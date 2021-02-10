@@ -1,0 +1,24 @@
+
+<div class="container">
+<div fxLayout="row" fxLayoutAlign="center center" >
+    <div fxFlex="100" > 
+    <div class="example-container">
+    <form [formGroup]="logIn">
+    <h1>Log In </h1>
+            <mat-form-field >
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+            </mat-form-field>
+            <mat-form-field >
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password">
+            </mat-form-field>
+            <div fxFlex="row">
+            
+            <button mat-raised-button  (click)="onFormSubmit()"> Log in </button>
+            </div>
+        </form>
+    </div>
+    </div>
+</div>
+</div>
