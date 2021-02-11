@@ -4,6 +4,7 @@ import {AuthService} from '../../services/auth.service';
 import {TokenService} from '../../services/token.service';
 import {IsAuthService} from '../../services/is-auth.service';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -19,10 +20,20 @@ export class LoginComponent implements OnInit {
               private  authSer: AuthService,
               private Token: TokenService,
               private isAuth: IsAuthService) {
+    console.log('log innnn');
+    this.isAuth.authStatus.subscribe((value) => {
+      console.log('jhgjhghjghjgjh', value);
+      if (value) {
+        console.log('jhgjhghjghjgjh');
+        this.router.navigate(['sitename/members']);
+      }
+    });
     this.logIn = fb.group({
       email: new FormControl(''),
       password: new FormControl(''),
     });
+
+
    }
 
   ngOnInit(): void {
@@ -32,8 +43,7 @@ export class LoginComponent implements OnInit {
       email: this.logIn.value.email,
       password: this.logIn.value.password,
     };
-    console.log(form);
-    return;
+
     this.authSer.login(form).subscribe(
       data => this.handleResponse(data),
       error => this.handleError(error)

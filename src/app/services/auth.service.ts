@@ -26,7 +26,7 @@ export class AuthService {
 
   public login(data: any): Observable<any> {
 
-    return this.httpClient.post(`${this.apiHost}api/client-login`, data);
+    return this.httpClient.post(`${this.apiHost}api/login`, data);
 
   }
 

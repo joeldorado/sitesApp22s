@@ -7,7 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MembersAreaComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+
+    console.log('members area');
+  }
 
   ngOnInit(): void {
     const path = location.pathname;
