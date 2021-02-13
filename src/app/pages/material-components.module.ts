@@ -30,6 +30,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   imports: [
@@ -67,7 +68,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatStepperModule,
     MatDividerModule,
     MatBadgeModule
-  ]
+  ],
+  declarations: [PageNotFoundComponent]
 })
 export class MaterialComponentsModule {
 }

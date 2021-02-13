@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {SalesPageComponent} from './sales-page.component';
+import {WildcardHandlerComponent} from './wildcard-handler.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: SalesPageComponent,
+    component: WildcardHandlerComponent,
     data: {
       scrollDisabled: true
     }
@@ -18,5 +18,5 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class SalesPageRoutignModule { }
+export class WildcardHandlerRoutignModule { }
 

@@ -14,18 +14,20 @@ export class LoginComponent implements OnInit {
   logIn: FormGroup;
   error = '';
   visible = false;
-
+  path = location.pathname.split('/');
+  redirecTo = 'members';
   constructor(private router: Router,
               private fb: FormBuilder,
               private  authSer: AuthService,
               private Token: TokenService,
               private isAuth: IsAuthService) {
-    console.log('log innnn');
     this.isAuth.authStatus.subscribe((value) => {
-      console.log('jhgjhghjghjgjh', value);
       if (value) {
-        console.log('jhgjhghjghjgjh');
-        this.router.navigate(['sitename/members']);
+        if (this.path.length > 1 && this.path[1] !== 'login') {
+          this.redirecTo = this.path[1] + '/members';
+        }
+        this.router.navigate([this.redirecTo]);
+
       }
     });
     this.logIn = fb.group({
@@ -42,6 +44,7 @@ export class LoginComponent implements OnInit {
     const form = {
       email: this.logIn.value.email,
       password: this.logIn.value.password,
+      business_id: '1000001'
     };
 
     this.authSer.login(form).subscribe(
@@ -57,7 +60,12 @@ export class LoginComponent implements OnInit {
   handleResponse(data: any): void {
     this.Token.handle(data);
     this.isAuth.changeAuthStatus(true);
-    this.router.navigateByUrl('sitename/members');
+
+    if (this.path.length > 1 && this.path[1] !== 'login') {
+      this.redirecTo = this.path[1] + '/members';
+    }
+
+    this.router.navigateByUrl(this.redirecTo);
   }
 
 }

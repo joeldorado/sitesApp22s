@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {AppComponent} from './app.component';
-import {MembersAreaComponent} from './pages/members-area/members-area.component';
+import {PageNotFoundComponent} from './pages/page-not-found/page-not-found.component';
 const Routes: Routes = [
   {
     path: 'login',
@@ -9,30 +8,34 @@ const Routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'page-not-found',
+    component: PageNotFoundComponent,
+    pathMatch: 'full'
+  },
+  {
     path: '',
-    redirectTo: 'sitename',
+    loadChildren: () => import('./pages/members-area/members-area.module').then(m => m.MembersAreaModule),
+    pathMatch: 'full',
+  },
+  {
+    path: 'start',
+    loadChildren: () => import('./pages/sales-page/sales-page.module').then(m => m.SalesPageModule),
+    pathMatch: 'full',
+  },
+  {
+    path: 'members',
+    loadChildren: () => import('./pages/members-area/members-area.module').then(m => m.MembersAreaModule),
+    pathMatch: 'full',
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
     pathMatch: 'full',
   },
   {
     path: '**',
-    component: AppComponent,
-    children: [
-      {
-        path: 'login',
-        loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule),
-        pathMatch: 'full'
-      },
-      {
-      path: 'members',
-      //loadChildren: () => import('./pages/members-area/members-area.module').then(m => m.MembersAreaModule),
-      component: MembersAreaComponent,
-      // pathMatch: 'full'
-    },
-    {
-    path: 'start',
-    loadChildren: () => import('./pages/sales-page/sales-page.module').then(m => m.SalesPageModule),
-    pathMatch: 'full'
-  }]
+     loadChildren: () =>
+     import('./pages/wildcard-handler/wildcard-handler.module').then(m => m.WildcardHandlerModule),
   }
 ];
 console.log(Routes);

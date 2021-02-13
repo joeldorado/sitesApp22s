@@ -1,0 +1,19 @@
+
+<div fxLayout="row" fxLayoutAlign="center center"  *ngIf="!loading">
+    <div fxFlex="30" fxFlexAlign="center">
+    
+    </div>
+        <div fxFlex="40" fxFlexAlign="center">
+    <mat-spinner></mat-spinner>
+    </div>
+        <div fxFlex="30" fxFlexAlign="center">
+    
+    </div>
+</div>
+<!--  -->
+<app-members-area *ngIf="membersarea === true && loading === true"></app-members-area>
+<app-sales-page *ngIf="salespage && loading === true"></app-sales-page>
+<app-dashboard *ngIf="dashboard && loading === true"></app-dashboard>
+<app-login *ngIf="login && loading === true"></app-login>
+
+

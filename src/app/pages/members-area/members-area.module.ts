@@ -9,6 +9,7 @@ import {MembersAreaRoutignModule} from './members-area-routign.module';
   imports: [
     CommonModule,
     MembersAreaRoutignModule,
-  ]
+  ],
+  exports: [MembersAreaComponent]
 })
 export class MembersAreaModule { }

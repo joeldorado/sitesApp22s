@@ -19,9 +19,9 @@ export class TokenService {
   set(token: any): void {
     localStorage.setItem('__api_access', token.access_token);
     localStorage.setItem('__api_name_', token.user);
-    localStorage.setItem('__api_owner_', token.owner);
     localStorage.setItem('__api_email_', token.email);
     localStorage.setItem('__api_userType_', token.email === 'admin@22s.com' ? 'user' : 'client');
+    // save business_id
   }
   get(): any {
     return localStorage.getItem('__api_access');
