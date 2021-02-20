@@ -9,7 +9,8 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private headers: HttpHeaders;
-  apiHost = 'http://127.0.0.1:8000/';
+   apiHost = 'http://127.0.0.1:8000/';
+  // apiHost = 'https://api-dot-crypto-haven-111118.appspot.com/';
   constructor(
     private httpClient: HttpClient,
     private token: TokenService,

@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   visible = false;
   path = location.pathname.split('/');
   redirecTo = 'members';
+
   constructor(private router: Router,
               private fb: FormBuilder,
               private  authSer: AuthService,
@@ -44,7 +45,7 @@ export class LoginComponent implements OnInit {
     const form = {
       email: this.logIn.value.email,
       password: this.logIn.value.password,
-      business_id: '1000001'
+      business_id: this.path[1] = 'login' ? '' : this.path[1]
     };
 
     this.authSer.login(form).subscribe(
@@ -58,6 +59,10 @@ export class LoginComponent implements OnInit {
   }
 
   handleResponse(data: any): void {
+    if (data.access_token === undefined) {
+      alert(data.error);
+      return;
+    }
     this.Token.handle(data);
     this.isAuth.changeAuthStatus(true);
 
