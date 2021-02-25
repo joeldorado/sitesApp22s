@@ -1,16 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { IsAuthService } from '../../services/is-auth.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import {MembersAreaService} from '../../services/members-area.service';
 @Component({
   selector: 'app-members-area',
   templateUrl: './members-area.component.html',
   styleUrls: ['./members-area.component.scss']
 })
 export class MembersAreaComponent implements OnInit {
+
   path = location.pathname.split('/');
   redirecTo = 'start';
-  constructor(private isAuth: IsAuthService, private router: Router) {
+
+  constructor(
+        private isAuth: IsAuthService,
+        private router: Router,
+        private ma: MembersAreaService) {
+
     this.isAuth.authStatus.subscribe((value) => {
+
       if (!value) {
         // redirect
         if (this.path.length > 1) {
@@ -18,13 +26,25 @@ export class MembersAreaComponent implements OnInit {
         }
         this.router.navigate([this.redirecTo]);
         console.log('redirect');
+      }else  {
+        // validate site access table member_site_access
+
+        // enviar token si no esta enviar al sales page de ese subdominio
+
       }
+
     });
   }
 
   ngOnInit(): void {
     const path = location.pathname;
-    console.log(path);
+    console.log('in.....');
+    this.ma.validateSiteAccess().subscribe( data => {
+      if (data.status === 'Token is Invalid') {
+        alert(data.status);
+      }
+      console.log(data);
+    });
   }
 
   logIn(): void {
