@@ -37,6 +37,7 @@ const Routes: Routes = [
      loadChildren: () =>
      import('./pages/wildcard-handler/wildcard-handler.module').then(m => m.WildcardHandlerModule),
   }
+
 ];
 console.log(Routes);
 @NgModule({

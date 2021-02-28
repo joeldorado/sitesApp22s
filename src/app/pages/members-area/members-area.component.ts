@@ -38,10 +38,12 @@ export class MembersAreaComponent implements OnInit {
 
   ngOnInit(): void {
     const path = location.pathname;
-    console.log('in.....');
+    
     this.ma.validateSiteAccess().subscribe( data => {
-      if (data.status === 'Token is Invalid') {
+      if (data.status !== undefined) {
         alert(data.status);
+        localStorage.clear();
+        this.router.navigate(['/login']);
       }
       console.log(data);
     });

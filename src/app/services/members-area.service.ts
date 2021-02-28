@@ -54,9 +54,7 @@ public getMenuPages(site: string): Observable<any> {
 
 public validateSiteAccess(): Observable<any> {
   console.log('validate site access:');
-  return this.httpClient.post(`${this.apiHost}api/ma-site-access?token=${this.tk.get()}`, {
-    params: new HttpParams().set('site_id', '000')
-  });
+  return this.httpClient.get(`${this.apiHost}api/ma-site-access?token=${this.tk.get()}`);
 }
 
 }

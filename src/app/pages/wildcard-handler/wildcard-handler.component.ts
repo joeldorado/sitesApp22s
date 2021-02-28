@@ -21,7 +21,7 @@ export class WildcardHandlerComponent implements OnInit {
     private bsids: BuisinessAndSitesIdsService,
     private router: Router
   ) {
-    this.getIds();
+
     // validar que el site exista y que el busines tambien
     // sales page
     const indexStart = this.path.indexOf('start');
@@ -30,6 +30,7 @@ export class WildcardHandlerComponent implements OnInit {
     const indexlLogin = this.path.indexOf('login');
     if (indexStart !== -1 && this.path[indexStart] === 'start') {
       this.salespage = true;
+      this.loading = true;
     } else if ((indexMembersArea !== -1 && this.path[indexMembersArea] === 'members') || this.path.length === 2) {
       this.membersarea = true;
     } else if (indexDashboard !== -1 && this.path[indexDashboard] === 'dashboard') {
@@ -40,24 +41,7 @@ export class WildcardHandlerComponent implements OnInit {
 
    }
 
-   getIds(): void {
-    console.log(this.path);
-    this.bsids.getBusinessId(this.subdoman).subscribe( business => {
-      console.log(this.path[1]);
-      if (business.lenght === 0) {
-        this.router.navigate(['page-not-found']);
-      }
-      // if path has
-      this.bsids.getSiteBySiteName(business[0].business_id, this.siteName).subscribe( site => {
 
-        if (site.length === 0) {
-          this.router.navigate(['page-not-found']);
-        }
-        this.loading = true;
-      });
-
-    });
-   }
 
   ngOnInit(): void {
   }

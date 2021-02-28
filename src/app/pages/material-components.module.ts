@@ -31,7 +31,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-
+import { FlexLayoutModule } from '@angular/flex-layout';
 @NgModule({
   imports: [
     CommonModule
@@ -67,7 +67,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MatSortModule,
     MatStepperModule,
     MatDividerModule,
-    MatBadgeModule
+    MatBadgeModule,
+    FlexLayoutModule
   ],
   declarations: [PageNotFoundComponent]
 })
