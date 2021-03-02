@@ -1,14 +1,15 @@
-import { Component, ComponentFactoryResolver, OnInit, ViewChildren,
+import { Component, Input, ComponentFactoryResolver, OnInit, ViewChildren,
   ViewContainerRef, QueryList, ComponentRef,  } from '@angular/core';
 
 declare const mosaicoCropp: any;
 
 @Component({
-  selector: 'fury-menu',
+  selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
+  @Input() menuData: any;
     constructor() { }
 
 

@@ -1,0 +1,36 @@
+ <div fxLayout="row">
+        <div fxFlex="100">    
+              <div #foo></div>
+            <div class="container" >
+                <div 
+                class="row"
+                fxLayout="row"  
+                *ngFor="let r of structure?.row_order let RI = index">
+                    <div fxFlex="100" >  
+                    
+                    <div  class="column-body">                        
+                    <div   
+                    style="margin-left: 10px; margin-right:10px;"                                                             
+                    *ngFor="let c of structure?.rows[r]?.column_order let CI = index" >                                                                             
+                        <div  
+                            fxLayout="row"
+                            fxLayoutAlign="center center" 
+                             *ngFor="let b of structure?.rows[r]?.columnBlockOrder[c] let BI = index">                             
+                                
+                            <div fxFlex="100" fxFlexAlign="center">
+                               
+                             <div style="margin:20px;" #blockComponent id="{{r}}{{c}}{{b}}"
+                            [ngStyle]="{'display': (ifBlockHasComponent(blocks, r,c,b)) ? 'block' : 'none'}" 
+                            ></div> 
+
+                            </div>
+                               <!--    -->
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+         </div>
+    </div>

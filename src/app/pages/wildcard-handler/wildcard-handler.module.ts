@@ -7,8 +7,19 @@ import {SalesPageModule} from '../sales-page/sales-page.module';
 import {DashboardModule} from '../dashboard/dashboard.module';
 import {MaterialComponentsModule} from '../material-components.module';
 import {LoginModule} from '../login/login.module';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { TranslateModule } from '@ngx-translate/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { YouTubePlayerModule } from '@angular/youtube-player';
+// components
+import { ImageComponent } from '../shared/image/image.component';
+import { ButtonComponent } from '../shared/button/button.component';
+import {TextComponent} from '../shared/text/text.component';
+import {VideoComponent} from '../shared/video/video.component';
 @NgModule({
-  declarations: [WildcardHandlerComponent],
+  declarations: [WildcardHandlerComponent, ImageComponent, ButtonComponent, TextComponent, VideoComponent],
   imports: [
     CommonModule,
     WildcardHandlerRoutignModule,
@@ -16,7 +27,14 @@ import {LoginModule} from '../login/login.module';
     SalesPageModule,
     DashboardModule,
     MaterialComponentsModule,
-    LoginModule
+    LoginModule,
+    HttpClientModule,
+    TranslateModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
+    ReactiveFormsModule,
+    FormsModule,
+    YouTubePlayerModule
 
   ]
 })
