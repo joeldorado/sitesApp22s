@@ -1,0 +1,110 @@
+<div fxLayout="row" fxLayoutAlign="center" class="template">
+    <div fxFlex="70" fxLayout="column" fxLayoutAlign="start">
+    <!-- content-->
+        <!-- info -->
+        <div class="box">
+            <div  fxLayout="row"  *ngFor="let block of blocks$ let i = index">                                    
+                    <div fxFlex="100">
+                        <!-- body content -->                                
+                        <div #previewComponents 
+                            [ngStyle]= "{'display' : block.block_type === 'empty' ? 'block' : 'none'}"></div>                     
+                        <!-- end body content -->
+                    </div>             
+            </div>  
+        </div>
+        <!-- end info-->
+        <!-- email content -->    
+        <div class="row box">
+                <div fxFlex="100">    
+                    <div fxLayout="row" *ngIf="account?.account === 'exist'">
+                        <div fxFlex="100">
+                            Plase Login                 
+                        </div>        
+                    </div>
+                                        
+                    <mat-form-field appearance="legacy" class = "full-input">
+                    <mat-label>Enter your email address</mat-label>
+                    <input type="email"  [(ngModel)]="email" (focusout)="onFocusOutEvent($event)"  matInput placeholder="email@example.com">                     
+                    </mat-form-field>  
+                    
+                    <mat-form-field *ngIf="account?.account === 'exist' || account?.account === 'dosent'" 
+                    appearance="legacy" class = "full-input">
+                    <mat-label>Enter Password</mat-label>
+                    <input  matInput type="password">                     
+                    </mat-form-field>   
+
+                    <mat-form-field *ngIf="account?.account === 'dosent'" appearance="legacy" class = "full-input">
+                    <mat-label>Confirm Password</mat-label>
+                    <input  matInput type="password">                     
+                    </mat-form-field> 
+                    <div fxLayout="row" *ngIf="account?.account === 'exist'">
+                        <div fxFlex="100">
+                           <button mat-raised-button> forgot password?</button>                    
+                        </div>        
+                    </div>
+                
+                    <section>
+                        <mat-checkbox [(ngModel)]="emailTerms">I accept Terms of Service and Privacy Policy</mat-checkbox>          
+                    </section>                                                  
+                </div>                                
+            </div>
+        <!-- end email content -->
+        <!--  payment coupone -->    
+        <div class="row box">
+            <div fxFlex="100"> 
+                <p style="display: block;">                                           
+                    <mat-form-field appearance="legacy" class = "full-input">
+                    <mat-label>Enter coupone</mat-label>
+                    <input  matInput placeholder="coupone name">                          
+                    </mat-form-field>
+                    <button mat-raised-button> Apply</button> 
+               </p>                 
+
+            <mat-radio-group
+            aria-labelledby="example-radio-group-label"
+            class="example-radio-group"
+            [(ngModel)]="favoriteSeason">
+                <mat-radio-button class="example-radio-button" *ngFor="let season of seasons" [value]="season">
+                {{season}}
+                </mat-radio-button>
+            </mat-radio-group>       
+                <button mat-raised-button> Continue</button>                                           
+            </div>                                
+        </div>
+        <!-- end payment coupone -->
+
+
+        <!--  payment coupone -->    
+        <div class="row box">
+            <div fxFlex="100"> 
+              
+                <div fxLayout="row" fxLayoutAlign="start center">
+                <div fxFlex="45">
+                <p> 
+               Process payment with credit card below
+                </p>
+                <div fxLayout="row" fxLAyoutGap="5px" style="font-size: 20px;">
+                
+                    <div fxFlex="10"><mat-icon fontSet="fab"  fontIcon="fa-cc-amex" inline></mat-icon></div>
+                    <div fxFlex="10"><mat-icon fontSet="fab"  fontIcon="fa-cc-discover" inline></mat-icon></div>
+                    <div fxFlex="10"><mat-icon fontSet="fab"  fontIcon="fa-cc-visa" inline></mat-icon></div>
+                    <div fxFlex="10"><mat-icon fontSet="fab"  fontIcon="fa-cc-mastercard" inline></mat-icon></div>
+                </div>
+                </div>
+                <div fxFlex="10" fxFlexAlign="center">
+                OR                        
+                </div>
+                <div fxFlex="45" fxFlexAlign="center">
+                <button class='btn-continue' mat-raised-button>                 
+                PayPal Checkout
+                </button>        
+                </div>
+                </div>
+
+            </div>                                
+        </div>
+        <!-- end payment coupone -->
+    <!-- end content -->    
+    </div>
+</div>
+

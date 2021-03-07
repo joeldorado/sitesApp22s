@@ -24,6 +24,7 @@
     "@angular/router": "~11.0.1",
     "@angular/youtube-player": "^11.2.2",
     "@ngx-translate/core": "^13.0.0",
+    "angular-font-awesome": "^3.1.2",
     "moment": "^2.29.1",
     "ng-pick-datetime": "^7.0.0",
     "rxjs": "~6.6.0",

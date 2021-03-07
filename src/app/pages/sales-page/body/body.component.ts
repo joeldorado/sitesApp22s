@@ -27,10 +27,9 @@ export class BodyComponent implements OnChanges{
  }
 
   ngOnChanges(): void {
-     this.getComponentData();
      setTimeout(() => {
       this.getComponentData();
-     }, 100);
+     }, 1000);
   }
 
 
@@ -46,7 +45,6 @@ export class BodyComponent implements OnChanges{
                                              b.column_number.toString() === ids[1] &&
                                              b.block_number.toString() === ids[2]
                                              )[0];
-
      this.drawComponent(index, ids, blockData);
     });
  }
@@ -80,9 +78,9 @@ export class BodyComponent implements OnChanges{
   * @desc toma y crea el componente dependiendo su tipo
   */
  drawComponent(selected: any, ids: any, blockData: any): void {
-
+  
    const elem: ViewContainerRef[]  =  this.blockComponent.filter((element, index) => index === selected);
-   const componentType = blockData.Block_type;
+   const componentType = blockData.block_type;
    const value = JSON.parse(blockData.data_json);
    let component: any;
 
@@ -98,8 +96,10 @@ export class BodyComponent implements OnChanges{
       component = CountdownTimerComponent;
    }
 
+   if (component === undefined) { return; }
    const Factory = this.resolver.resolveComponentFactory(component);
    const Ref: ComponentRef<any>  = elem[0].createComponent(Factory);
+  
    Ref.instance.value = value;
    Ref.instance.blockPosition = ids[0] + ',' + ids[1] + ',' + ids[2];
 

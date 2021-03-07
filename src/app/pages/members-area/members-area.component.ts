@@ -38,14 +38,13 @@ export class MembersAreaComponent implements OnInit {
 
   ngOnInit(): void {
     const path = location.pathname;
-    
     this.ma.validateSiteAccess().subscribe( data => {
       if (data.status !== undefined) {
-        alert(data.status);
         localStorage.clear();
         this.router.navigate(['/login']);
+       // alert(data.status);
+
       }
-      console.log(data);
     });
   }
 

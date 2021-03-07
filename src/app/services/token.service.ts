@@ -39,7 +39,12 @@ export class TokenService {
     if (token) {
       const payload = this.payload(token);
       if (payload) {
-        return Object.values(this.iss).indexOf(payload.iss) > -1 ? true : false;
+
+        if (Object.values(this.iss).indexOf(payload.iss) > -1) {
+          // true
+          return this.tokenExpired();
+        }
+        return false;
       }
     }
     return false;
@@ -56,5 +61,13 @@ export class TokenService {
 
   loggedIn(): any {
     return this.isValid();
+  }
+  private tokenExpired(): any {
+    const expiry = (JSON.parse(atob(this.get().split('.')[1]))).exp;
+    if ((Math.floor((new Date()).getTime() / 1000)) >= expiry) {
+      localStorage.clear();
+      return false;
+    }
+    return true;
   }
 }

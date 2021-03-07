@@ -18,8 +18,14 @@ import { ImageComponent } from '../shared/image/image.component';
 import { ButtonComponent } from '../shared/button/button.component';
 import {TextComponent} from '../shared/text/text.component';
 import {VideoComponent} from '../shared/video/video.component';
+import { SignUpFormsComponent } from '../sign-up-forms/sign-up-forms.component';
 @NgModule({
-  declarations: [WildcardHandlerComponent, ImageComponent, ButtonComponent, TextComponent, VideoComponent],
+  declarations: [WildcardHandlerComponent,
+                 ImageComponent,
+                 ButtonComponent,
+                 TextComponent,
+                 VideoComponent,
+                 SignUpFormsComponent],
   imports: [
     CommonModule,
     WildcardHandlerRoutignModule,
