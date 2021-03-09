@@ -8,6 +8,7 @@ import {CountdownTimerComponent} from '../shared/countdown-timer/countdown-timer
 import {VideoComponent} from '../shared/video/video.component';
 import {IsAuthService} from '../../services/is-auth.service';
 import {Router} from '@angular/router';
+
 @Component({
   selector: 'app-sign-up-forms',
   templateUrl: './sign-up-forms.component.html',
@@ -17,14 +18,27 @@ export class SignUpFormsComponent implements OnChanges {
   @ViewChildren('previewComponents', {read: ViewContainerRef}) previewComponents!: QueryList<ViewContainerRef>;
   blocks$!: any[];
   account!: any;
+  paymentsOpts$!: any[];
+  coupones$!: any[];
   email = '';
   emailTerms = false;
-  seasons: string[] = ['Winter', 'Spring', 'Summer', 'Autumn'];
+  selectedPayment!: string;
+  enterCoupone = '';
   password = false;
   cpassword = false;
   isAuthenticated!: boolean;
   favoriteSeason!: string;
   path = location.pathname.split('/')[1];
+  coupone!: Coupones[];
+  emailSignup = true;
+  paymentOpt = false;
+  processpymt = false;
+  accountInfo = false;
+
+
+  viewPhone = true;
+  questions: string[] = ['What are you most struggling with?'];
+
   constructor(
     private supForm: SignUpFormService,
     private resolver: ComponentFactoryResolver,
@@ -66,6 +80,14 @@ export class SignUpFormsComponent implements OnChanges {
         });
       }, 1000);
 
+    });
+
+    // get payment ioptions and coupones
+    this.supForm.get_paymentsOpts().subscribe(data => {
+      this.paymentsOpts$ = data;
+    });
+    this.supForm.get_coupones().subscribe(data => {
+      this.coupones$ = data;
     });
    }
 
@@ -120,4 +142,74 @@ export class SignUpFormsComponent implements OnChanges {
 
 
   }
+
+  paymentProcess(type): void {
+    console.log(type);
+    switch (type) {
+      case 1 :
+      this.emailSignup = true;
+      this.paymentOpt = false;
+      this.processpymt = false;
+      this.accountInfo = false;
+      break;
+      case 2 :
+      this.emailSignup =  false;
+      this.paymentOpt = true;
+      this.processpymt = false;
+      break;
+      case 3:
+      this.paymentOpt = false;
+      this.processpymt = true;
+      this.accountInfo = false;
+      break;
+      case 4:
+      this.processpymt = false;
+      this.accountInfo = true;
+      break;
+    }
+  }
+  applayCoupone(): void {
+    if (this.enterCoupone === '') {
+      alert('pleace enter a valid coupone name');
+    }
+
+    this.coupone = this.coupones$.filter(c => c.coupon_keyword === this.enterCoupone);
+    console.log(this.coupone);
+    if (this.coupone.length === 0) { alert('Invalid coupone'); return; }
+
+    this.paymentsOpts$.filter(p => {
+
+      // aply discount payment_type payment_type
+      if (this.coupone[0].payment_type === p.payment_type) {
+        console.log(this.coupone[0].payment_type + '----' + p.payment_type);
+        if (p.payment_type === 'onetime') {
+            console.log('ontimeeeeee');
+            p.initial_amount = p.initial_amount - this.coupone[0].initial_amount;
+            if (p.initial_amount < 0) {
+              p.initial_amount = 0;
+            }
+        } else  if (p.payment_type === 'recurring' || p.payment_type === 'installments') {
+          console.log('installments - recurring');
+          p.initial_amount = p.initial_amount - this.coupone[0].initial_amount;
+          p.recurring_amount = p.recurring_amount - this.coupone[0].recurring_amount;
+          if (p.initial_amount < 0) {
+            p.initial_amount = 0;
+          }
+          if (p.recurring_amount < 0) {
+            p.initial_amount = 0;
+          }
+      }
+      }
+    });
+  }
+}
+export interface Coupones {
+  site_id: number;
+  coupon_number: number;
+  coupon_keyword: string;
+  payment_type: string;
+  recurring_cycle: string;
+  initial_amount: number;
+  recurring_amount: number;
+  number_of_payments: number;
 }

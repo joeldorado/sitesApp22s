@@ -14,6 +14,8 @@
         </div>
         <!-- end info-->
         <!-- email content -->    
+      <div style="position: relative;" *ngIf="emailSignup">
+         <h3 >Email</h3>
         <div class="row box">
                 <div fxFlex="100">    
                     <div fxLayout="row" *ngIf="account?.account === 'exist'">
@@ -45,39 +47,80 @@
                 
                     <section>
                         <mat-checkbox [(ngModel)]="emailTerms">I accept Terms of Service and Privacy Policy</mat-checkbox>          
-                    </section>                                                  
+                    </section>   
+                    
+                <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
+                    <div fxFlex="50">
+                         <button fxFlex="100" mat-raised-button (click)="paymentProcess(2)"> Continue</button>                                               
+                    </div>
+                </div>                  
                 </div>                                
             </div>
+            </div>
         <!-- end email content -->
-        <!--  payment coupone -->    
+        <!--  payment coupone -->   
+        <div style="position: relative;" *ngIf="paymentOpt">
+        <h3 >Payment Option</h3> 
         <div class="row box">
             <div fxFlex="100"> 
-                <p style="display: block;">                                           
+
+             <button class="back-button"  mat-button (click)="paymentProcess(1)">
+             <mat-icon>arrow_back</mat-icon> Edit Email</button> 
+
+
+               <div fxLAyout="row">
+               <div fxFlex="90">
                     <mat-form-field appearance="legacy" class = "full-input">
-                    <mat-label>Enter coupone</mat-label>
-                    <input  matInput placeholder="coupone name">                          
+                    <mat-label>Enter coupone </mat-label>
+                    <input [(ngModel)]="enterCoupone" matInput placeholder="coupone name">                          
                     </mat-form-field>
-                    <button mat-raised-button> Apply</button> 
-               </p>                 
+               </div>
+                <div fxFlex="10"  fxLayoutAlign="end">
+                <button mat-raised-button (click)="applayCoupone()"> Apply </button> 
+                </div>
+               </div> 
 
             <mat-radio-group
             aria-labelledby="example-radio-group-label"
             class="example-radio-group"
-            [(ngModel)]="favoriteSeason">
-                <mat-radio-button class="example-radio-button" *ngFor="let season of seasons" [value]="season">
-                {{season}}
+            [(ngModel)]="selectedPayment"
+            >
+                <mat-radio-button class="example-radio-button" 
+                *ngFor="let payment of paymentsOpts$" [value]="payment?.option_number">
+                    <label *ngIf="payment?.payment_type === 'onetime'">
+                     $ {{payment?.initial_amount}} USD one time payment
+                    </label>
+                    <label *ngIf="payment?.payment_type === 'recurring'">
+                    $ {{payment?.initial_amount}} USD initial payment then 
+                    $ {{payment?.recurring_amount}} USD {{payment?.recurring_cycle}}
+                    </label>   
+                    <label *ngIf="payment?.payment_type === 'installments'">
+                    $ {{payment?.initial_amount}} USD initial payment then 
+                    $ {{payment?.recurring_amount}} USD {{payment?.recurring_cycle}} number of payments {{payment?.number_of_payments}}
+                    </label>    
+
                 </mat-radio-button>
             </mat-radio-group>       
-                <button mat-raised-button> Continue</button>                                           
+
+
+                 <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
+                    <div fxFlex="50">
+                         <button fxFlex="100" mat-raised-button (click)="paymentProcess(3)"> Continue</button>                                               
+                    </div>
+                </div>                                          
             </div>                                
+        </div>
         </div>
         <!-- end payment coupone -->
 
 
-        <!--  payment coupone -->    
-        <div class="row box">
-            <div fxFlex="100"> 
-              
+        <!--  process payment  -->   
+        <div style="position: relative;" *ngIf="processpymt">
+        <h3 >Process Payment </h3>  
+        <div class="row box" >
+            <div fxFlex="100">               
+                    <button class="back-button"  mat-button (click)="paymentProcess(2)">
+                    <mat-icon>arrow_back</mat-icon> Plan Options</button> 
                 <div fxLayout="row" fxLayoutAlign="start center">
                 <div fxFlex="45">
                 <p> 
@@ -101,9 +144,110 @@
                 </div>
                 </div>
 
-            </div>                                
+            </div>  
+
+            <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
+                <div fxFlex="100">
+                    <button fxFlex="100" mat-raised-button (click)="paymentProcess(4)"> Process Payment</button>                                               
+                </div>
+            </div>                               
+        </div>
         </div>
         <!-- end payment coupone -->
+
+        <!-- account info -->
+        <div style="position: relative;" *ngIf="accountInfo">
+        <h3 >Account Information </h3> 
+        <div class="row box" >
+            <div fxFlex="100">                   
+                <!-- account info contnet -->
+                    <!-- name -->
+                    <div fxLayout="row" fxLayoutGap="10px">
+                    <div fxFlex="50">
+                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-label>First Name</mat-label>
+                    <input matInput placeholder="">                     
+                    </mat-form-field>
+                    </div>
+                    <div fxFlex="50">
+                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-label>Last Name</mat-label>
+                    <input matInput placeholder="">                     
+                    </mat-form-field>
+                    </div>
+                    </div>
+                    <!-- end name-->
+                    <!-- phone -->
+                    <div fxLayout="row" fxLayoutGap="10px" *ngIf="viewPhone">
+                    <div fxFlex="50">
+                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-label>Phone</mat-label>
+                    <input matInput placeholder="">                     
+                    </mat-form-field>
+                    </div>
+                    <div fxFlex="50">               
+                    </div>
+                    </div>
+                    <!-- end phone-->
+                    <!-- address -->
+                    <div fxLayout="row" fxLayoutGap="10px">
+                    <div fxFlex="50">
+                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-label>Address 1</mat-label>
+                    <input matInput placeholder="">                     
+                    </mat-form-field>
+                    </div>
+                    <div fxFlex="50">
+                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-label>Suite / Apt Number</mat-label>
+                    <input matInput placeholder="">                     
+                    </mat-form-field>               
+                    </div>
+                    </div>
+                    <!-- end address-->
+                    <!-- City -->
+                    <div fxLayout="row" fxLayoutGap="10px">
+                    <div fxFlex="50">
+                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-label>City / Provence</mat-label>
+                    <input matInput placeholder="">                     
+                    </mat-form-field>
+                    </div>
+                    <div fxFlex="50">               
+                    </div>
+                    </div>
+                    <!-- end city-->
+                    <!-- country -->
+                    <div fxLayout="row" fxLayoutGap="10px">
+                    <div fxFlex="50">
+                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-label>Conuntry</mat-label>
+                    <input matInput placeholder="">                     
+                    </mat-form-field>
+                    </div>
+                    <div fxFlex="50">
+                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-label>Zip / Postal Code</mat-label>
+                    <input matInput placeholder="">                     
+                    </mat-form-field>               
+                    </div>
+                    </div>
+                    <!-- end country-->
+                    <!-- question -->
+                    <div fxLayout="row" fxLayoutGap="10px" *ngFor="let queston of questions; let i = index">
+                    <div fxFlex="100">
+                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-label>{{queston}}</mat-label>
+                    <input matInput placeholder="">                     
+                    </mat-form-field>
+                    </div>                
+                    </div>
+                    <!-- end question-->
+                <!-- end account info content -->
+            </div>
+        </div>
+        </div>
+        <!-- end  account info -->
     <!-- end content -->    
     </div>
 </div>

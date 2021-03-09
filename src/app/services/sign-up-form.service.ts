@@ -38,16 +38,16 @@ export class SignUpFormService {
 
   }
 
-  public get_paymentsOpts(siteId: string): Observable<any> {
-    return this.httpClient.get(`${this.apiHost}api/sing-up-paymentsOpts`, {
-      params: new HttpParams().set('site_id', siteId)
+  public get_paymentsOpts(): Observable<any> {
+    return this.httpClient.get(`${this.apiHost}api/site-sing-up-paymentsOpts`, {
+      params: new HttpParams().set('path', this.path)
     });
 
   }
 
-  public get_coupones(siteId: string): Observable<any> {
-    return this.httpClient.get(`${this.apiHost}api/sing-up-coupones`, {
-      params: new HttpParams().set('site_id', siteId)
+  public get_coupones(): Observable<any> {
+    return this.httpClient.get(`${this.apiHost}api/site-sing-up-coupones`, {
+      params: new HttpParams().set('path', this.path)
     });
 
   }

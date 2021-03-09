@@ -13,7 +13,7 @@
   }
   .box {
     background: #fff;
-    margin: 15px; 
+    margin: 20px; 
     padding: 60px;                
     border: 1px solid #ddd;
     transition-delay: all .8s;
@@ -32,4 +32,19 @@
   
   .example-radio-button {
     margin: 5px;
+  }
+  h3 {
+    position: absolute;
+    color: #ddd;
+    top: -10px;
+    left: 20px
+  }
+  .btn-container {
+    margin-top: 30px;
+    margin-bottom: -30px;
+  }
+  .back-button {
+    position: absolute;
+    top: 30px;
+    left: 30px;
   }

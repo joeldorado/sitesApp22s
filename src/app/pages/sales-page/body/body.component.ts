@@ -78,7 +78,7 @@ export class BodyComponent implements OnChanges{
   * @desc toma y crea el componente dependiendo su tipo
   */
  drawComponent(selected: any, ids: any, blockData: any): void {
-  
+
    const elem: ViewContainerRef[]  =  this.blockComponent.filter((element, index) => index === selected);
    const componentType = blockData.block_type;
    const value = JSON.parse(blockData.data_json);
