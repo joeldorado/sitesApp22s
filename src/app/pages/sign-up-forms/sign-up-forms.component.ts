@@ -8,7 +8,7 @@ import {CountdownTimerComponent} from '../shared/countdown-timer/countdown-timer
 import {VideoComponent} from '../shared/video/video.component';
 import {IsAuthService} from '../../services/is-auth.service';
 import {Router} from '@angular/router';
-
+import { faCcAmex, faCcDiscover, faCcVisa, faCcMastercard} from '@fortawesome/free-brands-svg-icons';
 @Component({
   selector: 'app-sign-up-forms',
   templateUrl: './sign-up-forms.component.html',
@@ -16,7 +16,13 @@ import {Router} from '@angular/router';
 })
 export class SignUpFormsComponent implements OnChanges {
   @ViewChildren('previewComponents', {read: ViewContainerRef}) previewComponents!: QueryList<ViewContainerRef>;
+  faCcAmex = faCcAmex;
+  faCcDiscover = faCcDiscover;
+  faCcVisa = faCcVisa;
+  faCcMastercard = faCcMastercard;
+  addresses: any[] = [];
   blocks$!: any[];
+  accountInfo$!: AccountInfo;
   account!: any;
   paymentsOpts$!: any[];
   coupones$!: any[];
@@ -86,8 +92,21 @@ export class SignUpFormsComponent implements OnChanges {
     this.supForm.get_paymentsOpts().subscribe(data => {
       this.paymentsOpts$ = data;
     });
+
     this.supForm.get_coupones().subscribe(data => {
       this.coupones$ = data;
+    });
+
+    this.supForm.get_accountInfo().subscribe(data => {
+      if (data.length === 0) { return; }
+      this.accountInfo$ = JSON.parse(data[0].user_accountinfo_settings_json);
+      console.log('--------->');
+      console.log(this.accountInfo$);
+      for (let i = 0; i <= this.accountInfo$.address; i++) {
+        const c = i + 1;
+        console.log('---' + c);
+        this.addresses.push(`Address ${c}`);
+      }
     });
    }
 
@@ -174,22 +193,22 @@ export class SignUpFormsComponent implements OnChanges {
     }
 
     this.coupone = this.coupones$.filter(c => c.coupon_keyword === this.enterCoupone);
-    console.log(this.coupone);
+
     if (this.coupone.length === 0) { alert('Invalid coupone'); return; }
 
     this.paymentsOpts$.filter(p => {
 
       // aply discount payment_type payment_type
       if (this.coupone[0].payment_type === p.payment_type) {
-        console.log(this.coupone[0].payment_type + '----' + p.payment_type);
+
         if (p.payment_type === 'onetime') {
-            console.log('ontimeeeeee');
+
             p.initial_amount = p.initial_amount - this.coupone[0].initial_amount;
             if (p.initial_amount < 0) {
               p.initial_amount = 0;
             }
         } else  if (p.payment_type === 'recurring' || p.payment_type === 'installments') {
-          console.log('installments - recurring');
+
           p.initial_amount = p.initial_amount - this.coupone[0].initial_amount;
           p.recurring_amount = p.recurring_amount - this.coupone[0].recurring_amount;
           if (p.initial_amount < 0) {
@@ -212,4 +231,11 @@ export interface Coupones {
   initial_amount: number;
   recurring_amount: number;
   number_of_payments: number;
+}
+
+export interface AccountInfo {
+  phone: number;
+  address: number;
+  dob: number;
+  custom_questions: [{id: number, question: string}];
 }

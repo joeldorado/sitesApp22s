@@ -117,42 +117,55 @@
         <!--  process payment  -->   
         <div style="position: relative;" *ngIf="processpymt">
         <h3 >Process Payment </h3>  
-        <div class="row box" >
+        <div class="row box">
             <div fxFlex="100">               
                     <button class="back-button"  mat-button (click)="paymentProcess(2)">
-                    <mat-icon>arrow_back</mat-icon> Plan Options</button> 
-                <div fxLayout="row" fxLayoutAlign="start center">
-                <div fxFlex="45">
-                <p> 
-               Process payment with credit card below
-                </p>
-                <div fxLayout="row" fxLAyoutGap="5px" style="font-size: 20px;">
-                
-                    <div fxFlex="10"><mat-icon fontSet="fab"  fontIcon="fa-cc-amex" inline></mat-icon></div>
-                    <div fxFlex="10"><mat-icon fontSet="fab"  fontIcon="fa-cc-discover" inline></mat-icon></div>
-                    <div fxFlex="10"><mat-icon fontSet="fab"  fontIcon="fa-cc-visa" inline></mat-icon></div>
-                    <div fxFlex="10"><mat-icon fontSet="fab"  fontIcon="fa-cc-mastercard" inline></mat-icon></div>
-                </div>
-                </div>
-                <div fxFlex="10" fxFlexAlign="center">
-                OR                        
-                </div>
-                <div fxFlex="45" fxFlexAlign="center">
-                <button class='btn-continue' mat-raised-button>                 
-                PayPal Checkout
-                </button>        
-                </div>
-                </div>
+                    <mat-icon>arrow_back</mat-icon> Plan Options</button>             
+                    <div fxLayout="row">
+                        <div fxFlex="100">
+                            <table style="margin-top: 15px;  margin-bottom: 15px; width: 100%;">
+                            <tr>
+                                <td fxFlex="100"><p>Process payment with credit card below</p>
+                                    <fa-icon [icon]="faCcAmex" size="2x" class="fa-icon"></fa-icon>
+                                    <fa-icon [icon]="faCcDiscover" size="2x" class="fa-icon"></fa-icon>            
+                                    <fa-icon [icon]="faCcVisa" size="2x" class="fa-icon"></fa-icon>            
+                                    <fa-icon [icon]="faCcMastercard" size="2x" class="fa-icon"></fa-icon>                                                                                   
+                                </td>
+                                <td fxFlex="10" fxLayout="column" fxLayoutAlign="center">OR</td>
+                                <td fxFlex="100" fxLayout="column" fxLayoutAlign="center"><button mat-raised-button > PayPal Checkout</button></td>
+                            </tr>
+                            </table>
+                        </div>
+                    </div>
+                   
+                    <div fxLayout="row">
+                        <div fxFlex="100">
+                            <div class="example-container">
+                                <mat-form-field fxFlex="50" appearance="fill">
+                                <mat-label>Credit Card Number</mat-label>
+                                    <input matInput type="number">                                                
+                                </mat-form-field>
 
-            </div>  
+                                <mat-form-field fxFlex="25" appearance="fill">
+                                <mat-label>MM/YY</mat-label>
+                                    <input matInput type="number" class="example-right-align">                                
+                                </mat-form-field>
+                                <mat-form-field fxFlex="25" appearance="fill">
+                                <mat-label>Zip Code</mat-label>
+                                    <input matInput type="number" class="example-right-align">                                
+                                </mat-form-field>
+                            </div>
+                        </div> 
+                    </div>
 
             <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
-                <div fxFlex="100">
-                    <button fxFlex="100" mat-raised-button (click)="paymentProcess(4)"> Process Payment</button>                                               
+                <div fxFlex="50">
+                        <button fxFlex="100" mat-raised-button (click)="paymentProcess(4)"> Process Payment</button>                                               
                 </div>
-            </div>                               
+            </div>                                  
         </div>
-        </div>
+    </div>
+    </div>
         <!-- end payment coupone -->
 
         <!-- account info -->
@@ -178,24 +191,32 @@
                     </div>
                     <!-- end name-->
                     <!-- phone -->
-                    <div fxLayout="row" fxLayoutGap="10px" *ngIf="viewPhone">
+                    <div fxLayout="row" fxLayoutGap="10px">
                     <div fxFlex="50">
-                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-form-field appearance="legacy" fxFlex="100" *ngIf="accountInfo$?.phone">
                     <mat-label>Phone</mat-label>
                     <input matInput placeholder="">                     
                     </mat-form-field>
                     </div>
-                    <div fxFlex="50">               
+                    <div fxFlex="50">   
+                        <mat-form-field appearance="legacy" fxFlex="100" *ngIf="accountInfo$?.dob">
+                            <mat-label>Birthday</mat-label>
+                            <input matInput placeholder="">                     
+                        </mat-form-field>
                     </div>
                     </div>
                     <!-- end phone-->
                     <!-- address -->
                     <div fxLayout="row" fxLayoutGap="10px">
                     <div fxFlex="50">
-                    <mat-form-field appearance="legacy" fxFlex="100">
-                    <mat-label>Address 1</mat-label>
+                    
+                    <mat-form-field appearance="legacy" 
+                    *ngFor="let a of addresses"
+                    fxFlex="100">
+                    <mat-label>{{a}}</mat-label>
                     <input matInput placeholder="">                     
                     </mat-form-field>
+
                     </div>
                     <div fxFlex="50">
                     <mat-form-field appearance="legacy" fxFlex="100">
@@ -234,15 +255,21 @@
                     </div>
                     <!-- end country-->
                     <!-- question -->
-                    <div fxLayout="row" fxLayoutGap="10px" *ngFor="let queston of questions; let i = index">
+                    <div fxLayout="row" fxLayoutGap="10px" *ngFor="let info of accountInfo$?.custom_questions; let i = index">
                     <div fxFlex="100">
                     <mat-form-field appearance="legacy" fxFlex="100">
-                    <mat-label>{{queston}}</mat-label>
+                    <mat-label>{{info.question}}</mat-label>
                     <input matInput placeholder="">                     
                     </mat-form-field>
                     </div>                
                     </div>
                     <!-- end question-->
+
+                    <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
+                        <div fxFlex="50">
+                            <button fxFlex="100" mat-raised-button > Complete</button>                                               
+                        </div>
+                    </div>    
                 <!-- end account info content -->
             </div>
         </div>

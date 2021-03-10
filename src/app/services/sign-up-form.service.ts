@@ -45,6 +45,13 @@ export class SignUpFormService {
 
   }
 
+  public get_accountInfo(): Observable<any> {
+    return this.httpClient.get(`${this.apiHost}api/site-sing-up-accountInfo`, {
+      params: new HttpParams().set('path', this.path)
+    });
+
+  }
+
   public get_coupones(): Observable<any> {
     return this.httpClient.get(`${this.apiHost}api/site-sing-up-coupones`, {
       params: new HttpParams().set('path', this.path)

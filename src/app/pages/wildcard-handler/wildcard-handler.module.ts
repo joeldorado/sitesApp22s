@@ -13,6 +13,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { YouTubePlayerModule } from '@angular/youtube-player';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 // components
 import { ImageComponent } from '../shared/image/image.component';
 import { ButtonComponent } from '../shared/button/button.component';
@@ -40,7 +41,8 @@ import { SignUpFormsComponent } from '../sign-up-forms/sign-up-forms.component';
     OwlNativeDateTimeModule,
     ReactiveFormsModule,
     FormsModule,
-    YouTubePlayerModule
+    YouTubePlayerModule,
+    FontAwesomeModule
 
   ]
 })
