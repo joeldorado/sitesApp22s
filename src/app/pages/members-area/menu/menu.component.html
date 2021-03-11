@@ -1,0 +1,62 @@
+<div class="template" fxLayout="row" fxLayoutGap="10px"> 
+  <div fxFlex="100" >
+<div  fxLayout="row">
+<div fxFlex="100">
+  <mat-toolbar class="menu">
+    <mat-toolbar-row fxLayout="row">
+        <div fxFlex="35">
+            <span>{{menuData?.business}}</span>
+        </div>
+        <div fxFlex="35" fxFlexAlign='center center'>
+         <span> {{menuData?.site}} </span>
+        </div>
+        <div fxFlex="30" fxFlexAlign='end center' >
+            <div fxLayout="row" style="float: right;">               
+                <div fxFlex="100" fxFlexAlign="center">
+                    <button mat-icon-button 
+                        class="menu-button"
+                        [matMenuTriggerFor]="menu" 
+                        aria-label="Example icon-button with a menu">
+                          <img class="avatar" [src]="pictureUrl">                            
+                        <mat-icon class="icon" fxHide fxShow.gt-sm>keyboard_arrow_down</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                            <mat-icon>dialpad</mat-icon>
+                        <span>Redial</span>
+                        </button>
+                        <button mat-menu-item disabled>
+                         <mat-icon>voicemail</mat-icon>
+                        <span>Check voice mail</span>
+                        </button>
+                        <button mat-menu-item (click)="logOut()">
+                            <mat-icon>notifications_off</mat-icon>
+                        <span>Log out</span>
+                        </button>
+                    </mat-menu>
+                
+                </div>
+            </div>
+        </div>
+    </mat-toolbar-row>
+
+       <mat-toolbar-row>         
+        <button 
+        class="menu-button"
+        mat-raised-button 
+        *ngFor="let menu of menuData?.pages; let i = index" >        
+        {{menu?.page_tittle}}
+        </button>
+      </mat-toolbar-row>
+<!--
+"page_number" => "0",
+"page_tittle" => "Home",
+"page_type" => "normal",
+"active" => true,
+"structure_json" => "",
+"site_id" => "1"
+-->
+
+  </mat-toolbar>
+</div>
+</div>

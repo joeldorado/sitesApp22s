@@ -1,1 +1,8 @@
-<h1>members-area workssasasasas!</h1>
+<div class="template">
+    <app-menu [menuData]="menuData$"></app-menu>
+   
+   <div fxLayout="row" *ngFor="let pages of menuData$?.pages">
+    <app-body      
+        [blocks]="getPageBlocks(blocks$?.blocks, pages.page_number)" *ngIf="pages.active"></app-body> 
+    </div>
+</div>

@@ -210,13 +210,13 @@
                     <div fxLayout="row" fxLayoutGap="10px">
                     <div fxFlex="50">
                     
-                    <mat-form-field appearance="legacy" 
-                    *ngFor="let a of addresses"
-                    fxFlex="100">
-                    <mat-label>{{a}}</mat-label>
-                    <input matInput placeholder="">                     
-                    </mat-form-field>
-
+                    <div fxLayout="row" *ngFor="let a of addresses"> 
+                        <mat-form-field appearance="legacy"                     
+                        fxFlex="100">
+                        <mat-label>{{a}}</mat-label>
+                        <input matInput placeholder="">                     
+                        </mat-form-field>
+                    </div>                    
                     </div>
                     <div fxFlex="50">
                     <mat-form-field appearance="legacy" fxFlex="100">

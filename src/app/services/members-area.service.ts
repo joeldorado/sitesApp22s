@@ -9,25 +9,29 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class MembersAreaService {
-
+  path = location.pathname.split('/')[1];
   // private headers: HttpHeaders;
   apiHost = 'http://127.0.0.1:8000/';
   constructor(
     private httpClient: HttpClient,
     private tk: TokenService
-  ) { }
+  ) {
+    if (this.path === 'members') {
+      this.path = '';
+  }
+   }
 
 
   /**
    *
    *
    */
-  public get_pages(site: string): Observable<any> {
+  public get_pages(): Observable<any> {
   // get owner id
   // falta enviar  el story id, o se optendra en el back end?
 
-  return this.httpClient.get(`${this.apiHost}api/members-area-block?token=${this.tk}`, {
-    params: new HttpParams().set('site_id', site)
+  return this.httpClient.get(`${this.apiHost}api/site-ma-block?token=${this.tk.get()}`, {
+    params: new HttpParams().set('path', this.path)
   });
 
   }
@@ -46,9 +50,9 @@ export class MembersAreaService {
       params: new HttpParams().set('site_id', site)
     });
   }
-public getMenuPages(site: string): Observable<any> {
-  return this.httpClient.get(`${this.apiHost}api/members-area-pages?token=${this.tk.get()}`, {
-    params: new HttpParams().set('site_id', site)
+public getMenuPages(): Observable<any> {
+  return this.httpClient.get(`${this.apiHost}api/site-ma-menu`, {
+    params: new HttpParams().set('path', this.path)
   });
 }
 
