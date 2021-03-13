@@ -38,7 +38,7 @@ export class BodyComponent implements OnChanges{
    if (this.blockComponent === undefined || this.blockComponent.length === 0 || this.blocks === null) { return; }
 
    this.blockComponent.forEach((blockComp, index) => {
-
+     if (blockComp.length > 0) { blockComp.detach(); }
      // first index is fore row, second column and tird block values positions
      const ids = blockComp.element.nativeElement.id.split('');
      const blockData = this.blocks.filter((b: any) => b.row_number.toString() === ids[0] &&

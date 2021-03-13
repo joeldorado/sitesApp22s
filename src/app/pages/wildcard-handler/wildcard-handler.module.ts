@@ -14,6 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {RouterPathPipe} from '../../pipes/router-path.pipe';
 // components
 import { ImageComponent } from '../shared/image/image.component';
 import { ButtonComponent } from '../shared/button/button.component';
@@ -45,6 +46,6 @@ import { SignUpFormsComponent } from '../sign-up-forms/sign-up-forms.component';
     YouTubePlayerModule,
     FontAwesomeModule
 
-  ]
+  ], providers: [RouterPathPipe]
 })
 export class WildcardHandlerModule { }

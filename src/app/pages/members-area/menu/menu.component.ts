@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import {Router} from '@angular/router';
 @Component({
@@ -7,6 +7,7 @@ import {Router} from '@angular/router';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
+@Output() activePage: EventEmitter<object[]> = new EventEmitter();
  @Input() menuData!: MenuData;
   pictureUrl: any;
 
@@ -22,6 +23,12 @@ export class MenuComponent implements OnInit {
     //  this.route.navigate(['/login']);
     location.reload();
   }
+
+  setActivePage(page): void {
+    this.activePage.emit(page);
+  }
+
+
 
 }
 

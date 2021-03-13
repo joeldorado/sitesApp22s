@@ -1,1 +1,21 @@
-<p>body works!</p>
+<div class='template'> 
+    <div class="drop-row"  *ngFor="let r of pageStructure?.row_order let RI = index">
+<div   fxLayout="row">      
+    <!-- column -->
+<div     
+class="column-body"             
+*ngFor="let c of pageStructure?.rows[r]?.column_order let CI = index" >                           
+    <!-- Blok-->                
+    <div class="block-item">
+    <!-- Blok ngFor-->
+        <div class="block"  
+                *ngFor="let b of pageStructure?.rows[r]?.columnBlockOrder[c]; let BI = index">
+                    <div #blockComponent   
+                        id="{{r}}{{c}}{{b}}"
+                    ></div>   
+        </div>    
+    </div>
+</div> <!-- end column CONTAINER -->
+    </div> <!-- end row ngFor-->
+</div> <!-- end temlate -->
+</div>

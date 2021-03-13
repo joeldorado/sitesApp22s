@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {TokenService} from './token.service';
 import { Router } from '@angular/router';
+import { AppConfigService } from './app-config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +12,13 @@ import { Router } from '@angular/router';
 export class MembersAreaService {
   path = location.pathname.split('/')[1];
   // private headers: HttpHeaders;
-  apiHost = 'http://127.0.0.1:8000/';
+   apiHost = '';
   constructor(
     private httpClient: HttpClient,
-    private tk: TokenService
-  ) {
+    private tk: TokenService,
+    private appserv: AppConfigService
+    ) {
+    this.apiHost = this.appserv.getApiHost();
     if (this.path === 'members') {
       this.path = '';
   }
@@ -35,12 +38,11 @@ export class MembersAreaService {
   });
 
   }
-  public get_page(site: string, pageNumber: string): Observable<any> {
+  public get_page(pageNumber: string): Observable<any> {
     // get owner id
     // falta enviar  el story id, o se optendra en el back end?
-    return this.httpClient.post(`${this.apiHost}api/ma-get-page`, {
-      site_id: site,
-       page_number: pageNumber
+    return this.httpClient.post(`${this.apiHost}api/ma-get-page?token=${this.tk.get()}`, {
+      page_number: pageNumber
     });
   }
   public get_home_page(site: string): Observable<any> {
@@ -51,7 +53,7 @@ export class MembersAreaService {
     });
   }
 public getMenuPages(): Observable<any> {
-  return this.httpClient.get(`${this.apiHost}api/site-ma-menu`, {
+  return this.httpClient.get(`${this.apiHost}api/site-ma-menu?token=${this.tk.get()}`, {
     params: new HttpParams().set('path', this.path)
   });
 }

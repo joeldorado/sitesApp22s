@@ -41,14 +41,19 @@
     </mat-toolbar-row>
 
        <mat-toolbar-row>         
-        <button 
-        class="menu-button"
-        mat-raised-button 
-        *ngFor="let menu of menuData?.pages; let i = index" >        
+       <div class="menu-button"  *ngFor="let menu of menuData?.pages; let i = index"   >
+        <button                      
+        mat-raised-button             
+        [color]="menu.active ? 'primary' : 'default'"
+        (click)="setActivePage(menu?.page_number)"
+        [routerLink]="[menu?.page_tittle | routerPath]"
+        >
         {{menu?.page_tittle}}
         </button>
+        </div>
       </mat-toolbar-row>
 <!--
+      
 "page_number" => "0",
 "page_tittle" => "Home",
 "page_type" => "normal",

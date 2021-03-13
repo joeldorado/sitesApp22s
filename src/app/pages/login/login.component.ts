@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
 import {TokenService} from '../../services/token.service';
 import {IsAuthService} from '../../services/is-auth.service';
 import { Router } from '@angular/router';
-
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   logIn: FormGroup;
   error = '';
+  siteName = 'No site name';
+  inputType = 'password';
   visible = false;
   path = location.pathname.split('/');
   redirecTo = 'members';
@@ -21,7 +23,9 @@ export class LoginComponent implements OnInit {
               private fb: FormBuilder,
               private  authSer: AuthService,
               private Token: TokenService,
-              private isAuth: IsAuthService) {
+              private isAuth: IsAuthService,
+              public dialogRef: MatDialogRef<LoginComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: any) {
     this.isAuth.authStatus.subscribe((value) => {
       if (value) {
         if (this.path.length > 1 && this.path[1] !== 'login') {
@@ -31,16 +35,27 @@ export class LoginComponent implements OnInit {
 
       }
     });
+
     this.logIn = fb.group({
       email: new FormControl(''),
       password: new FormControl(''),
     });
 
+    this.siteName = this.data.menuData.site;
+
+
 
    }
-
+   onNoClick(): void {
+    this.dialogRef.close();
+  }
   ngOnInit(): void {
   }
+
+  changeInput(): void {
+    this.inputType = this.inputType === 'password' ? 'text' : 'password';
+  }
+
   onFormSubmit(): void {
     const form = {
       email: this.logIn.value.email,
@@ -69,7 +84,7 @@ export class LoginComponent implements OnInit {
     if (this.path.length > 1 && this.path[1] !== 'login') {
       this.redirecTo = this.path[1] + '/members';
     }
-
+    this.dialogRef.close();
     this.router.navigateByUrl(this.redirecTo);
   }
 

@@ -30,13 +30,11 @@ export class WildcardHandlerComponent implements OnInit {
     const indexDashboard = this.path.indexOf('dashboard');
     const indexlLogin = this.path.indexOf('login');
     const indexSignUpForm = this.path.indexOf('signupform');
-    console.log('the index of: ', indexSignUpForm);
-    console.log(this.path);
+
     if (indexStart !== -1 && this.path[indexStart] === 'start') {
       this.salespage = true;
       this.loading = true;
-    } else if ((indexMembersArea !== -1 && this.path[indexMembersArea] === 'members') || this.path.length === 2) {
-      console.log('load members');
+    } else if ((indexMembersArea !== -1 && this.path[indexMembersArea] === 'members') || this.path.length === 2) {      
       this.membersarea = true;
       this.loading = true;
     } else if (indexDashboard !== -1 && this.path[indexDashboard] === 'dashboard') {

@@ -2,17 +2,20 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { AppConfigService } from './app-config.service';
 @Injectable({
   providedIn: 'root'
 })
 export class BuisinessAndSitesIdsService {
 
   private headers: HttpHeaders;
-  apiHost = 'http://127.0.0.1:8000/';
+  apiHost = '';
   constructor(
     private httpClient: HttpClient,
-    private router: Router
-  ) {
+    private router: Router,
+    private appserv: AppConfigService
+    ) {
+    this.apiHost = this.appserv.getApiHost();
     this.headers = new HttpHeaders({
       '22-SCIALAPP': 'jCBI5bHxh9HeBXagiLbm9ln4t0oUrkwioVhxUrofEbWNsu6DKxQfOCBHQVEXwCwR',
       Authorization: 'Basic Z21vcmFuQGJhbmR3aWR0aHguY29tOm9tcmVsbGl1Zw==',

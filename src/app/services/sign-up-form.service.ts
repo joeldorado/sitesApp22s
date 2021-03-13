@@ -4,17 +4,21 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import {TokenService} from './token.service';
+import { AppConfigService } from './app-config.service';
 @Injectable({
   providedIn: 'root'
 })
 export class SignUpFormService {
   path = location.pathname.split('/')[1];
   private headers: HttpHeaders;
-  apiHost = 'http://127.0.0.1:8000/';
+  apiHost = '';
 
   constructor(
     private httpClient: HttpClient,
-    private tkn: TokenService) {
+    private tkn: TokenService,
+    private appserv: AppConfigService
+    ) {
+    this.apiHost = this.appserv.getApiHost();
     this.headers = new HttpHeaders({
     //  '22-SCIALAPP': this.appConfigService.getAppEnv().apiToken,
     //  Authorization: this.appConfigService.getAppEnv().authorization,

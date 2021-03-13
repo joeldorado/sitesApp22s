@@ -12,7 +12,12 @@
         </div>
         <div fxFlex="30" fxFlexAlign='end center' >
             <div fxLayout="row" style="float: right;">               
-                <div fxFlex="100" fxFlexAlign="center"><button mat-raised-button >LOGIN</button></div>
+                <div fxFlex="100" fxFlexAlign="center">
+                <button 
+                (click)="openDialog()"
+                mat-raised-button
+                 >LOGIN</button>
+                </div>
             </div>
         </div>
     </mat-toolbar-row>

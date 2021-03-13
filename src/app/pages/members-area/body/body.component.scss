@@ -1,0 +1,186 @@
+.template {
+  margin: 20px;
+}
+.left-row-menu {
+    position: absolute;
+    top: 50%;   
+    z-index: 1;
+    border-radius: 5px;
+    height: 18%;
+    color: #333;
+    transition: all ease 1s;    
+  }
+
+  .drop-row {
+    margin-bottom: 30px;
+    border-radius: 4px;
+    position: relative;
+  }
+  .column-container {    
+     display: block;
+     overflow: hidden;
+     transition: all ease 0.8s;
+     padding-left: 35px;
+   
+     }
+     .column-body {
+      background: #fff;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+      flex-grow: 1;
+      flex-basis: 0;
+      border: 3px solid #fff;
+      transition-delay: all .8s;
+    }
+
+    .block-icon {
+      width: 100%; 
+    }
+
+    .icon-template {
+      opacity: 0;
+     margin-left: 45%;    
+     transform: rotate(90deg);
+     transition: all ease 0.8s;
+     cursor: grab;
+     color: #e0e0e0;
+   }
+  
+   .block{
+    width: 100%;      
+    margin: -3px -13px 15px 0px;
+    display: inline-block;
+    align-items: center center;
+    vertical-align: top;
+    box-sizing: border-box;    
+    background: #fff;
+  }
+
+   .block-icon:hover .icon-template {
+     opacity: 1;
+   }
+   .icon-template:hover {
+    color: #333;
+  }
+
+
+  .drop-section {
+    border: 1px solid #ddd;
+    transition: all ease 0.8s;
+  }
+  .drop-section:hover .icon-template{
+    opacity: 1;
+    color: #eee;
+  }
+
+
+
+    
+  .cdk-drag-preview {
+    background: #ccc;
+    border: dotted 3px #999;
+    min-height: 60px;
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+  .example-box:last-child {
+    border: none;
+  }
+  .cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+
+
+.cropper-dashed {
+    display: none !important;
+    border: 0px !important;
+} 
+
+@-webkit-keyframes pulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+img.my-cropper-loading {
+  animation: pulse 1s infinite ease-in-out;
+}
+.addRow:hover {
+  background: rgba(0, 0, 0, 0.38);
+}
+.addRow:hover .columnAdd{
+  background: rgba(0, 0, 0, 0.38);
+  border: 1px dotted #fff;
+}
+
+
+
+
+
+    //-----
+
+    .example-list {
+      width: 1000px;
+      max-width: 100%;
+      border: solid 1px #ccc;
+      min-height: 60px;
+      display: flex;
+      flex-direction: row;
+      background: white;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .example-box {
+      padding: 20px 10px;
+      border-right: solid 1px #ccc;
+      color: rgba(0, 0, 0, 0.87);
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+      cursor: move;
+      background: white;
+      font-size: 14px;
+      flex-grow: 1;
+      flex-basis: 0;
+    }
+    
+    .cdk-drag-preview {
+      box-sizing: border-box;
+      border-radius: 4px;
+      box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    }
+    
+    .cdk-drag-placeholder {
+      opacity: 0;
+    }
+    
+    .cdk-drag-animating {
+      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+    
+    .example-box:last-child {
+      border: none;
+    }
+    
+    .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }

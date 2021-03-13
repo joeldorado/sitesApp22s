@@ -1,8 +1,13 @@
 <div class="template">
-    <app-menu [menuData]="menuData$"></app-menu>
-   
-   <div fxLayout="row" *ngFor="let pages of menuData$?.pages">
-    <app-body      
-        [blocks]="getPageBlocks(blocks$?.blocks, pages.page_number)" *ngIf="pages.active"></app-body> 
-    </div>
+    <app-menu 
+    [menuData]="menuData$"
+    (activePage)="activeMenu($event)"
+    ></app-menu>
+   <mat-progress-bar *ngIf="loadingPage" mode="indeterminate"></mat-progress-bar>
+   <!-- <div fxLayout="row" *ngFor="let pages of menuData$?.pages">  </div>-->
+    <app-body         
+        [blocks]="blocks$" 
+        [pageStructure]="currentStructure">
+        </app-body> 
+  
 </div>

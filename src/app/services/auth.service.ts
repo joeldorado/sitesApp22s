@@ -4,19 +4,22 @@ import { Observable } from 'rxjs';
 import {TokenService} from './token.service';
 import {IsAuthService} from './is-auth.service';
 import { Router } from '@angular/router';
+import {AppConfigService} from '../services/app-config.service';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private headers: HttpHeaders;
-   apiHost = 'http://127.0.0.1:8000/';
-  // apiHost = 'https://api-dot-crypto-haven-111118.appspot.com/';
+    apiHost = '';
+
   constructor(
     private httpClient: HttpClient,
     private token: TokenService,
     private isAuth: IsAuthService,
-    private router: Router
+    private router: Router,
+    private appserv: AppConfigService
   ) {
+    this.apiHost = this.appserv.getApiHost();
     this.headers = new HttpHeaders({
       '22-SCIALAPP': 'jCBI5bHxh9HeBXagiLbm9ln4t0oUrkwioVhxUrofEbWNsu6DKxQfOCBHQVEXwCwR',
       Authorization: 'Basic Z21vcmFuQGJhbmR3aWR0aHguY29tOm9tcmVsbGl1Zw==',
