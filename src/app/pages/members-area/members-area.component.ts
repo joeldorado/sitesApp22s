@@ -4,6 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import {MembersAreaService} from '../../services/members-area.service';
 import { Observable } from 'rxjs';
 import { UpperCasePipe, LowerCasePipe, TitleCasePipe } from '@angular/common';
+import {Location} from '@angular/common';
 @Component({
   selector: 'app-members-area',
   templateUrl: './members-area.component.html',
@@ -21,54 +22,82 @@ export class MembersAreaComponent implements OnInit {
         private isAuth: IsAuthService,
         private router: Router,
         private ma: MembersAreaService,
-        private tcs: TitleCasePipe) {
+        private tcs: TitleCasePipe,
+        private loc: Location
+    ) {
 
     this.isAuth.authStatus.subscribe((value) => {
 
       if (!value) {
         // redirect
         if (this.path.length > 1) {
+
           this.redirecTo = this.path[1] + '/start';
-        }
-        this.router.navigate([this.redirecTo]);
-      }
-
-      // path for load pages
-
-      let pageName = 'Home';
-
-      const paths = location.pathname.split('members')[1];
-
-      if (paths !== '' && paths !== 'home') {
-
-          pageName = paths.replace('/', '');
-      }
-
-      // gets pages fore the menu
-      this.ma.getMenuPages().subscribe(data => {
-
-        this.menuData$ = data;
-
-        pageName = this.tcs.transform(pageName);
-
-        const page = this.menuData$.pages.filter(p => p.page_tittle === pageName);
-
-        let pageNumber = 0;
-
-        if (page.length > 0) {
-
-          pageNumber = page[0].page_number;
-
-        } else {
-
-          alert('404 Page not found, redirection to home page');
-
+          if (this.path[1] === 'members') {
+            this.redirecTo = 'start';
+          }
         }
 
-        this.activeMenu(pageNumber);
+        setTimeout(() => {
+          this.router.navigate([this.redirecTo]);
+        }, 100);
+      }
 
+      // validate site access if not send to other
+      // load menu
+      this.ma.validateSiteAccess().subscribe( data => {
+        let noAccess = true;
+        let msg = '';
+        if (data.length === 0) { noAccess = false;  msg = `You'r not a member.`; }
+        else if (data[0].status !== 'active') {noAccess = false; msg = `You'r not currently active. plase contact support.`; }
 
+        if (!noAccess) {
+          localStorage.clear();
+          console.log(this.path);
+          // this.notifier.notify('success', msg);
+          alert(msg);
+          // this.router.navigate([redirecTo]); // , {noaccess: msg}
+          this.loc.back();
+          return;
+        }
+        this.loadMembersArea();
       });
+
+    });
+  }
+  loadMembersArea(): void {
+    // path for load pages
+
+    let pageName = 'Home';
+    const paths = location.pathname.split('members')[1];
+
+    if (paths !== '' && paths !== 'home') {
+
+        pageName = paths.replace('/', '');
+    }
+
+    // gets pages fore the menu
+    this.ma.getMenuPages().subscribe(data => {
+
+      this.menuData$ = data;
+
+      pageName = this.tcs.transform(pageName);
+
+      const page = this.menuData$.pages.filter(p => p.page_tittle === pageName);
+
+      let pageNumber = 0;
+
+      if (page.length > 0) {
+
+        pageNumber = page[0].page_number;
+
+      } else {
+
+        alert('404 Page not found, redirection to home page');
+
+      }
+
+      this.activeMenu(pageNumber);
 
 
     });
@@ -89,18 +118,6 @@ export class MembersAreaComponent implements OnInit {
 
 
   ngOnInit(): void {
-    const path = location.pathname;
-    // load menu
-    this.ma.validateSiteAccess().subscribe( data => {
-      if (data.status !== undefined) {
-        localStorage.clear();
-        this.router.navigate(['/login']);
-       // alert(data.status);
-
-      }
-    });
-
-
     // load blocks
   }
 

@@ -69,7 +69,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatStepperModule,
     MatDividerModule,
     MatBadgeModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+
   ],
   declarations: [PageNotFoundComponent]
 })

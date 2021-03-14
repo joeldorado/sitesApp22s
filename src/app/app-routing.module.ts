@@ -7,6 +7,11 @@ const Routes: Routes = [
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule),
     pathMatch: 'full'
   },
+   {
+    path: '404',
+    loadChildren: () => import('./pages/page-404/page-404.module').then(m => m.Page404Module),
+    pathMatch: 'full'
+  },
   {
     path: 'page-not-found',
     component: PageNotFoundComponent,

@@ -1,5 +1,10 @@
   
 <div class="template">
    <app-menu [menuData]="menuData$"></app-menu>
+   <div fxLayout="row" *ngIf="siteNoAccess !== ''">
+      <div fxFlex="100" fxLayout="row" fxFlexAlign="center">
+         {{siteNoAccess}}
+      </div>
+    </div>
    <app-body [structure]="structure$" [blocks]="blocks$"></app-body>
 </div>
