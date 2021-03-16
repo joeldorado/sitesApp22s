@@ -47,14 +47,15 @@ export class TokenService {
   isValid(): any {
     const token = this.get();
     if (token) {
+      console.log('have token');
       const payload = this.payload(token);
       if (payload) {
-
-        if (Object.values(this.iss).indexOf(payload.iss) > -1) {
-          // true
-          return this.tokenExpired();
-        }
-        return false;
+        // console.log(this.iss);
+        // console.log(payload.iss);
+        // console.log(Object.values(this.iss).indexOf(payload.iss));
+        // if (Object.values(this.iss).indexOf(payload.iss) > -1) {}
+        // true
+        return this.tokenExpired();
       }
     }
     return false;

@@ -37,23 +37,23 @@ export class MembersAreaComponent implements OnInit {
             this.redirecTo = 'start';
           }
         }
-
-        setTimeout(() => {
-          this.router.navigate([this.redirecTo]);
-        }, 100);
+        this.router.navigate([this.redirecTo]);
+        return;
       }
 
       // validate site access if not send to other
       // load menu
       this.ma.validateSiteAccess().subscribe( data => {
+
         let noAccess = true;
         let msg = '';
         if (data.length === 0) { noAccess = false;  msg = `You'r not a member.`; }
         else if (data[0].status !== 'active') {noAccess = false; msg = `You'r not currently active. plase contact support.`; }
-
+        else if (data.error !== undefined) {
+          noAccess = false;  msg = data.error;
+        }
         if (!noAccess) {
           localStorage.clear();
-          console.log(this.path);
           // this.notifier.notify('success', msg);
           alert(msg);
           // this.router.navigate([redirecTo]); // , {noaccess: msg}

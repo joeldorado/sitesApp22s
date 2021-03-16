@@ -26,15 +26,6 @@ export class LoginComponent implements OnInit {
               private isAuth: IsAuthService,
               public dialogRef: MatDialogRef<LoginComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.isAuth.authStatus.subscribe((value) => {
-      if (value) {
-        if (this.path.length > 1 && this.path[1] !== 'login') {
-          this.redirecTo = this.path[1] + '/members';
-        }
-        this.router.navigate([this.redirecTo]);
-
-      }
-    });
 
     this.logIn = fb.group({
       email: new FormControl(''),
@@ -42,8 +33,6 @@ export class LoginComponent implements OnInit {
     });
 
     this.siteName = this.data.menuData.site;
-
-
 
    }
    onNoClick(): void {
@@ -59,10 +48,8 @@ export class LoginComponent implements OnInit {
   onFormSubmit(): void {
     const form = {
       email: this.logIn.value.email,
-      password: this.logIn.value.password,
-      business_id: this.path[1] = 'login' ? '' : this.path[1]
+      password: this.logIn.value.password
     };
-
     this.authSer.login(form).subscribe(
       data => this.handleResponse(data),
       error => this.handleError(error)
@@ -70,19 +57,19 @@ export class LoginComponent implements OnInit {
   }
   handleError(error: any): void {
     this.error = error.error.error;
-    alert(this.error);
   }
 
   handleResponse(data: any): void {
     if (data.access_token === undefined) {
-      alert(data.error);
-      return;
+      this.error = data.error; return;
     }
     this.Token.handle(data);
     this.isAuth.changeAuthStatus(true);
-
-    if (this.path.length > 1 && this.path[1] !== 'login') {
-      this.redirecTo = this.path[1] + '/members';
+    this.redirecTo = this.path[1] + '/members';
+    if (this.path[1] === 'start') {
+      this.redirecTo = 'members';
+    } else if (this.siteName === 'Dashboard') {
+      this.redirecTo = 'dashboard';
     }
     this.dialogRef.close();
     this.router.navigateByUrl(this.redirecTo);

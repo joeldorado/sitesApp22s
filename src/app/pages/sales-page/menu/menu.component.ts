@@ -10,18 +10,23 @@ declare const mosaicoCropp: any;
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
+  path = location.pathname.split('/');
   @Input() menuData: any;
-    constructor(public dialog: MatDialog) { }
+    constructor(public dialog: MatDialog) {
+      console.log('----');
+      console.log(this.path);
+     }
 
     openDialog(): void {
-      console.log('---->');
       const dialogRef = this.dialog.open(LoginComponent, {
         width: '30%',
         data: {menuData: this.menuData}
       });
 
       dialogRef.afterClosed().subscribe(result => {
+
         console.log('The dialog was closed');
+        console.log(result);
         // this.animal = result;
       });
     }

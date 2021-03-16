@@ -44,7 +44,7 @@ const Routes: Routes = [
   }
 
 ];
-console.log(Routes);
+
 @NgModule({
   imports: [RouterModule.forRoot(Routes)],
   exports: [RouterModule]

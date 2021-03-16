@@ -1,1 +1,10 @@
-<h1>dashboard works!</h1>
+<div class="template" *ngIf="isLogedIn">
+<h1> hi there this is your dashboard ... bo you are loged in</h1>
+</div>
+
+<div *ngIf="!isLogedIn" fxLayout="row" fxLayoutAlign="center" class="loginbtn">
+    <div fxFlex="50" fxLayout="column" fxLayoutAlign="center">
+        <button mat-raised-button (click)="openDialog()"> <mat-icon>login</mat-icon> Click here to login </button>
+    </div>
+</div>
+<div *ngIf="!isLogedIn" [style.background-image]="'url(/assets/img/login.jpeg)'" class="bk"></div>

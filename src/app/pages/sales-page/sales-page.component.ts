@@ -1,7 +1,7 @@
-import { Component, ComponentFactoryResolver, ViewChildren,
-  ViewContainerRef, QueryList, AfterViewInit, ComponentRef,  Input, OnChanges, ViewChild} from '@angular/core';
+import { Component} from '@angular/core';
 import {SalesPageService} from '../../services/sales-page.service';
-import {Router, ActivatedRoute} from '@angular/router';
+import {Router} from '@angular/router';
+import { IsAuthService } from '../../services/is-auth.service';
 @Component({
   selector: 'app-sales-page',
   templateUrl: './sales-page.component.html',
@@ -11,20 +11,27 @@ export class SalesPageComponent  {
 menuData$: any;
 structure$: any;
 blocks$: any;
-siteNoAccess: any = '';
+path = location.pathname.split('/');
  constructor(
   private sp: SalesPageService,
   private router: Router,
-  private actRouter: ActivatedRoute
+  private isAuth: IsAuthService,
  ) {
-
-  this.siteNoAccess = this.actRouter.snapshot.paramMap.get('noaccess');
-  this.sp.get_sales_pages().subscribe(data => {
-    if (data.error !== undefined) {
-      // console.log('erro alert');
-      this.router.navigate(['/404', {msg : data.error}]);
-      return;
+// valida si ya esta loged in enviar al members area que le corresponde
+  this.isAuth.authStatus.subscribe((value) => {
+    if (value) {
+      let sendTo = this.path[1] + '/members';
+      if (this.path[1] === 'start') {
+        sendTo = 'members';
     }
+      this.router.navigate([sendTo]);
+    }
+  });
+
+  // carga los datos
+  this.sp.get_sales_pages().subscribe(data => {
+    // si no tiene acceso no se econtro sitio enviar a 404
+    if (data.error !== undefined) { this.router.navigate(['/404', {msg : data.error}]); return; }
 
     this.structure$ = JSON.parse(data.structure.structure_json);
     this.blocks$ = data.body;
