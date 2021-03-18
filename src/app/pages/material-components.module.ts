@@ -32,7 +32,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
-
+import {MatChipsModule} from '@angular/material/chips';
 @NgModule({
   imports: [
     CommonModule
@@ -70,6 +70,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatDividerModule,
     MatBadgeModule,
     FlexLayoutModule,
+    MatChipsModule
 
   ],
   declarations: [PageNotFoundComponent]

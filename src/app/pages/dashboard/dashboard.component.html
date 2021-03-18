@@ -1,5 +1,6 @@
 <div class="template" *ngIf="isLogedIn">
-<h1> hi there this is your dashboard ... bo you are loged in</h1>
+<app-menu [businessName]="businessName"> </app-menu>
+<app-body [data]="data" [domain]="businessUrl"> </app-body>
 </div>
 
 <div *ngIf="!isLogedIn" fxLayout="row" fxLayoutAlign="center" class="loginbtn">

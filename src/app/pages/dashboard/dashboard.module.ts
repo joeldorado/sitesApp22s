@@ -7,8 +7,10 @@ import {MaterialComponentsModule} from '../material-components.module';
 import {LoginModule} from '../login/login.module';
 import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {LoginComponent} from '../login/login.component';
+import {MenuComponent} from './menu/menu.component';
+import {BodyComponent} from './body/body.component';
 @NgModule({
-  declarations: [DashboardComponent],
+  declarations: [DashboardComponent, MenuComponent, BodyComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
