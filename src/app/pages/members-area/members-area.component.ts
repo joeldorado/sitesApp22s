@@ -44,22 +44,27 @@ export class MembersAreaComponent implements OnInit {
       // validate site access if not send to other
       // load menu
       this.ma.validateSiteAccess().subscribe( data => {
+       // let msg = '';
+        if (data.length === 0 || data[0].status !== 'active' || data.error !== undefined) {
+           // alert(`You'r not a member.`);
+           let redirecTo = this.path[1] + '/start';
+           if (this.path[1] === 'members') { redirecTo = 'start'; }
+           this.router.navigate([redirecTo]);
+           return;
 
-        let noAccess = true;
-        let msg = '';
-        if (data.length === 0) { noAccess = false;  msg = `You'r not a member.`; }
-        else if (data[0].status !== 'active') {noAccess = false; msg = `You'r not currently active. plase contact support.`; }
-        else if (data.error !== undefined) {
-          noAccess = false;  msg = data.error;
         }
-        if (!noAccess) {
-          localStorage.clear();
-          // this.notifier.notify('success', msg);
-          alert(msg);
-          // this.router.navigate([redirecTo]); // , {noaccess: msg}
-          this.loc.back();
-          return;
-        }
+        // else if () {
+        //  msg = data.error;
+        //  alert(msg);
+        //  return;
+       // }
+       // else if () {
+         // alert(`Cant access this site, redirecting to your current access Sites.`);
+        //  this.router.navigate(['/dashboard']);
+        //  return;
+       // }
+
+
         this.loadMembersArea();
       });
 

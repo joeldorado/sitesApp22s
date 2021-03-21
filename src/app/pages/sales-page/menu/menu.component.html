@@ -14,9 +14,32 @@
             <div fxLayout="row" style="float: right;">               
                 <div fxFlex="100" fxFlexAlign="center">
                 <button 
+                *ngIf="!logedIn"
                 (click)="openDialog()"
                 mat-raised-button
                  >LOGIN</button>
+                  <button mat-icon-button 
+                   *ngIf="logedIn"
+                        class="menu-button"
+                        [matMenuTriggerFor]="menu" 
+                        aria-label="Example icon-button with a menu">
+                          <img class="avatar" [src]="pictureUrl">                            
+                        <mat-icon class="icon" fxHide fxShow.gt-sm>keyboard_arrow_down</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item>
+                            <mat-icon>dialpad</mat-icon>
+                        <span>Redial</span>
+                        </button>
+                        <button mat-menu-item disabled>
+                         <mat-icon>voicemail</mat-icon>
+                        <span>Check voice mail</span>
+                        </button>
+                        <button mat-menu-item (click)="logOut()">
+                            <mat-icon>notifications_off</mat-icon>
+                        <span>Log out</span>
+                        </button>
+                    </mat-menu>
                 </div>
             </div>
         </div>

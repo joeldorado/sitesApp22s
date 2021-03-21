@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { faLess } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
   selector: 'app-body',
@@ -86,6 +87,9 @@ isOther(userSiteAccess: any, siteId: any): any {
   const otherSite = userSiteAccess.filter(us => +us.site_id === +siteId);
 
   if (otherSite.length === 0) {
+    return true;
+  }
+  if (otherSite[0].status !== 'active') {
     return true;
   }
   return false;

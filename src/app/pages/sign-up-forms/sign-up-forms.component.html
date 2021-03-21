@@ -23,43 +23,62 @@
                             Plase Login                 
                         </div>        
                     </div>
-                                        
+                <form [formGroup]="emailForm" (ngSubmit)="onSubmitEmail()">   
+                    <div *ngIf="passMatch" style=" color: red; margin-bottom: 15px;">                    
+                            Confirm Password and Password dosent match.                       
+                    </div>          
                     <mat-form-field appearance="legacy" class = "full-input">
                     <mat-label>Enter your email address</mat-label>
-                    <input type="email"  [(ngModel)]="email" (focusout)="onFocusOutEvent($event)"  matInput placeholder="email@example.com">                     
+                    <input type="email"  formControlName="email"  (focusout)="onFocusOutEvent($event)"  matInput placeholder="email@example.com">   
+                        <mat-error *ngIf="emailForm.controls.email.hasError('required')">
+                          Email is required.
+                        </mat-error>                  
                     </mat-form-field>  
-                    
+      
                     <mat-form-field *ngIf="account?.account === 'exist' || account?.account === 'dosent'" 
                     appearance="legacy" class = "full-input">
                     <mat-label>Enter Password</mat-label>
-                    <input  matInput type="password">                     
+                    <input  matInput type="password" formControlName="password" >    
+                        <mat-error *ngIf="emailForm.controls.password.hasError('required')">
+                          Password is required.
+                        </mat-error>                     
                     </mat-form-field>   
 
                     <mat-form-field *ngIf="account?.account === 'dosent'" appearance="legacy" class = "full-input">
                     <mat-label>Confirm Password</mat-label>
-                    <input  matInput type="password">                     
+                    <input  matInput type="password" formControlName="confirmPassword">      
+                        <mat-error *ngIf="emailForm.controls.confirmPassword.hasError('required')">
+                         Confirm Password is required.
+                        </mat-error>
+                                                         
                     </mat-form-field> 
                     <div fxLayout="row" *ngIf="account?.account === 'exist'">
                         <div fxFlex="100">
                            <button mat-raised-button> forgot password?</button>                    
                         </div>        
                     </div>
-                
-                    <section>
-                        <mat-checkbox [(ngModel)]="emailTerms">I accept Terms of Service and Privacy Policy</mat-checkbox>          
+                <!-- [(ngModel)]="emailTerms"-->
+                    <section> 
+                        <mat-checkbox formControlName="agree"  >I accept Terms of Service and Privacy Policy</mat-checkbox>     
+                        <mat-error *ngIf="emailTerms">
+                          Terms of Service... is required.
+                        </mat-error>           
                     </section>   
                     
-                <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
-                    <div fxFlex="50">
-                         <button fxFlex="100" mat-raised-button (click)="paymentProcess(2)"> Continue</button>                                               
-                    </div>
-                </div>                  
-                </div>                                
+                    <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
+                            <div fxFlex="50">
+                            <!--  (click)="paymentProcess(2)" -->
+                                <button [disabled]="!emailForm.valid" type="submit" fxFlex="100" mat-raised-button> Continue</button>                                               
+                            </div>
+                    </div> 
+                </form>                   
+                </div>  
+                                           
             </div>
             </div>
         <!-- end email content -->
         <!--  payment coupone -->   
-        <div style="position: relative;" *ngIf="paymentOpt">
+        <div style="position: relative;" *ngIf="paymentOpt && this.siteOptions$[0].signup_type !== 'free'">
         <h3 >Payment Option</h3> 
         <div class="row box">
             <div fxFlex="100"> 
@@ -115,7 +134,7 @@
 
 
         <!--  process payment  -->   
-        <div style="position: relative;" *ngIf="processpymt">
+        <div style="position: relative;" *ngIf="processpymt && this.siteOptions$[0].signup_type !== 'free'">
         <h3 >Process Payment </h3>  
         <div class="row box">
             <div fxFlex="100">               

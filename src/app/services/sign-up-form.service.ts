@@ -12,7 +12,8 @@ export class SignUpFormService {
   path = location.pathname.split('/')[1];
   private headers: HttpHeaders;
   apiHost = '';
-
+  affilPath = location.pathname.split('/').slice(-1);
+  affiliate = '';
   constructor(
     private httpClient: HttpClient,
     private tkn: TokenService,
@@ -28,6 +29,9 @@ export class SignUpFormService {
         this.path = '';
     }
 
+    if (+this.affilPath[0]) {
+     this.affiliate = this.affilPath[0];
+   }
   }
 
 
@@ -64,7 +68,7 @@ export class SignUpFormService {
   }
 
   public accountExistVal(email: string): Observable<any> {
-    return this.httpClient.get(`${this.apiHost}api/account-validation`, {
+    return this.httpClient.get(`${this.apiHost}api/site-account-validation`, {
       params: new HttpParams().set('email', email)
     });
 
@@ -76,6 +80,11 @@ export class SignUpFormService {
 
   }
 
+  public siteNewUser(data: any): Observable<any> {
+    return this.httpClient.post(`${this.apiHost}api/site-new-user`,
+    {affiliate: this.affiliate, email: data.email, pws: data.pws, payment: data.payment, path: this.path });
+
+  }
 
 }
 

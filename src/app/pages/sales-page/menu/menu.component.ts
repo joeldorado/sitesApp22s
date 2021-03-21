@@ -12,10 +12,9 @@ declare const mosaicoCropp: any;
 export class MenuComponent implements OnInit {
   path = location.pathname.split('/');
   @Input() menuData: any;
-    constructor(public dialog: MatDialog) {
-      console.log('----');
-      console.log(this.path);
-     }
+  @Input() logedIn: any;
+  pictureUrl: any;
+    constructor(public dialog: MatDialog) { }
 
     openDialog(): void {
       const dialogRef = this.dialog.open(LoginComponent, {
@@ -31,8 +30,13 @@ export class MenuComponent implements OnInit {
       });
     }
   ngOnInit(): void {
+    this.pictureUrl = localStorage.getItem('__site_fb_picture_url');
   }
 
-
+  logOut(): void {
+    localStorage.clear();
+    //  this.route.navigate(['/login']);
+    location.reload();
+  }
 
 }

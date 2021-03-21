@@ -9,6 +9,7 @@ import {VideoComponent} from '../shared/video/video.component';
 import {IsAuthService} from '../../services/is-auth.service';
 import {Router} from '@angular/router';
 import { faCcAmex, faCcDiscover, faCcVisa, faCcMastercard} from '@fortawesome/free-brands-svg-icons';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 @Component({
   selector: 'app-sign-up-forms',
   templateUrl: './sign-up-forms.component.html',
@@ -40,11 +41,13 @@ export class SignUpFormsComponent implements OnChanges {
   paymentOpt = false;
   processpymt = false;
   accountInfo = false;
-
-
+  siteOptions$!: any[];
+  emailDisabledBtn = true;
   viewPhone = true;
+  emailForm!: FormGroup;
   questions: string[] = ['What are you most struggling with?'];
-
+  passMatch = false;
+  processor = '';
   constructor(
     private supForm: SignUpFormService,
     private resolver: ComponentFactoryResolver,
@@ -77,11 +80,15 @@ export class SignUpFormsComponent implements OnChanges {
       if (data.error){
         alert(data.error);
         // ver con rene a donde redige si no se encuentra el site
-        this.router.navigate(['/404']);
+     //   this.router.navigate(['/404']);
       }
-      this.blocks$ = data;
+      this.blocks$ = data.blocks;
+      this.siteOptions$ = data.siteOptions;
+      if (this.siteOptions$[0].signup_type === 'free') {
+        this.processor = 'free';
+      }
       setTimeout(() => {
-        data.forEach(element => {
+        data.blocks.forEach(element => {
           this.drawComponent(element);
         });
       }, 1000);
@@ -108,11 +115,76 @@ export class SignUpFormsComponent implements OnChanges {
         this.addresses.push(`Address ${c}`);
       }
     });
+
+    this.emailForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required]),
+      agree: new FormControl(false, [Validators.required]),
+    });
    }
 
   ngOnChanges(): void {
   }
+  onSubmitEmail(): void {
 
+    this.emailFormValidations();
+
+    console.log('submithed');
+    console.log(this.emailForm.value);
+  }
+
+
+  emailFormValidations(): void {
+    if (!this.emailForm.value.agree) { this.emailTerms = true; return; }
+    this.emailTerms = false;
+    if (this.account.account === 'dosent') {
+      if (this.emailForm.value.password !== this.emailForm.value.confirmPassword ) {
+        this.passMatch = true;
+        return;
+      }
+      this.passMatch = false;
+      this.newClient();
+      return;
+    }
+    this.alreadyClient();
+
+
+  }
+
+  newClient(): void {
+    console.log('adding new client');
+    this.supForm.siteNewUser({payment: {type: this.siteOptions$[0].signup_type, processor: this.processor},
+      email: this.emailForm.value.email, pws: this.emailForm.value.password}).subscribe(data => {
+      console.log(data);
+    });
+    // 'first_name' => '22Social',
+    // 'last_name' => 'Support',
+    // -- 'email' => 'support@22social.com',
+    // --'referral_user_id' => null,
+    // -- 'password' => Hash::make('support'),
+    // --'business_id' => 1000002,
+    // 'facebook_id' => 1,
+    // 'dob' => '2021/01/01',
+    // 'phone' => '555-555-555',
+    // 'address' => 'test',
+    // 'address2' => 'test2',
+    // 'city' => 'Sandiego',
+    // 'state' => 'California',
+    // 'zipcode' => '22000',
+    // 'country' => 'USA'
+    // create user and add the affiliate if hass
+    // 2) add the enrollment
+    // 3) give access to site
+
+  }
+
+  alreadyClient(): void {
+    console.log('already a client add to site......');
+  }
+
+  mailchimp(): void {
+    console.log('send the email');
+  }
   /**
    *
    * @param blockData
@@ -124,7 +196,7 @@ export class SignUpFormsComponent implements OnChanges {
     if (blockData.block_type === 'empty') {
       return true;
     }
-    const elem: ViewContainerRef[]  =  this.previewComponents.filter((element, index) => index === blockData.block_number);     
+    const elem: ViewContainerRef[]  =  this.previewComponents.filter((element, index) => index === blockData.block_number);
     const componentType = blockData.block_type;
     const value = JSON.parse(blockData.data_json);
     let component;
@@ -150,13 +222,14 @@ export class SignUpFormsComponent implements OnChanges {
   }
 
   onFocusOutEvent($event: any): void {
-    console.log('email:', this.email);
-    if (this.email === '') {
-      alert('Plase enter email');
-      return;
-    }
-    this.supForm.accountExistVal(this.email).subscribe(data => {
+    console.log('email:', this.emailForm.value.email);
+    if (this.emailForm.value.email === '') { return; }
+    this.supForm.accountExistVal( this.emailForm.value.email).subscribe(data => {
       this.account = data;
+      if (data.account === 'dosent') {
+        //      confirmPassword: new FormControl(''),
+        this.emailForm.addControl('confirmPassword', new FormControl ('', [Validators.required]));
+      }
     });
 
 
@@ -173,8 +246,15 @@ export class SignUpFormsComponent implements OnChanges {
       break;
       case 2 :
       this.emailSignup =  false;
-      this.paymentOpt = true;
-      this.processpymt = false;
+      if (this.siteOptions$[0].signup_type === 'free') {
+        this.paymentOpt = false;
+        this.processpymt = false;
+        this.accountInfo = true;
+      }else {
+        this.paymentOpt = true;
+        this.processpymt = false;
+      }
+
       break;
       case 3:
       this.paymentOpt = false;

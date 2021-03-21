@@ -9,13 +9,15 @@ import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {LoginComponent} from '../login/login.component';
 import {MenuComponent} from './menu/menu.component';
 import {BodyComponent} from './body/body.component';
+import { RouterModule } from '@angular/router';
 @NgModule({
   declarations: [DashboardComponent, MenuComponent, BodyComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
     MaterialComponentsModule,
-    LoginModule
+    LoginModule,
+    RouterModule
   ],
   exports: [DashboardComponent],
   providers: [
