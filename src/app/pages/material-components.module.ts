@@ -33,6 +33,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatChipsModule} from '@angular/material/chips';
+import { EmailSenderComponent } from './shared/email-sender/email-sender.component';
 @NgModule({
   imports: [
     CommonModule
@@ -73,7 +74,7 @@ import {MatChipsModule} from '@angular/material/chips';
     MatChipsModule
 
   ],
-  declarations: [PageNotFoundComponent]
+  declarations: [PageNotFoundComponent, EmailSenderComponent]
 })
 export class MaterialComponentsModule {
 }

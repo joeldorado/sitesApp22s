@@ -28,6 +28,11 @@ const Routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'sendEmail',
+    loadChildren: () => import('./pages/shared/email-sender/email-sender.module').then(m => m.EmailSenderModule),
+    pathMatch: 'full',
+  },
+  {
     path: 'members',
     loadChildren: () => import('./pages/members-area/members-area.module').then(m => m.MembersAreaModule),
     pathMatch: 'full',

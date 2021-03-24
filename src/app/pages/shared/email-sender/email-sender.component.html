@@ -1,0 +1,9 @@
+<form ngNoForm  method="post" action="https://www.aweber.com/scripts/addlead.pl" >
+        <input type="hidden" name="listname" [value]="key" /> <!-- awlist4313354-->
+        <input type="hidden" name="redirect" value="" />
+        <input type="hidden" name="meta_required" value="name,email" />
+        <input type="text" name="name" value="joel dorado" /> Name 
+        <input type="text" name="email" [value]="email" /> Email
+        <input type="submit" #btnsendMail value='send' /> 
+    </form>
+{{key}}

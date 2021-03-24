@@ -86,5 +86,28 @@ export class SignUpFormService {
 
   }
 
+  public siteSaveUserInfo(data: any): Observable<any> {
+    return this.httpClient.post(`${this.apiHost}api/site-save-user-info?token=${this.tkn.get()}`,
+    data);
+
+  }
+  public sendEmail(data: any): Observable<any>  {
+
+    return this.httpClient.post(`https://www.aweber.com/scripts/addlead.pl?email=doradoaguilusjoel@gmail.com
+    &meta_adtracking=custom form&meta_required=email&meta_message=1`,
+    {params: new HttpParams().set('listname', 'awlist4313354')} );
+
+    console.log(data);
+    return this.httpClient.post(`https://www.aweber.com/scripts/addlead.pl`, {
+      listname: 'awlist4313354',
+      meta_adtracking: 'custom form',
+      meta_message: 1,
+      meta_required: 'name, email',
+      meta_forward_vars: 0,
+      name: 'joel dorado',
+      email: data.email
+    });
+  }
+
 }
 

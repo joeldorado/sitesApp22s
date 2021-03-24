@@ -24,7 +24,6 @@ export class TokenService {
     localStorage.setItem('__site_name_', token.user);
     localStorage.setItem('__site_email_', token.email);
     localStorage.setItem('__site_userType_', token.email === 'admin@22s.com' ? 'user' : 'client');
-    console.log(token.fb);
     if (token.fb.length > 0) {
       localStorage.setItem('__site_fb_picture_url', token.fb[0].picture_url);
 

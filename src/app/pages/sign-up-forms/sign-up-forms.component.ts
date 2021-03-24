@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChildren, ViewContainerRef, QueryList, ComponentFactoryResolver, ComponentRef, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChildren, ViewContainerRef, QueryList,
+  ComponentFactoryResolver, ComponentRef, OnChanges, ViewChild, ElementRef } from '@angular/core';
 import {SignUpFormService} from '../../services/sign-up-form.service';
 import { Observable } from 'rxjs';
 import {ButtonComponent} from '../shared/button/button.component';
@@ -9,13 +10,15 @@ import {VideoComponent} from '../shared/video/video.component';
 import {IsAuthService} from '../../services/is-auth.service';
 import {Router} from '@angular/router';
 import { faCcAmex, faCcDiscover, faCcVisa, faCcMastercard} from '@fortawesome/free-brands-svg-icons';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
+import {TokenService} from '../../services/token.service';
+import {DomSanitizer} from '@angular/platform-browser';
 @Component({
   selector: 'app-sign-up-forms',
   templateUrl: './sign-up-forms.component.html',
   styleUrls: ['./sign-up-forms.component.scss']
 })
-export class SignUpFormsComponent implements OnChanges {
+export class SignUpFormsComponent  {
   @ViewChildren('previewComponents', {read: ViewContainerRef}) previewComponents!: QueryList<ViewContainerRef>;
   faCcAmex = faCcAmex;
   faCcDiscover = faCcDiscover;
@@ -45,14 +48,20 @@ export class SignUpFormsComponent implements OnChanges {
   emailDisabledBtn = true;
   viewPhone = true;
   emailForm!: FormGroup;
+  userInfoForm!: FormGroup;
   questions: string[] = ['What are you most struggling with?'];
   passMatch = false;
   processor = '';
+  progress = false;
+  validatonEmailLbl = '';
+  iframee: any;
   constructor(
     private supForm: SignUpFormService,
     private resolver: ComponentFactoryResolver,
     private isAuth: IsAuthService,
-    private router: Router
+    private router: Router,
+    private token: TokenService,
+    private sanitizer: DomSanitizer
   ) {
     // validate log in and if it is check if is payed user then if it is send them to members area
     this.isAuth.authStatus.subscribe((value) => {
@@ -67,7 +76,7 @@ export class SignUpFormsComponent implements OnChanges {
             }
 
             this.router.navigate(['/' + redirecTo]);
-
+            return;
           }
 
           // else ist'n subscriebd
@@ -107,30 +116,41 @@ export class SignUpFormsComponent implements OnChanges {
     this.supForm.get_accountInfo().subscribe(data => {
       if (data.length === 0) { return; }
       this.accountInfo$ = JSON.parse(data[0].user_accountinfo_settings_json);
-      console.log('--------->');
-      console.log(this.accountInfo$);
       for (let i = 0; i <= this.accountInfo$.address; i++) {
         const c = i + 1;
-        console.log('---' + c);
         this.addresses.push(`Address ${c}`);
       }
     });
 
-    this.emailForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required]),
-      agree: new FormControl(false, [Validators.required]),
-    });
+    this.startForms();
    }
-
-  ngOnChanges(): void {
-  }
+  // EMAIL FORM SUBMIT
   onSubmitEmail(): void {
 
+    this.progress = true;
+    this.emailForm.disable();
     this.emailFormValidations();
-
-    console.log('submithed');
-    console.log(this.emailForm.value);
+  }
+  // USER INFO FORM SUBMIT
+  onSubmitUserInfo(): void {
+    this.progress = true;
+    this.userInfoForm.disable();
+    console.log(this.userInfoForm);
+    this.supForm.siteSaveUserInfo(this.userInfoForm.value).subscribe(data => {
+      console.log('user info saved..........');
+      console.log(data);
+      if (data.user !== undefined) {
+        // pasar a una funcion para no repetir este codigo
+        let redirecTo = this.path + '/members';
+        if (this.path === 'signupform') {
+          redirecTo = 'members';
+        }
+        this.router.navigate(['/' + redirecTo]);
+        return;
+      }
+    }, error => {
+      console.error(error);
+    });
   }
 
 
@@ -152,39 +172,51 @@ export class SignUpFormsComponent implements OnChanges {
   }
 
   newClient(): void {
-    console.log('adding new client');
     this.supForm.siteNewUser({payment: {type: this.siteOptions$[0].signup_type, processor: this.processor},
       email: this.emailForm.value.email, pws: this.emailForm.value.password}).subscribe(data => {
       console.log(data);
-    });
-    // 'first_name' => '22Social',
-    // 'last_name' => 'Support',
-    // -- 'email' => 'support@22social.com',
-    // --'referral_user_id' => null,
-    // -- 'password' => Hash::make('support'),
-    // --'business_id' => 1000002,
-    // 'facebook_id' => 1,
-    // 'dob' => '2021/01/01',
-    // 'phone' => '555-555-555',
-    // 'address' => 'test',
-    // 'address2' => 'test2',
-    // 'city' => 'Sandiego',
-    // 'state' => 'California',
-    // 'zipcode' => '22000',
-    // 'country' => 'USA'
-    // create user and add the affiliate if hass
-    // 2) add the enrollment
-    // 3) give access to site
+      if (data.error !== undefined) {
+        alert(data.error);
+        return;
+      }
+      if (data.access !== undefined) {
+        // loged in
+        this.token.set(data.access);
+        // send the email awaber
+       //  this.supForm.sendEmail(data.access).subscribe(resp => {
+       //   console.log(resp);
+       // }, error => {
+       //   console.error(error);
+       // });
+        // next step
+        this.sendEmail({email: data.access.email, keyList: 'awlist4313354'});
+        this.paymentProcess(2);
+        this.progress = false;
+      }
 
+
+    }, error => {
+      console.log(error);
+      alert('Ooops somthing when worong, plase try again or contact support.');
+    });
+
+
+  }
+  // EMAIL IFRAME SENDER
+  sendEmail(data: any): void {
+    this.iframee = this.sanitizer.bypassSecurityTrustHtml(`
+      <iframe
+          width="1"
+          height="1"
+          src="sendEmail?${data.email}&key=${data.keyList}">
+      </iframe>
+    `);
   }
 
   alreadyClient(): void {
     console.log('already a client add to site......');
   }
 
-  mailchimp(): void {
-    console.log('send the email');
-  }
   /**
    *
    * @param blockData
@@ -221,10 +253,12 @@ export class SignUpFormsComponent implements OnChanges {
 
   }
 
+// ON FOCUS OUT EMAIL VALIDATION
   onFocusOutEvent($event: any): void {
-    console.log('email:', this.emailForm.value.email);
+    this.validatonEmailLbl = 'Validating current email...';
     if (this.emailForm.value.email === '') { return; }
     this.supForm.accountExistVal( this.emailForm.value.email).subscribe(data => {
+      this.validatonEmailLbl = '';
       this.account = data;
       if (data.account === 'dosent') {
         //      confirmPassword: new FormControl(''),
@@ -299,6 +333,25 @@ export class SignUpFormsComponent implements OnChanges {
           }
       }
       }
+    });
+  }
+
+  startForms(): void {
+    this.emailForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required]),
+      agree: new FormControl(false, [Validators.required]),
+    });
+
+    this.userInfoForm = new FormGroup({
+      firstName: new FormControl('', [Validators.required]),
+      lastName: new FormControl('', [Validators.required]),
+      phone: new FormControl(''),
+      birthday: new FormControl('', [Validators.required]),
+      suiteAptNumber: new FormControl('', [Validators.required]),
+      conuntry: new FormControl('', [Validators.required]),
+      city: new FormControl('', [Validators.required]),
+      zip: new FormControl('', [Validators.required]),
     });
   }
 }
