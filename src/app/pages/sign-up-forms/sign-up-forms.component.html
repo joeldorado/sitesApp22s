@@ -14,7 +14,18 @@
         </div>
         <!-- end info-->
         <!-- email content -->    
-      <div style="position: relative;" *ngIf="emailSignup">
+     <div class="row box" *ngIf="isAuthenticated && freeSub">
+     <div fxLAyout="row">
+        <div fxFlex="100">
+            <p>Plase click on continue in order to get the free Subscrition. </p>
+        </div>
+        </div>
+     <div fxFlex="100">
+     
+         <button  (click)="logedInFreeSub()" fxFlex="100" mat-raised-button> Continue</button> 
+     </div>
+     </div>
+      <div style="position: relative;" *ngIf="emailSignup && !isAuthenticated">
          <h3 >Email</h3>
         <div class="row box">
                 <div fxFlex="100">                    
@@ -27,7 +38,10 @@
                 <form [formGroup]="emailForm" (ngSubmit)="onSubmitEmail()">   
                     <div *ngIf="passMatch" style=" color: red; margin-bottom: 15px;">                    
                             Confirm Password and Password dosent match.                       
-                    </div>          
+                    </div>   
+                    <div *ngIf="LogInerror !== ''" style=" color: red; margin-bottom: 15px;">
+                    {{LogInerror}}
+                    </div>       
                     <mat-form-field appearance="legacy" class = "full-input">
                     <mat-label>Enter your email address <b>{{validatonEmailLbl}}</b></mat-label>
                     <input type="email"  formControlName="email"  (focusout)="onFocusOutEvent($event)"  matInput placeholder="email@example.com">   
@@ -192,7 +206,7 @@
         <!-- end payment coupone -->
 
         <!-- account info -->
-        <div style="position: relative;" *ngIf="accountInfo">
+        <div style="position: relative;" *ngIf="accountInfo && !isNewUser">
         <h3 >Account Information </h3> 
         <div class="row box" >
             <div fxFlex="100">                   

@@ -42,7 +42,7 @@ export class MembersAreaService {
     // get owner id
     // falta enviar  el story id, o se optendra en el back end?
     return this.httpClient.post(`${this.apiHost}api/ma-get-page?token=${this.tk.get()}`, {
-      page_number: pageNumber
+      page_number: pageNumber, path: this.path
     });
   }
   public get_home_page(site: string): Observable<any> {

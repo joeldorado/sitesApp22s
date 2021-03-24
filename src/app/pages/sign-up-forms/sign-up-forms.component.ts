@@ -13,6 +13,9 @@ import { faCcAmex, faCcDiscover, faCcVisa, faCcMastercard} from '@fortawesome/fr
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import {TokenService} from '../../services/token.service';
 import {DomSanitizer} from '@angular/platform-browser';
+import { ReturnStatement } from '@angular/compiler';
+import {AuthService} from '../../services/auth.service';
+
 @Component({
   selector: 'app-sign-up-forms',
   templateUrl: './sign-up-forms.component.html',
@@ -54,34 +57,27 @@ export class SignUpFormsComponent  {
   processor = '';
   progress = false;
   validatonEmailLbl = '';
+  LogInerror = '';
   iframee: any;
+  isNewUser = false;
+  freeSub = false;
   constructor(
     private supForm: SignUpFormService,
     private resolver: ComponentFactoryResolver,
     private isAuth: IsAuthService,
     private router: Router,
     private token: TokenService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private auth: AuthService
   ) {
     // validate log in and if it is check if is payed user then if it is send them to members area
     this.isAuth.authStatus.subscribe((value) => {
       this.isAuthenticated = value;
       if (value) {
         // if is loged in and if length > 0 the account is alredy subscribed
-        this.supForm.siteValidation().subscribe(data => {
-          if (data.length > 0) {
-            let redirecTo = this.path + '/members';
-            if (this.path === 'signupform') {
-              redirecTo = 'members';
-            }
+        this.supForm.siteValidation().subscribe(data => this.hanldeSiteAccess(data));
+        // if its free and is already loged in dont show emaillogin
 
-            this.router.navigate(['/' + redirecTo]);
-            return;
-          }
-
-          // else ist'n subscriebd
-
-        });
       }
     });
     // get blocks data
@@ -94,6 +90,7 @@ export class SignUpFormsComponent  {
       this.blocks$ = data.blocks;
       this.siteOptions$ = data.siteOptions;
       if (this.siteOptions$[0].signup_type === 'free') {
+        this.freeSub = true;
         this.processor = 'free';
       }
       setTimeout(() => {
@@ -124,6 +121,23 @@ export class SignUpFormsComponent  {
 
     this.startForms();
    }
+
+  // HANLDE SITE ACCESS (check if the user already have acces to this site)
+   hanldeSiteAccess(data: any): boolean {
+
+      if (data.length > 0) {
+        let redirecTo = this.path + '/members';
+        if (this.path === 'signupform') {
+          redirecTo = 'members';
+        }
+
+        this.router.navigate(['/' + redirecTo]);
+        return true;
+      }
+      return false;
+
+
+   }
   // EMAIL FORM SUBMIT
   onSubmitEmail(): void {
 
@@ -135,18 +149,10 @@ export class SignUpFormsComponent  {
   onSubmitUserInfo(): void {
     this.progress = true;
     this.userInfoForm.disable();
-    console.log(this.userInfoForm);
     this.supForm.siteSaveUserInfo(this.userInfoForm.value).subscribe(data => {
-      console.log('user info saved..........');
-      console.log(data);
       if (data.user !== undefined) {
         // pasar a una funcion para no repetir este codigo
-        let redirecTo = this.path + '/members';
-        if (this.path === 'signupform') {
-          redirecTo = 'members';
-        }
-        this.router.navigate(['/' + redirecTo]);
-        return;
+        this.isAuth.changeAuthStatus(true);
       }
     }, error => {
       console.error(error);
@@ -171,7 +177,73 @@ export class SignUpFormsComponent  {
 
   }
 
+  // NEW ACCESS AND ALREADY LOGED IN
+  logedInFreeSub(): void {
+    const hasAccess = this.supForm.siteValidation().toPromise();
+    hasAccess.then(dataAccess => {
+      if (this.hanldeSiteAccess(dataAccess)) { return; }
+      // then give site access
+      this.supForm.newSiteAccess({payment: {type: this.siteOptions$[0].signup_type, processor: this.processor}}).subscribe(siteAcc => {
+      this.sendEmail({email: siteAcc.access.email, keyList: 'awlist4313354'});
+      if (this.siteOptions$[0].signup_type === 'free') {
+          let redirecTo = this.path + '/members';
+          if (this.path === 'signupform') {
+            redirecTo = 'members';
+          }
+          this.router.navigate(['/' + redirecTo]);
+          return;
+      }
+      this.progress = false;
+      }, error => {
+      console.error(error);
+      }); // end add new access
+  }); // end handle access if already have access
+  }
+ // NEW SITE ACCESS
+ alreadyClient(): void {
+  // close user info if user already exist
+  this.isNewUser = true;
+   // log in the user
+  this.auth.login({email: this.emailForm.value.email, password: this.emailForm.value.password}). subscribe(data => {
+
+    if (data.access_token === undefined) {
+
+      this.LogInerror = data.error; return;
+
+    }
+
+    this.token.set(data);
+    this.isAuth.changeAuthStatus(true);
+    // if hass acces redirect to members area
+    const hasAccess = this.supForm.siteValidation().toPromise();
+
+    hasAccess.then(dataAccess => {
+      if (this.hanldeSiteAccess(dataAccess)) { return; }
+      // then give site access
+      this.supForm.newSiteAccess({payment: {type: this.siteOptions$[0].signup_type, processor: this.processor}}).subscribe(siteAcc => {
+      this.sendEmail({email: siteAcc.access.email, keyList: 'awlist4313354'});
+      if (this.siteOptions$[0].signup_type === 'free') {
+          let redirecTo = this.path + '/members';
+          if (this.path === 'signupform') {
+            redirecTo = 'members';
+          }
+          this.router.navigate(['/' + redirecTo]);
+          return;
+      }
+      this.paymentProcess(2);
+
+      this.progress = false;
+      }, error => {
+      console.error(error);
+      }); // end add new access
+  }); // end handle access if already have access
+
+  }); // end log in
+
+  }
+  // NEW USER
   newClient(): void {
+    // 
     this.supForm.siteNewUser({payment: {type: this.siteOptions$[0].signup_type, processor: this.processor},
       email: this.emailForm.value.email, pws: this.emailForm.value.password}).subscribe(data => {
       console.log(data);
@@ -182,6 +254,7 @@ export class SignUpFormsComponent  {
       if (data.access !== undefined) {
         // loged in
         this.token.set(data.access);
+// this.isAuth.changeAuthStatus(true);
         // send the email awaber
        //  this.supForm.sendEmail(data.access).subscribe(resp => {
        //   console.log(resp);
@@ -192,6 +265,7 @@ export class SignUpFormsComponent  {
         this.sendEmail({email: data.access.email, keyList: 'awlist4313354'});
         this.paymentProcess(2);
         this.progress = false;
+
       }
 
 
@@ -213,9 +287,6 @@ export class SignUpFormsComponent  {
     `);
   }
 
-  alreadyClient(): void {
-    console.log('already a client add to site......');
-  }
 
   /**
    *
@@ -270,7 +341,7 @@ export class SignUpFormsComponent  {
   }
 
   paymentProcess(type): void {
-    console.log(type);
+    
     switch (type) {
       case 1 :
       this.emailSignup = true;

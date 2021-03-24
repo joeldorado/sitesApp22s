@@ -85,6 +85,8 @@ export class MembersAreaComponent implements OnInit {
     this.ma.getMenuPages().subscribe(data => {
 
       this.menuData$ = data;
+      console.log('-------------->------>');
+      console.log(data);
 
       pageName = this.tcs.transform(pageName);
 
@@ -99,7 +101,7 @@ export class MembersAreaComponent implements OnInit {
       } else {
 
         alert('404 Page not found, redirection to home page');
-
+        return;
       }
 
       this.activeMenu(pageNumber);
@@ -115,6 +117,10 @@ export class MembersAreaComponent implements OnInit {
 
     this.ma.get_page(pageNumber).subscribe(data => {
 
+      if (data.length === 0) {
+        alert('There is no page on this site, plase contact support.');
+        return;
+      }
       this.blocks$ = data;
       this.loadingPage = false;
     });

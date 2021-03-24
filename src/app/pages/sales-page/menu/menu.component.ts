@@ -14,7 +14,14 @@ export class MenuComponent implements OnInit {
   @Input() menuData: any;
   @Input() logedIn: any;
   pictureUrl: any;
-    constructor(public dialog: MatDialog) { }
+  letter: any;
+    constructor(public dialog: MatDialog) {
+      this.letter = localStorage.getItem('__site_name_');
+      if (this.letter === 'null') {
+        this.letter = localStorage.getItem('__site_email_');
+      }
+
+     }
 
     openDialog(): void {
       const dialogRef = this.dialog.open(LoginComponent, {

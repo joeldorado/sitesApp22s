@@ -22,8 +22,11 @@
                    *ngIf="logedIn"
                         class="menu-button"
                         [matMenuTriggerFor]="menu" 
-                        aria-label="Example icon-button with a menu">
-                          <img class="avatar" [src]="pictureUrl">                            
+                        aria-label="Example icon-button with a menu">                           
+                            <img *ngIf="pictureUrl !== null" class="avatar" [src]="pictureUrl">                            
+                            <div class ="dot" *ngIf="pictureUrl === null">
+                                <h1>{{ letter | uppercase | slice:0:1 }}</h1>
+                            </div>                        
                         <mat-icon class="icon" fxHide fxShow.gt-sm>keyboard_arrow_down</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">

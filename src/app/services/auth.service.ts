@@ -38,6 +38,7 @@ export class AuthService {
     this.token.remove();
     this.isAuth.changeAuthStatus(false);
     this.router.navigateByUrl('/login');
+    // send request to api to logout
   }
 
 }

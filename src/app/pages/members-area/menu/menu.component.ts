@@ -10,8 +10,15 @@ export class MenuComponent implements OnInit {
 @Output() activePage: EventEmitter<object[]> = new EventEmitter();
  @Input() menuData!: MenuData;
   pictureUrl: any;
+  letter: any;
+  constructor(private route: Router) {
 
-  constructor(private route: Router) { }
+    this.letter = localStorage.getItem('__site_name_');
+    if (this.letter === 'null') {
+      this.letter = localStorage.getItem('__site_email_');
+    }
+    this.letter.toUpperCase();
+   }
 
   ngOnInit(): void {
     this.pictureUrl = localStorage.getItem('__site_fb_picture_url');

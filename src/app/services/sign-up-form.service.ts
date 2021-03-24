@@ -86,6 +86,12 @@ export class SignUpFormService {
 
   }
 
+
+  public newSiteAccess(data: any): Observable<any> {
+    return this.httpClient.post(`${this.apiHost}api/site-new-site-access?token=${this.tkn.get()}`,
+    {path: this.path, payment: data.payment });
+  }
+
   public siteSaveUserInfo(data: any): Observable<any> {
     return this.httpClient.post(`${this.apiHost}api/site-save-user-info?token=${this.tkn.get()}`,
     data);
