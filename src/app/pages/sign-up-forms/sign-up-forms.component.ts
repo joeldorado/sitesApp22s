@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChildren, ViewContainerRef, QueryList,
-  ComponentFactoryResolver, ComponentRef, OnChanges, ViewChild, ElementRef } from '@angular/core';
+  ComponentFactoryResolver, ComponentRef, OnChanges, ViewChild, ElementRef, ViewChildDecorator } from '@angular/core';
 import {SignUpFormService} from '../../services/sign-up-form.service';
 import { Observable } from 'rxjs';
 import {ButtonComponent} from '../shared/button/button.component';
@@ -15,7 +15,8 @@ import {TokenService} from '../../services/token.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import { ReturnStatement } from '@angular/compiler';
 import {AuthService} from '../../services/auth.service';
-
+import {AweberComponent} from '../shared/crm/auto-responders/aweber/aweber.component';
+import { validate } from 'json-schema';
 @Component({
   selector: 'app-sign-up-forms',
   templateUrl: './sign-up-forms.component.html',
@@ -23,6 +24,9 @@ import {AuthService} from '../../services/auth.service';
 })
 export class SignUpFormsComponent  {
   @ViewChildren('previewComponents', {read: ViewContainerRef}) previewComponents!: QueryList<ViewContainerRef>;
+  // @ViewChildren('', {read: ViewContainerRef}) autoresponder!: ViewContainerRef;
+  @ViewChild('autoresponder', {read: ViewContainerRef})
+   autoresponder!: ViewContainerRef;
   faCcAmex = faCcAmex;
   faCcDiscover = faCcDiscover;
   faCcVisa = faCcVisa;
@@ -33,7 +37,7 @@ export class SignUpFormsComponent  {
   account!: any;
   paymentsOpts$!: any[];
   coupones$!: any[];
-  email = '';
+  InfoUsrEmail = '';
   emailTerms = false;
   selectedPayment!: string;
   enterCoupone = '';
@@ -58,9 +62,15 @@ export class SignUpFormsComponent  {
   progress = false;
   validatonEmailLbl = '';
   LogInerror = '';
-  iframee: any;
   isNewUser = false;
   freeSub = false;
+  paymentOptions$: any;
+  integrationOptions$: any;
+
+
+  Token = '';
+  Bs = '';
+  List = '';
   constructor(
     private supForm: SignUpFormService,
     private resolver: ComponentFactoryResolver,
@@ -93,6 +103,10 @@ export class SignUpFormsComponent  {
         this.freeSub = true;
         this.processor = 'free';
       }
+      // crm options
+      this.paymentOptions$ = data.paymentOptions;
+      this.integrationOptions$ = data.crm_json.integrationsOptions;
+      // payment options
       setTimeout(() => {
         data.blocks.forEach(element => {
           this.drawComponent(element);
@@ -115,7 +129,8 @@ export class SignUpFormsComponent  {
       this.accountInfo$ = JSON.parse(data[0].user_accountinfo_settings_json);
       for (let i = 0; i <= this.accountInfo$.address; i++) {
         const c = i + 1;
-        this.addresses.push(`Address ${c}`);
+        this.addresses.push({lbl: `Address ${c}`, formControl: 'Address' + c });
+        this.userInfoForm.addControl('Address' + c , new FormControl('', [Validators.required]));
       }
     });
 
@@ -184,7 +199,7 @@ export class SignUpFormsComponent  {
       if (this.hanldeSiteAccess(dataAccess)) { return; }
       // then give site access
       this.supForm.newSiteAccess({payment: {type: this.siteOptions$[0].signup_type, processor: this.processor}}).subscribe(siteAcc => {
-      this.sendEmail({email: siteAcc.access.email, keyList: 'awlist4313354'});
+      this.sendEmail({email: siteAcc.access.email});
       if (this.siteOptions$[0].signup_type === 'free') {
           let redirecTo = this.path + '/members';
           if (this.path === 'signupform') {
@@ -221,7 +236,7 @@ export class SignUpFormsComponent  {
       if (this.hanldeSiteAccess(dataAccess)) { return; }
       // then give site access
       this.supForm.newSiteAccess({payment: {type: this.siteOptions$[0].signup_type, processor: this.processor}}).subscribe(siteAcc => {
-      this.sendEmail({email: siteAcc.access.email, keyList: 'awlist4313354'});
+      this.sendEmail({email: siteAcc.access.email});
       if (this.siteOptions$[0].signup_type === 'free') {
           let redirecTo = this.path + '/members';
           if (this.path === 'signupform') {
@@ -243,7 +258,7 @@ export class SignUpFormsComponent  {
   }
   // NEW USER
   newClient(): void {
-    // 
+    //
     this.supForm.siteNewUser({payment: {type: this.siteOptions$[0].signup_type, processor: this.processor},
       email: this.emailForm.value.email, pws: this.emailForm.value.password}).subscribe(data => {
       console.log(data);
@@ -262,7 +277,7 @@ export class SignUpFormsComponent  {
        //   console.error(error);
        // });
         // next step
-        this.sendEmail({email: data.access.email, keyList: 'awlist4313354'});
+        this.sendEmail({email: data.access.email});
         this.paymentProcess(2);
         this.progress = false;
 
@@ -278,13 +293,22 @@ export class SignUpFormsComponent  {
   }
   // EMAIL IFRAME SENDER
   sendEmail(data: any): void {
-    this.iframee = this.sanitizer.bypassSecurityTrustHtml(`
-      <iframe
-          width="1"
-          height="1"
-          src="sendEmail?${data.email}&key=${data.keyList}">
-      </iframe>
-    `);
+
+    if (this.integrationOptions$.siteIntegration.crm.type !== this.integrationOptions$.businessIntegration.type) { console.log('error the type direfetn'); return; }
+
+    // seth the form user info values in order to update the custome values and name
+
+    this.userInfoForm.addControl('awtoken', new FormControl (this.integrationOptions$.businessIntegration.public_values.token));
+    this.userInfoForm.addControl('bs', new FormControl (this.integrationOptions$.businessIntegration.bs));
+    this.userInfoForm.addControl('list', new FormControl (this.integrationOptions$.siteIntegration.crm.values.listid));
+    this.userInfoForm.addControl('email', new FormControl (data.email));
+
+
+    // autoresponder
+    const Factory = this.resolver.resolveComponentFactory(AweberComponent);
+    const Ref: ComponentRef<any>  = this.autoresponder.createComponent(Factory);
+    Ref.instance.value = {email: data.email, list: this.integrationOptions$.siteIntegration.crm.values.listid};
+
   }
 
 
@@ -341,7 +365,7 @@ export class SignUpFormsComponent  {
   }
 
   paymentProcess(type): void {
-    
+
     switch (type) {
       case 1 :
       this.emailSignup = true;
@@ -413,6 +437,7 @@ export class SignUpFormsComponent  {
       password: new FormControl('', [Validators.required]),
       agree: new FormControl(false, [Validators.required]),
     });
+
 
     this.userInfoForm = new FormGroup({
       firstName: new FormControl('', [Validators.required]),

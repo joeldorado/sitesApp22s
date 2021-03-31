@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnChanges, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnChanges, AfterViewInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-email-sender',
@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class EmailSenderComponent implements AfterViewInit {
   @ViewChild('btnsendMail') btnsendMail!: ElementRef;
+ 
   key: any;
   email: any;
   constructor(private route: ActivatedRoute) {
@@ -17,6 +18,7 @@ export class EmailSenderComponent implements AfterViewInit {
 
 
   ngAfterViewInit(): void {
+
     console.log(this.btnsendMail);
     if (this.btnsendMail !== undefined) {
       console.log('changed has value ');

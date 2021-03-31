@@ -21,14 +21,15 @@ import { ButtonComponent } from '../shared/button/button.component';
 import {TextComponent} from '../shared/text/text.component';
 import {VideoComponent} from '../shared/video/video.component';
 import { SignUpFormsComponent } from '../sign-up-forms/sign-up-forms.component';
-
+import {AweberComponent} from '../shared/crm/auto-responders/aweber/aweber.component';
 @NgModule({
   declarations: [WildcardHandlerComponent,
                  ImageComponent,
                  ButtonComponent,
                  TextComponent,
                  VideoComponent,
-                 SignUpFormsComponent],
+                 SignUpFormsComponent,
+                 AweberComponent],
   imports: [
     CommonModule,
     WildcardHandlerRoutignModule,

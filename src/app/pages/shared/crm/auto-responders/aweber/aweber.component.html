@@ -1,0 +1,19 @@
+     <!-- when the form is submitted, the server response will appear in this iframe
+      <iframe
+          width="1"
+          height="1"
+          src="sendEmail?${data.email}&key=${data.this.integrationOptions$.siteIntegration.crm.values.listid}">
+      </iframe>
+
+      <form action="do_stuff.aspx" method="post" >
+  <input type="submit" value="Do Stuff!">
+</form> -->
+<form ngNoForm  method="post" action="https://www.aweber.com/scripts/addlead.pl" target="aweberFrame" style="opacity: 0;">
+        <input type="hidden" name="listname" [value]="value.list" />
+        <input type="hidden" name="redirect" value="" />
+        <input type="hidden" name="meta_required" value="email" />   
+        <input type="text" name="email" [value]="value.email" /> Email
+        <input type="submit" #btnsendMail value='send' /> 
+</form>
+<iframe name="aweberFrame"  width="1" style="opacity: 0;"
+          height="1" src="https://www.aweber.com/scripts/addlead.pl"></iframe>

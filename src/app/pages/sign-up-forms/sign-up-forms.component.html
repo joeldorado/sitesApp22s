@@ -93,8 +93,8 @@
                                            
             </div>
             </div>
-        <!-- end email content -->
-       <div  [innerHtml]="iframee" style="opacity: 0;"></div>
+        <!-- end email content  [innerHtml]="iframee" -->
+       <div  #autoresponder ></div>
         <!--  payment coupone -->   
         <div style="position: relative;" *ngIf="paymentOpt && this.siteOptions$[0].signup_type !== 'free'">
         <h3 >Payment Option</h3> 
@@ -216,7 +216,7 @@
                     <div fxLayout="row" fxLayoutGap="10px">
                     <div fxFlex="50">
                     <mat-form-field appearance="legacy" fxFlex="100">
-                    <mat-label>First Name</mat-label>
+                    <mat-label>First Name</mat-label>               
                     <input matInput placeholder="" formControlName="firstName">  
                         <mat-error *ngIf="userInfoForm.controls.firstName.hasError('required')">
                              First Name is required.
@@ -247,10 +247,10 @@
                     </div>
                     <div fxFlex="50">   
                         <mat-form-field appearance="legacy" fxFlex="100" *ngIf="accountInfo$?.dob">
-                            <mat-label>Birthday</mat-label>
+                            <mat-label>Date of Birth </mat-label>
                             <input matInput placeholder="" formControlName="birthday">
                                 <mat-error *ngIf="userInfoForm.controls.birthday.hasError('required')">
-                                    Birthday is required.
+                                    Date of Birth is required.
                                 </mat-error>                      
                         </mat-form-field>
                     </div>
@@ -260,11 +260,11 @@
                     <div fxLayout="row" fxLayoutGap="10px">
                     <div fxFlex="50">
                     
-                    <div fxLayout="row" *ngFor="let a of addresses"> 
+                    <div fxLayout="row" *ngFor="let a of addresses; let i = index"> 
                         <mat-form-field appearance="legacy"                     
                         fxFlex="100">
-                        <mat-label>{{a}}</mat-label>
-                        <input matInput placeholder="">                     
+                        <mat-label>{{a.lbl}}</mat-label>
+                        <input matInput placeholder="" formControlName="{{a.formControl}}">                     
                         </mat-form-field>
                     </div>                    
                     </div>
@@ -325,11 +325,11 @@
                     </mat-form-field>
                     </div>                
                     </div>
-                    <!-- end question-->
+                    <!-- end question [disabled]="!userInfoForm.valid"-->
 
                     <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
                         <div fxFlex="50">
-                            <button fxFlex="100" [disabled]="!userInfoForm.valid"  mat-raised-button > Complete</button>                                               
+                            <button fxFlex="100"   mat-raised-button > Complete</button>                                               
                         </div>
                     </div>    
                     </form>
