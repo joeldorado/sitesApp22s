@@ -13,7 +13,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { YouTubePlayerModule } from '@angular/youtube-player';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import {RouterPathPipe} from '../../pipes/router-path.pipe';
 // components
 import { ImageComponent } from '../shared/image/image.component';
@@ -22,6 +22,8 @@ import {TextComponent} from '../shared/text/text.component';
 import {VideoComponent} from '../shared/video/video.component';
 import { SignUpFormsComponent } from '../sign-up-forms/sign-up-forms.component';
 import {AweberComponent} from '../shared/crm/auto-responders/aweber/aweber.component';
+import {StripeCardModule} from '../shared/payments/stripe-card/stripe-card.module';
+
 @NgModule({
   declarations: [WildcardHandlerComponent,
                  ImageComponent,
@@ -45,7 +47,7 @@ import {AweberComponent} from '../shared/crm/auto-responders/aweber/aweber.compo
     ReactiveFormsModule,
     FormsModule,
     YouTubePlayerModule,
-    FontAwesomeModule
+    StripeCardModule
 
   ], providers: [RouterPathPipe]
 })

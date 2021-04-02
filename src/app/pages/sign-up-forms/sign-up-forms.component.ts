@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChildren, ViewContainerRef, QueryList,
-  ComponentFactoryResolver, ComponentRef, OnChanges, ViewChild, ElementRef, ViewChildDecorator } from '@angular/core';
+  ComponentFactoryResolver, ComponentRef, OnChanges, ViewChild, ElementRef, ViewChildDecorator, AfterViewInit } from '@angular/core';
 import {SignUpFormService} from '../../services/sign-up-form.service';
-import { Observable } from 'rxjs';
 import {ButtonComponent} from '../shared/button/button.component';
 import {TextComponent} from '../shared/text/text.component';
 import {ImageComponent} from '../shared/image/image.component';
@@ -17,6 +16,7 @@ import { ReturnStatement } from '@angular/compiler';
 import {AuthService} from '../../services/auth.service';
 import {AweberComponent} from '../shared/crm/auto-responders/aweber/aweber.component';
 import { validate } from 'json-schema';
+
 @Component({
   selector: 'app-sign-up-forms',
   templateUrl: './sign-up-forms.component.html',
@@ -27,6 +27,7 @@ export class SignUpFormsComponent  {
   // @ViewChildren('', {read: ViewContainerRef}) autoresponder!: ViewContainerRef;
   @ViewChild('autoresponder', {read: ViewContainerRef})
    autoresponder!: ViewContainerRef;
+
   faCcAmex = faCcAmex;
   faCcDiscover = faCcDiscover;
   faCcVisa = faCcVisa;
@@ -71,6 +72,7 @@ export class SignUpFormsComponent  {
   Token = '';
   Bs = '';
   List = '';
+
   constructor(
     private supForm: SignUpFormService,
     private resolver: ComponentFactoryResolver,
@@ -78,8 +80,9 @@ export class SignUpFormsComponent  {
     private router: Router,
     private token: TokenService,
     private sanitizer: DomSanitizer,
-    private auth: AuthService
+    private auth: AuthService,
   ) {
+
     // validate log in and if it is check if is payed user then if it is send them to members area
     this.isAuth.authStatus.subscribe((value) => {
       this.isAuthenticated = value;
@@ -90,32 +93,12 @@ export class SignUpFormsComponent  {
 
       }
     });
-    // get blocks data
-    this.supForm.get_block().subscribe(data => {
-      if (data.error){
-        alert(data.error);
-        // ver con rene a donde redige si no se encuentra el site
-     //   this.router.navigate(['/404']);
-      }
-      this.blocks$ = data.blocks;
-      this.siteOptions$ = data.siteOptions;
-      if (this.siteOptions$[0].signup_type === 'free') {
-        this.freeSub = true;
-        this.processor = 'free';
-      }
-      // crm options
-      this.paymentOptions$ = data.paymentOptions;
-      this.integrationOptions$ = data.crm_json.integrationsOptions;
-      // payment options
-      setTimeout(() => {
-        data.blocks.forEach(element => {
-          this.drawComponent(element);
-        });
-      }, 1000);
 
-    });
+    // # loads blocks site ande intgrations and payment options
+    this.getSiteDataSettings();
 
-    // get payment ioptions and coupones
+
+    // get payment ioptions and coupones # make one fucntion in order to get the integration data and the options payment
     this.supForm.get_paymentsOpts().subscribe(data => {
       this.paymentsOpts$ = data;
     });
@@ -135,8 +118,54 @@ export class SignUpFormsComponent  {
     });
 
     this.startForms();
+   } // end constructor
+
+
+   getSiteDataSettings(): void {
+    // get blocks data and integrations and payments
+    this.supForm.get_block().subscribe(data => {
+      if (data.error){
+        alert(data.error);
+        // ver con rene a donde redige si no se encuentra el site
+    //   this.router.navigate(['/404']);
+      }
+      this.blocks$ = data.blocks;
+      this.siteOptions$ = data.siteOptions;
+
+      if (this.siteOptions$[0].signup_type === 'free') {
+        this.freeSub = true;
+        this.processor = 'free';
+      }
+
+      // crm options
+      this.paymentOptions$ = data.crm_json.paymentOptions;
+      this.integrationOptions$ = data.crm_json.integrationsOptions;
+      // set payment options
+      this.setPaymentOptions();
+      // payment options
+      setTimeout(() => {
+        data.blocks.forEach(element => {
+          this.drawComponent(element);
+        });
+      }, 1000);
+
+    });
    }
 
+   setPaymentOptions(): void  {
+
+    if (this.paymentOptions$.type === 'stripe') {
+      this.setStripePayments();
+    }
+
+   }
+   setStripePayments(): void {
+   // if (!this.stripeScriptTag.StripeInstance) {
+    //   this.stripeScriptTag.setPublishableKey(this.paymentOptions$.public.publishable_key);
+     //  console.log('instanse', this.stripeScriptTag.StripeInstance);
+    // }
+
+   }
   // HANLDE SITE ACCESS (check if the user already have acces to this site)
    hanldeSiteAccess(data: any): boolean {
 
@@ -199,6 +228,7 @@ export class SignUpFormsComponent  {
       if (this.hanldeSiteAccess(dataAccess)) { return; }
       // then give site access
       this.supForm.newSiteAccess({payment: {type: this.siteOptions$[0].signup_type, processor: this.processor}}).subscribe(siteAcc => {
+
       this.sendEmail({email: siteAcc.access.email});
       if (this.siteOptions$[0].signup_type === 'free') {
           let redirecTo = this.path + '/members';
