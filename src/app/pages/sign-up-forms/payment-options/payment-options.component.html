@@ -1,0 +1,55 @@
+ <h3 >Payment Option</h3> 
+        <div class="row box">
+            <div fxFlex="100"> 
+
+             <button class="back-button"  mat-button (click)="paymentProcess(1)">
+             <mat-icon>arrow_back</mat-icon> Edit Email</button> 
+
+
+               <div fxLAyout="row" fxLayoutGap="10px">
+               <div fxFlex="90">
+                    <mat-form-field appearance="legacy" class = "full-input">
+                    <mat-label>Enter coupone  
+                    <strong class='warning' *ngIf="invalidCoupone">Invalid coupone.</strong>
+                    <strong class='success' *ngIf="aplayed">Coupone Aplayed.</strong>
+                    </mat-label>
+                    <input [(ngModel)]="enterCoupone" (ngModelChange)="resetPaymentOpts()" matInput placeholder="coupone name">                          
+                   
+                    </mat-form-field>
+                    
+               </div>
+                <div fxFlex="10"  fxLayoutAlign="end">
+                <button mat-raised-button [disabled]="enterCoupone === ''"  (click)="applayCoupone()"> Apply </button> 
+                </div>
+               </div> 
+
+            <mat-radio-group
+            aria-labelledby="example-radio-group-label"
+            class="example-radio-group"
+            [(ngModel)]="selectedPayment"
+            >
+                <mat-radio-button class="example-radio-button" 
+                *ngFor="let payment of paymentsOpts$" [value]="payment?.option_number">
+                    <label *ngIf="payment?.payment_type === 'onetime'">
+                     $ {{payment?.initial_amount}} USD one time payment
+                    </label>
+                    <label *ngIf="payment?.payment_type === 'recurring'">
+                    $ {{payment?.initial_amount}} USD initial payment then 
+                    $ {{payment?.recurring_amount}} USD {{payment?.recurring_cycle}}
+                    </label>   
+                    <label *ngIf="payment?.payment_type === 'installments'">
+                    $ {{payment?.initial_amount}} USD initial payment then 
+                    $ {{payment?.recurring_amount}} USD {{payment?.recurring_cycle}} number of payments {{payment?.number_of_payments}}
+                    </label>    
+
+                </mat-radio-button>
+            </mat-radio-group>       
+
+
+                 <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
+                    <div fxFlex="50">
+                         <button fxFlex="100" [disabled]="btnDisabled" mat-raised-button (click)="paymentProcess(3)"> Continue</button>                                               
+                    </div>
+                </div>                                          
+            </div>                                
+        </div>

@@ -8,7 +8,7 @@ import {CountdownTimerComponent} from '../shared/countdown-timer/countdown-timer
 import {VideoComponent} from '../shared/video/video.component';
 import {IsAuthService} from '../../services/is-auth.service';
 import {Router} from '@angular/router';
-import { faCcAmex, faCcDiscover, faCcVisa, faCcMastercard} from '@fortawesome/free-brands-svg-icons';
+
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import {TokenService} from '../../services/token.service';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -28,31 +28,25 @@ export class SignUpFormsComponent  {
   @ViewChild('autoresponder', {read: ViewContainerRef})
    autoresponder!: ViewContainerRef;
 
-  faCcAmex = faCcAmex;
-  faCcDiscover = faCcDiscover;
-  faCcVisa = faCcVisa;
-  faCcMastercard = faCcMastercard;
+
   addresses: any[] = [];
   blocks$!: any[];
   accountInfo$!: AccountInfo;
   account!: any;
-  paymentsOpts$!: any[];
-  coupones$!: any[];
   InfoUsrEmail = '';
   emailTerms = false;
-  selectedPayment!: string;
-  enterCoupone = '';
+
   password = false;
   cpassword = false;
   isAuthenticated!: boolean;
   favoriteSeason!: string;
   path = location.pathname.split('/')[1];
-  coupone!: Coupones[];
+
   emailSignup = true;
   paymentOpt = false;
   processpymt = false;
   accountInfo = false;
-  siteOptions$!: any[];
+  siteOptions$!: any;
   emailDisabledBtn = true;
   viewPhone = true;
   emailForm!: FormGroup;
@@ -95,51 +89,25 @@ export class SignUpFormsComponent  {
     });
 
     // # loads blocks site ande intgrations and payment options
-    this.getSiteDataSettings();
+    this.supForm.getsiteSignUpFormData().subscribe(data => {
+      if (data.error) { console.error(data); alert(data.error); }
 
-
-    // get payment ioptions and coupones # make one fucntion in order to get the integration data and the options payment
-    this.supForm.get_paymentsOpts().subscribe(data => {
-      this.paymentsOpts$ = data;
-    });
-
-    this.supForm.get_coupones().subscribe(data => {
-      this.coupones$ = data;
-    });
-
-    this.supForm.get_accountInfo().subscribe(data => {
-      if (data.length === 0) { return; }
-      this.accountInfo$ = JSON.parse(data[0].user_accountinfo_settings_json);
+      // account questions info
+      this.accountInfo$ = JSON.parse(data.user_accountinfo_settings_json);
       for (let i = 0; i <= this.accountInfo$.address; i++) {
         const c = i + 1;
         this.addresses.push({lbl: `Address ${c}`, formControl: 'Address' + c });
         this.userInfoForm.addControl('Address' + c , new FormControl('', [Validators.required]));
       }
-    });
-
-    this.startForms();
-   } // end constructor
-
-
-   getSiteDataSettings(): void {
-    // get blocks data and integrations and payments
-    this.supForm.get_block().subscribe(data => {
-      if (data.error){
-        alert(data.error);
-        // ver con rene a donde redige si no se encuentra el site
-    //   this.router.navigate(['/404']);
-      }
       this.blocks$ = data.blocks;
       this.siteOptions$ = data.siteOptions;
-
-      if (this.siteOptions$[0].signup_type === 'free') {
+      if (this.siteOptions$.signup_type === 'free') {
         this.freeSub = true;
         this.processor = 'free';
       }
-
       // crm options
-      this.paymentOptions$ = data.crm_json.paymentOptions;
-      this.integrationOptions$ = data.crm_json.integrationsOptions;
+      this.paymentOptions$ = data.integrationsOptions.paymentOptions;
+      this.integrationOptions$ = data.integrationsOptions;
       // set payment options
       this.setPaymentOptions();
       // payment options
@@ -148,9 +116,10 @@ export class SignUpFormsComponent  {
           this.drawComponent(element);
         });
       }, 1000);
-
     });
-   }
+
+    this.startForms();
+   } // end constructor
 
    setPaymentOptions(): void  {
 
@@ -227,10 +196,10 @@ export class SignUpFormsComponent  {
     hasAccess.then(dataAccess => {
       if (this.hanldeSiteAccess(dataAccess)) { return; }
       // then give site access
-      this.supForm.newSiteAccess({payment: {type: this.siteOptions$[0].signup_type, processor: this.processor}}).subscribe(siteAcc => {
+      this.supForm.newSiteAccess({payment: {type: this.siteOptions$.signup_type, processor: this.processor}}).subscribe(siteAcc => {
 
       this.sendEmail({email: siteAcc.access.email});
-      if (this.siteOptions$[0].signup_type === 'free') {
+      if (this.siteOptions$.signup_type === 'free') {
           let redirecTo = this.path + '/members';
           if (this.path === 'signupform') {
             redirecTo = 'members';
@@ -265,9 +234,9 @@ export class SignUpFormsComponent  {
     hasAccess.then(dataAccess => {
       if (this.hanldeSiteAccess(dataAccess)) { return; }
       // then give site access
-      this.supForm.newSiteAccess({payment: {type: this.siteOptions$[0].signup_type, processor: this.processor}}).subscribe(siteAcc => {
+      this.supForm.newSiteAccess({payment: {type: this.siteOptions$.signup_type, processor: this.processor}}).subscribe(siteAcc => {
       this.sendEmail({email: siteAcc.access.email});
-      if (this.siteOptions$[0].signup_type === 'free') {
+      if (this.siteOptions$.signup_type === 'free') {
           let redirecTo = this.path + '/members';
           if (this.path === 'signupform') {
             redirecTo = 'members';
@@ -289,7 +258,7 @@ export class SignUpFormsComponent  {
   // NEW USER
   newClient(): void {
     //
-    this.supForm.siteNewUser({payment: {type: this.siteOptions$[0].signup_type, processor: this.processor},
+    this.supForm.siteNewUser({payment: {type: this.siteOptions$.signup_type, processor: this.processor},
       email: this.emailForm.value.email, pws: this.emailForm.value.password}).subscribe(data => {
       console.log(data);
       if (data.error !== undefined) {
@@ -405,7 +374,7 @@ export class SignUpFormsComponent  {
       break;
       case 2 :
       this.emailSignup =  false;
-      if (this.siteOptions$[0].signup_type === 'free') {
+      if (this.siteOptions$.signup_type === 'free') {
         this.paymentOpt = false;
         this.processpymt = false;
         this.accountInfo = true;
@@ -426,40 +395,7 @@ export class SignUpFormsComponent  {
       break;
     }
   }
-  applayCoupone(): void {
-    if (this.enterCoupone === '') {
-      alert('pleace enter a valid coupone name');
-    }
 
-    this.coupone = this.coupones$.filter(c => c.coupon_keyword === this.enterCoupone);
-
-    if (this.coupone.length === 0) { alert('Invalid coupone'); return; }
-
-    this.paymentsOpts$.filter(p => {
-
-      // aply discount payment_type payment_type
-      if (this.coupone[0].payment_type === p.payment_type) {
-
-        if (p.payment_type === 'onetime') {
-
-            p.initial_amount = p.initial_amount - this.coupone[0].initial_amount;
-            if (p.initial_amount < 0) {
-              p.initial_amount = 0;
-            }
-        } else  if (p.payment_type === 'recurring' || p.payment_type === 'installments') {
-
-          p.initial_amount = p.initial_amount - this.coupone[0].initial_amount;
-          p.recurring_amount = p.recurring_amount - this.coupone[0].recurring_amount;
-          if (p.initial_amount < 0) {
-            p.initial_amount = 0;
-          }
-          if (p.recurring_amount < 0) {
-            p.initial_amount = 0;
-          }
-      }
-      }
-    });
-  }
 
   startForms(): void {
     this.emailForm = new FormGroup({
@@ -481,16 +417,7 @@ export class SignUpFormsComponent  {
     });
   }
 }
-export interface Coupones {
-  site_id: number;
-  coupon_number: number;
-  coupon_keyword: string;
-  payment_type: string;
-  recurring_cycle: string;
-  initial_amount: number;
-  recurring_amount: number;
-  number_of_payments: number;
-}
+
 
 export interface AccountInfo {
   phone: number;

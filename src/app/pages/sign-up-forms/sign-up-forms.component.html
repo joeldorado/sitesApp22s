@@ -4,7 +4,7 @@
         <!-- info -->
         <div class="box">
             <div  fxLayout="row"  *ngFor="let block of blocks$ let i = index">                                    
-                    <div fxFlex="100">
+                    <div fxFlex="100">                   
                         <!-- body content -->                                
                         <div #previewComponents 
                             [ngStyle]= "{'display' : block.block_type === 'empty' ? 'block' : 'none'}"></div>                     
@@ -95,64 +95,15 @@
             </div>
         <!-- end email content  [innerHtml]="iframee" -->
        <div  #autoresponder ></div>
-        <!--  payment coupone -->   
-        <div style="position: relative;" *ngIf="paymentOpt && this.siteOptions$[0].signup_type !== 'free'">
-        <h3 >Payment Option</h3> 
-        <div class="row box">
-            <div fxFlex="100"> 
-
-             <button class="back-button"  mat-button (click)="paymentProcess(1)">
-             <mat-icon>arrow_back</mat-icon> Edit Email</button> 
-
-
-               <div fxLAyout="row">
-               <div fxFlex="90">
-                    <mat-form-field appearance="legacy" class = "full-input">
-                    <mat-label>Enter coupone </mat-label>
-                    <input [(ngModel)]="enterCoupone" matInput placeholder="coupone name">                          
-                    </mat-form-field>
-               </div>
-                <div fxFlex="10"  fxLayoutAlign="end">
-                <button mat-raised-button (click)="applayCoupone()"> Apply </button> 
-                </div>
-               </div> 
-
-            <mat-radio-group
-            aria-labelledby="example-radio-group-label"
-            class="example-radio-group"
-            [(ngModel)]="selectedPayment"
-            >
-                <mat-radio-button class="example-radio-button" 
-                *ngFor="let payment of paymentsOpts$" [value]="payment?.option_number">
-                    <label *ngIf="payment?.payment_type === 'onetime'">
-                     $ {{payment?.initial_amount}} USD one time payment
-                    </label>
-                    <label *ngIf="payment?.payment_type === 'recurring'">
-                    $ {{payment?.initial_amount}} USD initial payment then 
-                    $ {{payment?.recurring_amount}} USD {{payment?.recurring_cycle}}
-                    </label>   
-                    <label *ngIf="payment?.payment_type === 'installments'">
-                    $ {{payment?.initial_amount}} USD initial payment then 
-                    $ {{payment?.recurring_amount}} USD {{payment?.recurring_cycle}} number of payments {{payment?.number_of_payments}}
-                    </label>    
-
-                </mat-radio-button>
-            </mat-radio-group>       
-
-
-                 <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
-                    <div fxFlex="50">
-                         <button fxFlex="100" mat-raised-button (click)="paymentProcess(3)"> Continue</button>                                               
-                    </div>
-                </div>                                          
-            </div>                                
-        </div>
+        <!--  payment coupone *ngIf="paymentOpt && this.siteOptions$[0].signup_type !== 'free'" -->   
+        <div style="position: relative;" >
+            <app-payment-options></app-payment-options>
         </div>
         <!-- end payment coupone -->
 
 
-        <!--  process payment  *ngIf="processpymt && this.siteOptions$[0].signup_type !== 'free'"  -->   
-        <div style="position: relative;">
+        <!--  process payment   -->   
+        <div style="position: relative;" *ngIf="processpymt && this.siteOptions$[0].signup_type !== 'free'" >
         <h3 >Process Payment </h3>  
         <div class="row box">
             <div fxFlex="100">               

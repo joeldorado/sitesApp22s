@@ -35,16 +35,6 @@ export class SignUpFormService {
   }
 
 
-  /**
-   * 
-   *
-   */
-  public get_block(): Observable<any> {
-    return this.httpClient.get(`${this.apiHost}api/site-supf-block`, {
-      params: new HttpParams().set('path', this.path)
-    });
-
-  }
 
   public get_paymentsOpts(): Observable<any> {
     return this.httpClient.get(`${this.apiHost}api/site-sing-up-paymentsOpts`, {
@@ -52,20 +42,14 @@ export class SignUpFormService {
     });
 
   }
-
-  public get_accountInfo(): Observable<any> {
-    return this.httpClient.get(`${this.apiHost}api/site-sing-up-accountInfo`, {
+ 
+  public getsiteSignUpFormData(): Observable<any> {
+    return this.httpClient.get(`${this.apiHost}api/site-sing-up-data`, {
       params: new HttpParams().set('path', this.path)
     });
 
   }
 
-  public get_coupones(): Observable<any> {
-    return this.httpClient.get(`${this.apiHost}api/site-sing-up-coupones`, {
-      params: new HttpParams().set('path', this.path)
-    });
-
-  }
 
   public accountExistVal(email: string): Observable<any> {
     return this.httpClient.get(`${this.apiHost}api/site-account-validation`, {
