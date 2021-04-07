@@ -1,34 +1,34 @@
-<div fxLayout="row">
-                        <div fxFlex="100">
-                            <table style="margin-top: 15px;  margin-bottom: 15px; width: 100%;">
-                            <tr>
-                                <td fxFlex="100"><p>Process payment with credit card below</p>
-                                    <fa-icon [icon]="faCcAmex" size="2x" class="fa-icon"></fa-icon>
-                                    <fa-icon [icon]="faCcDiscover" size="2x" class="fa-icon"></fa-icon>            
-                                    <fa-icon [icon]="faCcVisa" size="2x" class="fa-icon"></fa-icon>            
-                                    <fa-icon [icon]="faCcMastercard" size="2x" class="fa-icon"></fa-icon>                                                                                   
-                                </td><td fxFlex="10" fxLayout="column" fxLayoutAlign="center"></td><td fxFlex="100" fxLayout="column" fxLayoutAlign="center"></td>
-                            </tr>
-                            </table>
-                        </div>
-                    </div> 
- 
-    <div fxLayout="row"  fxLayoutAlign="center center" >
-            <div fxFlex="50" class="error" *ngIf="cardError">
-            <strong>{{cardError}}</strong>
-            </div>
-    </div>
+
+<mat-progress-bar mode="query" *ngIf="progressBar"></mat-progress-bar>
+    <table style="margin-top: 15px;  margin-bottom: 15px; width: 100%;">
+        <tr>
+            <td fxFlex="100"><p>Process payment with credit card below</p>
+            <fa-icon [icon]="faCcAmex" size="2x" class="fa-icon"></fa-icon>
+            <fa-icon [icon]="faCcDiscover" size="2x" class="fa-icon"></fa-icon>            
+            <fa-icon [icon]="faCcVisa" size="2x" class="fa-icon"></fa-icon>            
+            <fa-icon [icon]="faCcMastercard" size="2x" class="fa-icon"></fa-icon>                                                                                   
+            </td><td fxFlex="10" fxLayout="column" fxLayoutAlign="center"></td><td fxFlex="100" fxLayout="column" fxLayoutAlign="center"></td>
+        </tr>    
+    </table>
+
+<div fxLayout="row"  fxLayoutAlign="center center" >
+        <div fxFlex="50" class="error" *ngIf="cardError">
+        <strong>{{cardError}}</strong>
+        </div>
+</div>
+
  <div fxLayout="row" fxLayoutAlign="center center" >
     <div fxFlex="50">          
         <div fxFlex="100" #cardInfo></div>
     </div>
 </div>    
-<div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
+
+<div fxLayout="row" style="margin-bottom: 5px;" fxLayoutAlign="center center" class="btn-container">
     <div fxFlex="50">
-            <button fxFlex="100" mat-raised-button (click)="paymentProcess(4)"> Process Payment</button>                                               
+            <button fxFlex="100" [disabled]='btnDisabled' mat-raised-button (click)="paymentProcess(4)"> Process Payment</button>                                               
     </div>
 </div>    
-   
+
     <!-- 
         <div class="example-container">
     <mat-form-field fxFlex="50" appearance="fill">

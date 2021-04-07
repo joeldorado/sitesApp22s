@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { IsAuthService } from './services/is-auth.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 @Component({
@@ -6,7 +6,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
   title = 'SitesApp22S';
   constructor(private isAuth: IsAuthService, private router: Router) {
     this.isAuth.authStatus.subscribe((value) => {
@@ -14,6 +14,10 @@ export class AppComponent {
        // this.router.navigate(['sitename/start']);
       }
     });
+
+  }
+  ngOnDestroy(): void {
+    localStorage.clear();
   }
 }
 

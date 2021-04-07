@@ -1,21 +1,23 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, EventEmitter, OnChanges, SimpleChanges, Output } from '@angular/core';
 import {SignUpFormService} from '../../../services/sign-up-form.service';
+
 @Component({
   selector: 'app-payment-options',
   templateUrl: './payment-options.component.html',
   styleUrls: ['./payment-options.component.scss']
 })
 export class PaymentOptionsComponent implements OnChanges {
+  @Output()
+  processPay: EventEmitter<any> = new EventEmitter();
   paymentsOpts$!: any[];
   copyPaymentsOpts;
   staticbkuppaymentsOpts$!: any[];
-  selectedPayment!: string;
+  selectedPayment = '';
   enterCoupone = '';
   coupones$!: any[];
   coupone!: Coupones[];
   invalidCoupone = false;
   aplayed = false;
-  btnDisabled = true;
 
   constructor(
     private singupForm: SignUpFormService
@@ -26,7 +28,7 @@ export class PaymentOptionsComponent implements OnChanges {
         if (data.error) { console.error(data); alert(data.error); }
         this.paymentsOpts$ = data.payments;
         this.coupones$ = data.coupones;
-
+    
       });
 
   }
@@ -37,10 +39,11 @@ export class PaymentOptionsComponent implements OnChanges {
     }
   }
 
-  ngOnChanges(): any {}
-  
-  paymentProcess(type: number): void {
-    console.log(type);
+  ngOnChanges(): any {
+  }
+
+  paymentProcess(Type: number): void {
+    this.processPay.emit({type: Type, selected: this.paymentsOpts$[this.selectedPayment] });
   }
 
   applayCoupone(): void {

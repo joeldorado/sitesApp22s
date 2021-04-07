@@ -8,7 +8,6 @@ import {CountdownTimerComponent} from '../shared/countdown-timer/countdown-timer
 import {VideoComponent} from '../shared/video/video.component';
 import {IsAuthService} from '../../services/is-auth.service';
 import {Router} from '@angular/router';
-
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import {TokenService} from '../../services/token.service';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -22,18 +21,17 @@ import { validate } from 'json-schema';
   templateUrl: './sign-up-forms.component.html',
   styleUrls: ['./sign-up-forms.component.scss']
 })
-export class SignUpFormsComponent  {
+export class SignUpFormsComponent implements AfterViewInit {
   @ViewChildren('previewComponents', {read: ViewContainerRef}) previewComponents!: QueryList<ViewContainerRef>;
   // @ViewChildren('', {read: ViewContainerRef}) autoresponder!: ViewContainerRef;
   @ViewChild('autoresponder', {read: ViewContainerRef})
    autoresponder!: ViewContainerRef;
 
-
+  paypalData$!: any;
   addresses: any[] = [];
   blocks$!: any[];
   accountInfo$!: AccountInfo;
   account!: any;
-  InfoUsrEmail = '';
   emailTerms = false;
 
   password = false;
@@ -61,12 +59,12 @@ export class SignUpFormsComponent  {
   freeSub = false;
   paymentOptions$: any;
   integrationOptions$: any;
-
-
+  currentEmail = '';
+  selectedPaymentOpt!: any;
   Token = '';
   Bs = '';
   List = '';
-
+  panelOpenState = false;
   constructor(
     private supForm: SignUpFormService,
     private resolver: ComponentFactoryResolver,
@@ -108,8 +106,6 @@ export class SignUpFormsComponent  {
       // crm options
       this.paymentOptions$ = data.integrationsOptions.paymentOptions;
       this.integrationOptions$ = data.integrationsOptions;
-      // set payment options
-      this.setPaymentOptions();
       // payment options
       setTimeout(() => {
         data.blocks.forEach(element => {
@@ -121,20 +117,14 @@ export class SignUpFormsComponent  {
     this.startForms();
    } // end constructor
 
-   setPaymentOptions(): void  {
 
-    if (this.paymentOptions$.type === 'stripe') {
-      this.setStripePayments();
-    }
-
-   }
-   setStripePayments(): void {
-   // if (!this.stripeScriptTag.StripeInstance) {
-    //   this.stripeScriptTag.setPublishableKey(this.paymentOptions$.public.publishable_key);
-     //  console.log('instanse', this.stripeScriptTag.StripeInstance);
+   ngAfterViewInit(): void {
+    // const currentStep = localStorage.getItem('currentStep');
+    // if (currentStep) {
+    //   this.paymentProcess(currentStep);
     // }
-
    }
+ 
   // HANLDE SITE ACCESS (check if the user already have acces to this site)
    hanldeSiteAccess(data: any): boolean {
 
@@ -153,7 +143,6 @@ export class SignUpFormsComponent  {
    }
   // EMAIL FORM SUBMIT
   onSubmitEmail(): void {
-
     this.progress = true;
     this.emailForm.disable();
     this.emailFormValidations();
@@ -163,7 +152,7 @@ export class SignUpFormsComponent  {
     this.progress = true;
     this.userInfoForm.disable();
     this.supForm.siteSaveUserInfo(this.userInfoForm.value).subscribe(data => {
-      if (data.user !== undefined) {
+      if (data.subscriber) {
         // pasar a una funcion para no repetir este codigo
         this.isAuth.changeAuthStatus(true);
       }
@@ -258,28 +247,18 @@ export class SignUpFormsComponent  {
   // NEW USER
   newClient(): void {
     //
-    this.supForm.siteNewUser({payment: {type: this.siteOptions$.signup_type, processor: this.processor},
-      email: this.emailForm.value.email, pws: this.emailForm.value.password}).subscribe(data => {
-      console.log(data);
-      if (data.error !== undefined) {
-        alert(data.error);
-        return;
-      }
-      if (data.access !== undefined) {
+    this.supForm.siteNewUser({
+          payment: {type: this.siteOptions$.signup_type, processor: this.processor},
+          email: this.emailForm.value.email,
+          pws: this.emailForm.value.password}).subscribe(data => {
+
+      if (data.error) { alert(data.error); return; }
+      if (data.access) {
         // loged in
         this.token.set(data.access);
-// this.isAuth.changeAuthStatus(true);
-        // send the email awaber
-       //  this.supForm.sendEmail(data.access).subscribe(resp => {
-       //   console.log(resp);
-       // }, error => {
-       //   console.error(error);
-       // });
-        // next step
         this.sendEmail({email: data.access.email});
         this.paymentProcess(2);
         this.progress = false;
-
       }
 
 
@@ -301,7 +280,7 @@ export class SignUpFormsComponent  {
     this.userInfoForm.addControl('bs', new FormControl (this.integrationOptions$.businessIntegration.bs));
     this.userInfoForm.addControl('list', new FormControl (this.integrationOptions$.siteIntegration.crm.values.listid));
     this.userInfoForm.addControl('email', new FormControl (data.email));
-
+    this.userInfoForm.addControl('refrshawtoken', new FormControl(this.integrationOptions$.businessIntegration.public_values.refreshToken));
 
     // autoresponder
     const Factory = this.resolver.resolveComponentFactory(AweberComponent);
@@ -351,6 +330,7 @@ export class SignUpFormsComponent  {
   onFocusOutEvent($event: any): void {
     this.validatonEmailLbl = 'Validating current email...';
     if (this.emailForm.value.email === '') { return; }
+    this.currentEmail = this.emailForm.value.email;
     this.supForm.accountExistVal( this.emailForm.value.email).subscribe(data => {
       this.validatonEmailLbl = '';
       this.account = data;
@@ -363,8 +343,29 @@ export class SignUpFormsComponent  {
 
   }
 
-  paymentProcess(type): void {
 
+/**
+ *
+ * Form submitions functions
+ */
+
+ /**
+  * 
+  * @param data 
+  * @desc set the price and payment type for stripe and paypal,
+  * payment option selected ontime, recurren etc. next step card data
+  */
+ submitedPayOptions(data: any): void {
+  this.selectedPaymentOpt = data.selected;
+  this.selectedPaymentOpt.email = this.currentEmail;
+  this.selectedPaymentOpt.paymentOptions = this.paymentOptions$; // .public.publishable_key;
+  // this.selectedPaymentOpt.currency = this.paymentOptions$.currency;
+  this.paymentProcess(data.type);
+}
+  // sign up form proccess stepper foward and backward
+  paymentProcess(type): void {
+    console.log('step..', type);
+    // localStorage.setItem('currentStep', type);
     switch (type) {
       case 1 :
       this.emailSignup = true;
@@ -392,6 +393,7 @@ export class SignUpFormsComponent  {
       case 4:
       this.processpymt = false;
       this.accountInfo = true;
+     // localStorage.removeItem('currentStep');
       break;
     }
   }

@@ -34,7 +34,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatChipsModule} from '@angular/material/chips';
 import { EmailSenderComponent } from './shared/email-sender/email-sender.component';
-
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   imports: [
@@ -73,7 +73,8 @@ import { EmailSenderComponent } from './shared/email-sender/email-sender.compone
     MatDividerModule,
     MatBadgeModule,
     FlexLayoutModule,
-    MatChipsModule
+    MatChipsModule,
+    MatExpansionModule
 
   ],
   declarations: [PageNotFoundComponent, EmailSenderComponent]

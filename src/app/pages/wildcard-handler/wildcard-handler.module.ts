@@ -24,6 +24,7 @@ import { SignUpFormsComponent } from '../sign-up-forms/sign-up-forms.component';
 import {AweberComponent} from '../shared/crm/auto-responders/aweber/aweber.component';
 import {StripeCardModule} from '../shared/payments/stripe-card/stripe-card.module';
 import { PaymentOptionsComponent } from '../sign-up-forms/payment-options/payment-options.component';
+import {PaypalComponent} from '../shared/payments/paypal/paypal.component';
 @NgModule({
   declarations: [WildcardHandlerComponent,
                  ImageComponent,
@@ -32,7 +33,8 @@ import { PaymentOptionsComponent } from '../sign-up-forms/payment-options/paymen
                  VideoComponent,
                  SignUpFormsComponent,
                  AweberComponent,
-                 PaymentOptionsComponent],
+                 PaymentOptionsComponent,
+                 PaypalComponent],
   imports: [
     CommonModule,
     WildcardHandlerRoutignModule,

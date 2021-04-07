@@ -32,9 +32,12 @@ export class StripeService {
         this.path = '';
     }
   }
+
   public charge(data: any): Observable<any> {
     return this.httpClient.post(`${this.apiHost}api/stripe-charge?token=${this.tkn.get()}`,
-    {path: this.path, amount: data.amount, currency: data.currency, stripeToken: data.stripeToken, email: data.email});
+    {path: this.path, amount: data.initial_amount,
+       currency: data.currency, type: data.type,
+        stripeToken: data.stripeToken, email: data.email});
 
   }
 }

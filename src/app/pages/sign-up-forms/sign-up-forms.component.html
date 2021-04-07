@@ -95,32 +95,47 @@
             </div>
         <!-- end email content  [innerHtml]="iframee" -->
        <div  #autoresponder ></div>
-        <!--  payment coupone *ngIf="paymentOpt && this.siteOptions$[0].signup_type !== 'free'" -->   
-        <div style="position: relative;" >
-            <app-payment-options></app-payment-options>
+        <!--  -->   
+        <div style="position: relative;"  payment coupone *ngIf="paymentOpt && this.siteOptions$.signup_type !== 'free'">
+            <app-payment-options (processPay)="submitedPayOptions($event)"></app-payment-options>
         </div>
         <!-- end payment coupone -->
 
 
         <!--  process payment   -->   
-        <div style="position: relative;" *ngIf="processpymt && this.siteOptions$[0].signup_type !== 'free'" >
+        <div style="position: relative;" *ngIf="processpymt && this.siteOptions$.signup_type !== 'free'" >
         <h3 >Process Payment </h3>  
         <div class="row box">
-            <div fxFlex="100">               
-                    <button class="back-button"  mat-button (click)="paymentProcess(2)">
-                    <mat-icon>arrow_back</mat-icon> Plan Options</button>             
+            <div fxFlex="100">     
+                <!-- stripe - paypal -->
+                <button class="back-button"  mat-button (click)="paymentProcess(2)">
+                <mat-icon>arrow_back</mat-icon> Plan Options</button> 
+                <mat-accordion>
+                    <mat-expansion-panel hideToggle>
+                    <mat-expansion-panel-header>
+                    <mat-panel-title>
+                    Pay with card
+                    </mat-panel-title>                 
+                    </mat-expansion-panel-header>
+                                           
+                        <app-stripe-card (nexStep)="paymentProcess($event)" [paymentData] ="selectedPaymentOpt"> </app-stripe-card>
                     
-                   
-                    <div fxLayout="row">
-                        <div fxFlex="100">
-                           
-                                <app-stripe-card> </app-stripe-card>                                                    
 
+                    </mat-expansion-panel>
 
-                        </div> 
-                    </div>
-
-                                   
+                    <mat-expansion-panel (opened)="panelOpenState = true"
+                                    (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                    <mat-panel-title>
+                    Pay with Paypal
+                    </mat-panel-title>
+                    <mat-panel-description>                    
+                    </mat-panel-description>
+                    </mat-expansion-panel-header>                                          
+                            <app-paypal (nexStep)="paymentProcess($event)" [paypalData]="selectedPaymentOpt"></app-paypal>                     
+                    </mat-expansion-panel>
+                </mat-accordion>
+                <!-- END stripe - paypal -->                                                                                                                                 
         </div>
     </div>
     </div>
@@ -128,6 +143,7 @@
 
         <!-- account info -->
         <div style="position: relative;" *ngIf="accountInfo && !isNewUser">
+        <mat-progress-bar mode="query" *ngIf="progress"></mat-progress-bar>
         <h3 >Account Information </h3> 
         <div class="row box" >
             <div fxFlex="100">                   
