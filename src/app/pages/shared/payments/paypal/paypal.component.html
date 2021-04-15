@@ -1,1 +1,7 @@
-<div #paypal></div>
+
+<div [innerHTML]='boton'>
+</div>
+{{boton}}
+<button *ngIf="subc" mat-raised-button (click)="createSubscription()"> Subscribe</button>
+<div #paypal ></div>
+

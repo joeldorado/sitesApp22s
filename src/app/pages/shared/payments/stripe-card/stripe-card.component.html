@@ -8,8 +8,13 @@
             <fa-icon [icon]="faCcVisa" size="2x" class="fa-icon"></fa-icon>            
             <fa-icon [icon]="faCcMastercard" size="2x" class="fa-icon"></fa-icon>                                                                                   
             </td><td fxFlex="10" fxLayout="column" fxLayoutAlign="center"></td><td fxFlex="100" fxLayout="column" fxLayoutAlign="center"></td>
-        </tr>    
-    </table>
+        </tr> 
+        <tr  *ngIf="stripeClientData?.stripe_id !== null"><td colspan="1"> <h1>Hi we notice that you alredy client, do yoy whant to pay with saved card?</h1>
+        <button fxFlex="10"  mat-raised-button (click)="payWithSavedCard(4)"> Pay </button>
+         
+        </td><td>     <p fxFlex="20" >card details: ...{{stripeClientData?.card_last_four}}, Brand: {{stripeClientData?.card_brand}}</p>         </td></tr>   
+    </table>      
+
 
 <div fxLayout="row"  fxLayoutAlign="center center" >
         <div fxFlex="50" class="error" *ngIf="cardError">

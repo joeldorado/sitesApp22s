@@ -15,7 +15,7 @@ import { ReturnStatement } from '@angular/compiler';
 import {AuthService} from '../../services/auth.service';
 import {AweberComponent} from '../shared/crm/auto-responders/aweber/aweber.component';
 import { validate } from 'json-schema';
-
+import {PaypalService} from '../../services/paypal.service';
 @Component({
   selector: 'app-sign-up-forms',
   templateUrl: './sign-up-forms.component.html',
@@ -73,6 +73,7 @@ export class SignUpFormsComponent implements AfterViewInit {
     private token: TokenService,
     private sanitizer: DomSanitizer,
     private auth: AuthService,
+    private paypalS: PaypalService
   ) {
 
     // validate log in and if it is check if is payed user then if it is send them to members area
@@ -117,6 +118,22 @@ export class SignUpFormsComponent implements AfterViewInit {
     this.startForms();
    } // end constructor
 
+  /* getTokenAccess(): void {
+    console.log(this.paymentOptions$.paypal.paypalAccessToken);
+    this.paypalS.getPaypalAccessToken(this.paymentOptions$.paypal.paypalAccessToken).subscribe(data => {
+      console.log(data);
+    });
+   }
+
+   getSubscription(): void {
+     this.paypalS.getSubscription('A21AALlUHImo6gnhAH-xTpn04XHibu0XPfsNJhFxGvZ1UiZwHfITairCJT1evhLBwk18KdFDfHfzay-rFPKOIy1KpxLfi_5mQ',
+     'I-6X6P051XGASE').subscribe(data => {
+       console.log(data);
+     });
+   }
+   <button (click)="getTokenAccess()" mat-raised-button>get token</button>
+         <button (click)="getSubscription()" mat-raised-button>get subscription</button>
+   */
 
    ngAfterViewInit(): void {
     // const currentStep = localStorage.getItem('currentStep');
@@ -271,6 +288,8 @@ export class SignUpFormsComponent implements AfterViewInit {
   }
   // EMAIL IFRAME SENDER
   sendEmail(data: any): void {
+    // remove later
+    return;
 
     if (this.integrationOptions$.siteIntegration.crm.type !== this.integrationOptions$.businessIntegration.type) { console.log('error the type direfetn'); return; }
 
@@ -351,7 +370,7 @@ export class SignUpFormsComponent implements AfterViewInit {
 
  /**
   * 
-  * @param data 
+  * @param data
   * @desc set the price and payment type for stripe and paypal,
   * payment option selected ontime, recurren etc. next step card data
   */
@@ -364,7 +383,6 @@ export class SignUpFormsComponent implements AfterViewInit {
 }
   // sign up form proccess stepper foward and backward
   paymentProcess(type): void {
-    console.log('step..', type);
     // localStorage.setItem('currentStep', type);
     switch (type) {
       case 1 :

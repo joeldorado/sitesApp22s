@@ -25,11 +25,21 @@ export class StripeCardComponent implements AfterViewInit {
   faCcDiscover = faCcDiscover;
   faCcVisa = faCcVisa;
   faCcMastercard = faCcMastercard;
+  stripeClientData: any;
   constructor(private ngZone: NgZone, private stripeServ: StripeService) { }
 
   ngAfterViewInit(): void {
     console.log(this.paymentData);
     if (this.paymentData === undefined) { return; }
+
+    // validate if it has saved card, if is loged in then check
+
+    this.stripeServ.getStripeClientId().subscribe(data => {
+      if (data.stripe_id !== '') {
+        this.stripeClientData = data;
+      }
+    });
+
     this.stripe = Stripe(this.paymentData.paymentOptions.stripe.public.publishable_key);
     this.elements = this.stripe.elements();
     console.log('payment data');
@@ -57,19 +67,56 @@ export class StripeCardComponent implements AfterViewInit {
       console.log(token);
       // SINGLE PAYMENT STRIE
       console.log(this.paymentData);
+      this.paymentData.stripeToken = token.id;
+
       if (this.paymentData.payment_type === 'onetime') {
-          this.paymentData.stripeToken = token.id;
+
           this.stripeServ.charge(this.paymentData).subscribe(data => {
             this.progressBar = false;
             console.log(data);
-
             this.nexStep.emit(step);
           });
-      } else {
+      } else if (this.paymentData.payment_type === 'recurring') {
+        // subscription stripe
+        this.stripeServ.subscription(this.paymentData).subscribe(data => {
+          this.progressBar = false;
+          console.log(data);
+          if (data.error) { alert(data.error); return; }
+          this.nexStep.emit(step);
+        });
+
+      } else if (this.paymentData.payment_type === 'installments') {
         // subscription stripe
       }
     } else {
       this.ngZone.run(() => this.cardError = error.message);
+    }
+   }
+
+   payWithSavedCard(step: number): void {
+    this.progressBar = true;
+    console.log(this.paymentData);
+    this.paymentData.stripeToken = 'chargeWithSavedCard';
+    this.paymentData.stripeClienId = this.stripeClientData.stripe_id;
+
+    if (this.paymentData.payment_type === 'onetime') {
+
+        this.stripeServ.charge(this.paymentData).subscribe(data => {
+          this.progressBar = false;
+          console.log(data);
+          this.nexStep.emit(step);
+        });
+
+    } else if (this.paymentData.payment_type === 'recurring') {
+
+      this.stripeServ.subscription(this.paymentData).subscribe(data => {
+        this.progressBar = false;
+        console.log(data);
+        this.nexStep.emit(step);
+      });
+
+    } else if (this.paymentData.payment_type === 'installments') {
+      // subscription stripe
     }
    }
 }

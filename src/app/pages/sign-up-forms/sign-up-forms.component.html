@@ -26,7 +26,13 @@
      </div>
      </div>
       <div style="position: relative;" *ngIf="emailSignup && !isAuthenticated">
-         <h3 >Email</h3>
+         <h3 >Email 
+         
+         </h3>
+
+
+
+
         <div class="row box">
                 <div fxFlex="100">                    
                 <mat-progress-bar mode="query" *ngIf="progress"></mat-progress-bar>
@@ -103,7 +109,7 @@
 
 
         <!--  process payment   -->   
-        <div style="position: relative;" *ngIf="processpymt && this.siteOptions$.signup_type !== 'free'" >
+        <div style="position: relative;" *ngIf="processpymt && this.siteOptions$.signup_type !== 'free'"  >
         <h3 >Process Payment </h3>  
         <div class="row box">
             <div fxFlex="100">     
