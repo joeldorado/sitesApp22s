@@ -201,18 +201,18 @@ export class SignUpFormsComponent implements AfterViewInit {
     const hasAccess = this.supForm.siteValidation().toPromise();
     hasAccess.then(dataAccess => {
       if (this.hanldeSiteAccess(dataAccess)) { return; }
+      if (this.siteOptions$.signup_type !== 'free') {
+        this.paymentProcess(2);
+        return; }
       // then give site access
       this.supForm.newSiteAccess({payment: {type: this.siteOptions$.signup_type, processor: this.processor}}).subscribe(siteAcc => {
 
       this.sendEmail({email: siteAcc.access.email});
-      if (this.siteOptions$.signup_type === 'free') {
-          let redirecTo = this.path + '/members';
-          if (this.path === 'signupform') {
-            redirecTo = 'members';
-          }
-          this.router.navigate(['/' + redirecTo]);
-          return;
+      let redirecTo = this.path + '/members';
+      if (this.path === 'signupform') {
+        redirecTo = 'members';
       }
+      this.router.navigate(['/' + redirecTo]);
       this.progress = false;
       }, error => {
       console.error(error);
@@ -221,10 +221,11 @@ export class SignUpFormsComponent implements AfterViewInit {
   }
  // NEW SITE ACCESS
  alreadyClient(): void {
+  console.log('asdasdasdasdasdas');
   // close user info if user already exist
   this.isNewUser = true;
    // log in the user
-  this.auth.login({email: this.emailForm.value.email, password: this.emailForm.value.password}). subscribe(data => {
+  this.auth.login({email: this.emailForm.value.email, password: this.emailForm.value.password}).subscribe(data => {
 
     if (data.access_token === undefined) {
 
@@ -263,6 +264,7 @@ export class SignUpFormsComponent implements AfterViewInit {
   }
   // NEW USER
   newClient(): void {
+    console.log('new client');
     //
     this.supForm.siteNewUser({
           payment: {type: this.siteOptions$.signup_type, processor: this.processor},

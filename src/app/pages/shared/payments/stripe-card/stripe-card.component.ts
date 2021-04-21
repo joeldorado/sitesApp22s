@@ -64,15 +64,13 @@ export class StripeCardComponent implements AfterViewInit {
     this.progressBar = true;
     const {token, error } = await this.stripe.createToken(this.card);
     if (token) {
-      console.log(token);
       // SINGLE PAYMENT STRIE
       console.log(this.paymentData);
       this.paymentData.stripeToken = token.id;
-
       if (this.paymentData.payment_type === 'onetime') {
-
           this.stripeServ.charge(this.paymentData).subscribe(data => {
             this.progressBar = false;
+            if (data.error) {alert(data.error); return; }
             console.log(data);
             this.nexStep.emit(step);
           });
@@ -87,6 +85,16 @@ export class StripeCardComponent implements AfterViewInit {
 
       } else if (this.paymentData.payment_type === 'installments') {
         // subscription stripe
+        this.stripeServ.installment(this.paymentData).subscribe( data => {
+          this.progressBar = false;
+          console.log(data);
+          if (data.error) { alert(data.error); return; }
+          else if (data.success) { this.nexStep.emit(step); }
+          else {
+          alert('error.');
+          console.log('error response installment');
+        }
+        });
       }
     } else {
       this.ngZone.run(() => this.cardError = error.message);
@@ -117,6 +125,7 @@ export class StripeCardComponent implements AfterViewInit {
 
     } else if (this.paymentData.payment_type === 'installments') {
       // subscription stripe
+
     }
    }
 }

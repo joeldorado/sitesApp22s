@@ -14,7 +14,6 @@ export class PaypalComponent implements OnInit {
   boton = '';
   paypal: any;
   subc = false;
-// https://www.youtube.com/watch?v=nnmt8-9jUTI
   constructor(private paypalService: PaypalService, private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
@@ -23,46 +22,15 @@ export class PaypalComponent implements OnInit {
     console.log(this.paypalData);
     if (this.paypalData.payment_type === 'onetime') {
       this.singlePayment();
-    } else if (this.paypalData.payment_type === 'recurring') {
+    } else if (this.paypalData.payment_type === 'recurring' || this.paypalData.payment_type === 'installments') {
        this.subscription();
-      // this.subc = true;
-    } else if (this.paypalData.payment_type === 'instalments') {
-
     }
-
 //
-  }
-
-  chekcAgreement($data): void {
-    alert('adasdasdsdadsdsd' + $data);
-    console.log($data);
-  }
-  createSubscription(): void {
-    this.paypalService.createAgreement(this.paypalData).subscribe( data => {
-      console.log('create agreement');
-      console.log(data);
-      if (data.error) {
-        alert(data.error);
-        return;
-      }
-      const paypalAgreemnet: any = window.open(data.agreementUrl + '?test=1232132', 'paypal agreement', 'width=500,height=600');
-
-      paypalAgreemnet.onload = () => {
-        paypalAgreemnet.localStorage.setItem('paymentData', JSON.stringify(this.paypalData));
-        paypalAgreemnet.onunload = () => {
-          alert('agreement closed..');
-        };
-
-    };
-
-    });
-
   }
 
 
 
   subscription(): void {
-
     this.paypalService.initiate(
       'subscription',
       this.paypalData.paymentOptions.paypal.public.clientId,

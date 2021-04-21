@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { IsAuthService } from '../../services/is-auth.service';
-import {BuisinessAndSitesIdsService} from '../../services/buisiness-and-sites-ids.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 @Component({
   selector: 'app-wildcard-handler',
@@ -19,7 +18,6 @@ export class WildcardHandlerComponent implements OnInit {
   subdoman = 'app';
   siteName = this.path[1];
   constructor(
-    private bsids: BuisinessAndSitesIdsService,
     private router: Router
   ) {
     console.log('.....wildkard');

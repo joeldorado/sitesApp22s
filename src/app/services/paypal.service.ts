@@ -95,19 +95,37 @@ export class PaypalService {
 
   saveSubscrition(subData, paypalData): Observable<any> {
 
+    let sendCurrency!: string;
+    let sendAmount!: string;
+    let sendEnrrollDate!: string;
+
+    if (subData.billing_info.last_payment) {
+      sendAmount =  subData.billing_info.last_payment.amount.value;
+      sendCurrency = subData.billing_info.last_payment.amount.currency_code;
+      sendEnrrollDate = subData.billing_info.last_payment.time;
+    } else {
+        sendAmount =  subData.billing_info.outstanding_balance.value;
+        sendCurrency = subData.billing_info.outstanding_balance.currency_code;
+        sendEnrrollDate = subData.create_time;
+    }
+
+    // outstanding_balance
+    // subData.billing_info.last_payment
     return this.httpClient.post(`${this.apiHost}api/site-paypal-save-subscrion?token=${this.tkn.get()}`,
     {path: this.path,
       processor_settings_id: paypalData.paymentOptions.paypal.processor_settings_id,
       sub_id: subData.id,
       payment_type: paypalData.payment_type,
       status: subData.status,
-      currency: subData.billing_info.last_payment.amount.currency_code,
-      amount: subData.billing_info.last_payment.amount.value,
-      next_charge: new Date(subData.billing_info.next_billing_time).toISOString().replace('Z', '').replace('T', ''),
-      enrollment_date: new Date(subData.billing_info.last_payment.time).toISOString().replace('Z', '').replace('T', '')
+      currency: sendCurrency, // subData.billing_info.last_payment.amount.currency_code,
+      amount: sendAmount, // subData.billing_info.last_payment.amount.value,
+      next_charge: subData.billing_info.next_billing_time, // .toISOString().replace('.000Z', '').replace('.000T', ''),
+      enrollment_date: sendEnrrollDate
+      // subData.billing_info.last_payment.time // ).toISOString().replace('.000Z', '').replace('.000T', '')
       });
-
   }
+
+
   encodeBase(data): any {
     return window.btoa(data.clientId + ':' + data.clientSecret);
   }

@@ -38,7 +38,7 @@ export class StripeService {
     {
       path: this.path,
       amount: data.initial_amount,
-      currency: data.currency,
+      currency: data.paymentOptions.stripe.currency,
       stripeClienId: data.stripeClienId,
       stripeToken: data.stripeToken,
       paymentType: data.payment_type,
@@ -57,10 +57,30 @@ export class StripeService {
       paymentType: data.payment_type,
       processor_settings_id: data.paymentOptions.stripe.processor_settings_id,
       email: data.email,
-      amount: data.initial_amount
+      currency: data.paymentOptions.stripe.currency,
+      amount: data.recurring_amount,
+      initialAmount: data.initial_amount,
+      recurring_cycle: data.recurring_cycle
     });
   }
-
+  // if token has key chargeWithSavedCard then we need the client id in order to chargue with saved card.
+  public installment(data: any): Observable <any> {
+    return this.httpClient.post(`${this.apiHost}api/stripe-installment?token=${this.tkn.get()}`,
+    {
+      path: this.path,
+      stripe_price_id: data.stripe_price_id,
+      stripeClienId: data.stripeClienId,
+      stripeToken: data.stripeToken,
+      paymentType: data.payment_type,
+      number_of_payments: data.number_of_payments,
+      processor_settings_id: data.paymentOptions.stripe.processor_settings_id,
+      email: data.email,
+      currency: data.paymentOptions.stripe.currency,
+      amount: data.recurring_amount,
+      initialAmount: data.initial_amount,
+      recurring_cycle: data.recurring_cycle
+    });
+  }
   getStripeClientId(): Observable<any> {
     return this.httpClient.post(`${this.apiHost}api/site-stripe-get-stripe-client?token=${this.tkn.get()}`, { path: this.path});
   }
