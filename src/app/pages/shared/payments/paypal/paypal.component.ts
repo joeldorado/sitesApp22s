@@ -25,7 +25,6 @@ export class PaypalComponent implements OnInit {
     } else if (this.paypalData.payment_type === 'recurring' || this.paypalData.payment_type === 'installments') {
        this.subscription();
     }
-//
   }
 
 

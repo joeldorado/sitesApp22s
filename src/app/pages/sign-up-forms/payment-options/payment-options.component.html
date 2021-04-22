@@ -9,11 +9,11 @@
                <div fxLAyout="row" fxLayoutGap="10px">
                <div fxFlex="90">
                     <mat-form-field appearance="legacy" class = "full-input">
-                    <mat-label>Enter coupone  
-                    <strong class='warning' *ngIf="invalidCoupone">Invalid coupone.</strong>
-                    <strong class='success' *ngIf="aplayed">Coupone Aplayed.</strong>
+                    <mat-label>Enter coupon 
+                    <strong class='warning' *ngIf="invalidCoupone">Invalid coupon.</strong>
+                    <strong class='success' *ngIf="aplayed">Coupon Aplayed.</strong>
                     </mat-label>
-                    <input [(ngModel)]="enterCoupone" (ngModelChange)="resetPaymentOpts()" matInput placeholder="coupone name">                          
+                    <input [(ngModel)]="enterCoupone" (ngModelChange)="resetPaymentOpts()" matInput placeholder="coupon name">                          
                    
                     </mat-form-field>
                     

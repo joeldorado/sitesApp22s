@@ -28,7 +28,6 @@ export class PaymentOptionsComponent implements OnChanges {
         if (data.error) { console.error(data); alert(data.error); }
         this.paymentsOpts$ = data.payments;
         this.coupones$ = data.coupones;
-    
       });
 
   }
@@ -60,7 +59,7 @@ export class PaymentOptionsComponent implements OnChanges {
     }else if (this.copyPaymentsOpts !== JSON.stringify(this.paymentsOpts$)){
       this.paymentsOpts$ = JSON.parse(this.copyPaymentsOpts);
     }
-  
+
     this.paymentsOpts$.filter(p => {
       this.aplayed = false;
       // aply discount payment_type payment_type
@@ -75,6 +74,8 @@ export class PaymentOptionsComponent implements OnChanges {
 
           p.initial_amount =  this.coupone[0].initial_amount;
           p.recurring_amount =  this.coupone[0].recurring_amount;
+          p.stripe_price_id =  this.coupone[0].stripe_price_id;
+          p.paypal_plan_id =  this.coupone[0].paypal_plan_id;
       }
       }
     });
@@ -91,4 +92,6 @@ export interface Coupones {
   initial_amount: number;
   recurring_amount: number;
   number_of_payments: number;
+  stripe_price_id: string;
+  paypal_plan_id: string;
 }

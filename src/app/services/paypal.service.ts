@@ -39,7 +39,7 @@ export class PaypalService {
      // ATRrthueOsUMS2vVxiwDT1o3l--AnFPaf3W1tmFCJszat5_HKHGSf1uYREL7FpXQ3YOrGZczMc0FaFMk
 
      // doradojoel //#endregion
-     //ARLgj0D_duq4esbEQhM9Erd4Nj4e_xJvSblwa3ZYyuutwty8SuoXLyhcndL4BDrnQc1ZYg09aSqCxiGY
+     // ARLgj0D_duq4esbEQhM9Erd4Nj4e_xJvSblwa3ZYyuutwty8SuoXLyhcndL4BDrnQc1ZYg09aSqCxiGY
     }
 
    // console.log(paypalScriptElement.src);

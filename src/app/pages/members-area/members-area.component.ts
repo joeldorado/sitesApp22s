@@ -45,14 +45,19 @@ export class MembersAreaComponent implements OnInit {
       // load menu
       this.ma.validateSiteAccess().subscribe( data => {
        // let msg = '';
-        if (data.length === 0 || data[0].status !== 'active' || data.error !== undefined) {
-           // alert(`You'r not a member.`);
-           let redirecTo = this.path[1] + '/start';
-           if (this.path[1] === 'members') { redirecTo = 'start'; }
-           this.router.navigate([redirecTo]);
-           return;
+       if (!data.access) {
+          this.redirect();
+          return;
+       }
+       this.loadMembersArea();
+        // if (data.length === 0 || data[0].status !== 'active' || data.error !== undefined) {
+        //    // alert(`You'r not a member.`);
+        //    let redirecTo = this.path[1] + '/start';
+        //    if (this.path[1] === 'members') { redirecTo = 'start'; }
+        //    this.router.navigate([redirecTo]);
+        //    return;
 
-        }
+        // }
         // else if () {
         //  msg = data.error;
         //  alert(msg);
@@ -63,9 +68,6 @@ export class MembersAreaComponent implements OnInit {
         //  this.router.navigate(['/dashboard']);
         //  return;
        // }
-
-
-        this.loadMembersArea();
       });
 
     });
@@ -84,9 +86,9 @@ export class MembersAreaComponent implements OnInit {
     // gets pages fore the menu
     this.ma.getMenuPages().subscribe(data => {
 
+      if (data.error) { alert(data.error); this.redirect(); return; }
+
       this.menuData$ = data;
-      console.log('-------------->------>');
-      console.log(data);
 
       pageName = this.tcs.transform(pageName);
 
@@ -116,7 +118,7 @@ export class MembersAreaComponent implements OnInit {
     this.currentStructure = JSON.parse(this.menuData$.pages.filter(p => p.active === 1)[0].structure_json);
 
     this.ma.get_page(pageNumber).subscribe(data => {
-
+      if (data.error) { alert(data.error); this.redirect(); return; }
       if (data.length === 0) {
         alert('There is no page on this site, plase contact support.');
         return;
@@ -159,6 +161,13 @@ export class MembersAreaComponent implements OnInit {
 
     this.loadPage(pageNumber);
 
+  }
+
+  redirect(): void {
+    let redirecTo = this.path[1] + '/start';
+    if (this.path[1] === 'members') { redirecTo = 'start'; }
+    this.router.navigate([redirecTo]);
+    return;
   }
 }
 export interface MenuData {

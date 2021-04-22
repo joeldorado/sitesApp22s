@@ -291,7 +291,6 @@ export class SignUpFormsComponent implements AfterViewInit {
   // EMAIL IFRAME SENDER
   sendEmail(data: any): void {
     // remove later
-    return;
 
     if (this.integrationOptions$.siteIntegration.crm.type !== this.integrationOptions$.businessIntegration.type) { console.log('error the type direfetn'); return; }
 
@@ -371,12 +370,15 @@ export class SignUpFormsComponent implements AfterViewInit {
  */
 
  /**
-  * 
+  *
   * @param data
   * @desc set the price and payment type for stripe and paypal,
   * payment option selected ontime, recurren etc. next step card data
   */
  submitedPayOptions(data: any): void {
+
+  // cambiar los datos para que aqui tome el cupone data
+
   this.selectedPaymentOpt = data.selected;
   this.selectedPaymentOpt.email = this.currentEmail;
   this.selectedPaymentOpt.paymentOptions = this.paymentOptions$; // .public.publishable_key;
