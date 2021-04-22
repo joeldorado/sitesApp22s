@@ -51,7 +51,8 @@ export class StripeService {
     return this.httpClient.post(`${this.apiHost}api/stripe-subscription?token=${this.tkn.get()}`,
     {
       path: this.path,
-      stripe_price_id: data.stripe_price_id,
+      stripe_initial_price_id: data.stripe_initial_price_id,
+      stripe_recurring_price_id: data.stripe_recurring_price_id,
       stripeClienId: data.stripeClienId,
       stripeToken: data.stripeToken,
       paymentType: data.payment_type,
@@ -68,7 +69,8 @@ export class StripeService {
     return this.httpClient.post(`${this.apiHost}api/stripe-installment?token=${this.tkn.get()}`,
     {
       path: this.path,
-      stripe_price_id: data.stripe_price_id,
+      stripe_initial_price_id: data.stripe_initial_price_id,
+      stripe_recurring_price_id: data.stripe_recurring_price_id,
       stripeClienId: data.stripeClienId,
       stripeToken: data.stripeToken,
       paymentType: data.payment_type,

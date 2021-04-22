@@ -74,8 +74,10 @@ export class PaymentOptionsComponent implements OnChanges {
 
           p.initial_amount =  this.coupone[0].initial_amount;
           p.recurring_amount =  this.coupone[0].recurring_amount;
-          p.stripe_price_id =  this.coupone[0].stripe_price_id;
+          p.stripe_initial_price_id =  this.coupone[0].stripe_initial_price_id;
+          p.stripe_recurring_price_id =  this.coupone[0].stripe_recurring_price_id;
           p.paypal_plan_id =  this.coupone[0].paypal_plan_id;
+
       }
       }
     });
@@ -92,6 +94,7 @@ export interface Coupones {
   initial_amount: number;
   recurring_amount: number;
   number_of_payments: number;
-  stripe_price_id: string;
+  stripe_recurring_price_id: string;
   paypal_plan_id: string;
+  stripe_initial_price_id: string;
 }
