@@ -14,6 +14,7 @@ import {VideoComponent} from '../../shared/video/video.component';
 export class BodyComponent implements OnChanges{
   @Input() structure: any;
   @Input() blocks: any;
+  @Input() siteStyle: any;
   @ViewChildren('blockComponent', { read: ViewContainerRef })
   blockComponent!: QueryList<ViewContainerRef>;
 
@@ -35,8 +36,7 @@ export class BodyComponent implements OnChanges{
 
  getComponentData(): void {
 
-   if (this.blockComponent === undefined || this.blockComponent.length === 0 || this.blocks === null) { return; }
-
+   if (this.blockComponent === undefined || this.blockComponent.length === 0 || this.blocks === undefined) { return; }
    this.blockComponent.forEach((blockComp, index) => {
      if (blockComp.length > 0) { blockComp.detach(); }
      // first index is fore row, second column and tird block values positions
@@ -45,6 +45,7 @@ export class BodyComponent implements OnChanges{
                                              b.column_number.toString() === ids[1] &&
                                              b.block_number.toString() === ids[2]
                                              )[0];
+     // console.log(blockData);
      this.drawComponent(index, ids, blockData);
     });
  }
@@ -99,12 +100,18 @@ export class BodyComponent implements OnChanges{
    if (component === undefined) { return; }
    const Factory = this.resolver.resolveComponentFactory(component);
    const Ref: ComponentRef<any>  = elem[0].createComponent(Factory);
-  
+
    Ref.instance.value = value;
    Ref.instance.blockPosition = ids[0] + ',' + ids[1] + ',' + ids[2];
 
+   const preSiteStyles = this.siteStyle.rows_style[this.structure.rows[ids[0]].style];
+   preSiteStyles.buttons['font-family'] =  this.siteStyle.sites_style.bodyFont;
+   preSiteStyles.text.body['font-family'] = this.siteStyle.sites_style.bodyFont;
+   preSiteStyles.text.header['font-family'] = this.siteStyle.sites_style.headerFont;
+   Ref.instance.siteStyle = this.siteStyle.rows_style[this.structure.rows[ids[0]].style];
+   // console.log(this.structure.rows[ids[0]].style);
+   // console.log(this.siteStyle.rows_style[this.structure.rows[ids[0]].style]);
 
  }
-
 
 }

@@ -9,6 +9,7 @@ import { Component, OnInit, ViewEncapsulation, Input, EventEmitter, Output } fro
 export class TextComponent implements OnInit {
   @Input() public value: any;
   @Input() public blockPosition: any;
+  @Input() public siteStyle: any;
   inText!: string;
   constructor() { }
 

@@ -5,7 +5,9 @@
                 <div 
                 class="row"
                 fxLayout="row"  
-                *ngFor="let r of structure?.row_order let RI = index">
+                *ngFor="let r of structure?.row_order let RI = index"
+                [style]="siteStyle?.rows_style[structure?.rows[r]?.style].section"
+                >
                     <div fxFlex="100" >  
                     
                     <div  class="column-body">                        
@@ -19,8 +21,12 @@
                                 
                             <div fxFlex="100" fxFlexAlign="center">
                                
-                             <div style="margin:20px;" #blockComponent id="{{r}}{{c}}{{b}}"
-                            [ngStyle]="{'display': (ifBlockHasComponent(blocks, r,c,b)) ? 'block' : 'none'}" 
+                             <div 
+                                style="margin:20px;" 
+                                #blockComponent 
+                                id="{{r}}{{c}}{{b}}"
+                                
+                                [ngStyle]="{'display': (ifBlockHasComponent(blocks, r,c,b)) ? 'block' : 'none'}" 
                             ></div> 
 
                             </div>

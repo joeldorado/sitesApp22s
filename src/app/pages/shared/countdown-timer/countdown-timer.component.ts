@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import * as _moment from 'moment';
 const moment =  _moment;
 @Component({
@@ -8,7 +8,9 @@ const moment =  _moment;
   styleUrls: ['./countdown-timer.component.scss']
 })
 export class CountdownTimerComponent implements OnInit {
+  @Input() public siteStyle: any;
   public dateControl = new FormControl(moment());
+
   lefttime!: number;
   end = '';
   intv: any;

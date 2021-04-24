@@ -12,7 +12,7 @@ import {SalesPageService} from '../../../services/sales-page.service';
 export class ButtonComponent implements OnInit {
   @Input() public value: any;
   @Input() public blockPosition: any;
-
+  @Input() public siteStyle: any;
   title = '';
   subtitle = '';
   buttonUrl = '';

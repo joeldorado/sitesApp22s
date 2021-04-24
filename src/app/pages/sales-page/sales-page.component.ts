@@ -13,11 +13,33 @@ structure$: any;
 blocks$: any;
 logedIn = false;
 path = location.pathname.split('/');
+siteStyles: any;
  constructor(
   private sp: SalesPageService,
   private router: Router,
   private isAuth: IsAuthService,
  ) {
+
+  // console.log(
+  //   JSON.stringify({
+  //         sites_style: {headerFont: 'Open Sans', bodyFont: 'Zen Dots', padding: 1, bodyBackground: '#000'},
+  //         rows_style: {
+  //             default: {section:
+  //               {background: '#fff'}, buttons: {background: '#fff', color: '#000'}, text: {header: {color: '#000'}, body:
+  //                {color: '#000'}}},
+  //             highlight: {section:
+  //               {background: '#1a73e8'}, buttons: {background: '#fff', color: '#000'}, text: {header: {color: '#000'}, body:
+  //                {color: '#000'}}},
+  //             otherone: {section:
+  //               {background: '#d93025'}, buttons: {background: '#fff', color: '#000'}, text: {header: {color: '#000'},
+  //                body: {color: '#000'}}},
+  //             othertwo: {section:
+  //               {background: '#dadce0'}, buttons: {background: '#fff', color: '#000'},
+  //               text: {header: {color: '#000'}, body: {color: '#000'}}}
+  //         }
+  //     })
+
+  // );
 // valida si ya esta loged in enviar al members area que le corresponde
   this.isAuth.authStatus.subscribe((value) => {
     if (value) {
@@ -35,8 +57,10 @@ path = location.pathname.split('/');
   this.sp.get_sales_pages().subscribe(data => {
     // si no tiene acceso no se econtro sitio enviar a 404
     if (data.error !== undefined) { this.router.navigate(['/404', {msg : data.error}]); return; }
-    console.log(data.structure.site_id);
+   // console.log(data);
     this.structure$ = JSON.parse(data.structure.structure_json);
+   // console.log(data.style);
+    this.siteStyles = JSON.parse(data.style);
     this.blocks$ = data.body;
     this.menuData$ = {
       business : data.business_name,
@@ -44,5 +68,10 @@ path = location.pathname.split('/');
     };
 
   });
+
+
  }
+
+
+
 }

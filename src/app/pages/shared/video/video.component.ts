@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class VideoComponent implements OnInit {
   @Input() public blockPosition: any;
   @Input() public videoSettings: any;
+  @Input() public siteStyle: any;
   width!: number;
   height!: number;
   constructor() { }
