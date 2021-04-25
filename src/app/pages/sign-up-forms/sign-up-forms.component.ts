@@ -65,6 +65,8 @@ export class SignUpFormsComponent implements AfterViewInit {
   Bs = '';
   List = '';
   panelOpenState = false;
+  sitesStyles: any;
+  bodyFont: any;
   constructor(
     private supForm: SignUpFormService,
     private resolver: ComponentFactoryResolver,
@@ -91,6 +93,10 @@ export class SignUpFormsComponent implements AfterViewInit {
     this.supForm.getsiteSignUpFormData().subscribe(data => {
       if (data.error) { console.error(data); alert(data.error); }
 
+      this.sitesStyles = JSON.parse(data.style);
+      this.bodyFont = { 'font-family': this.sitesStyles.sites_style.bodyFont};
+      this.sitesStyles.rows_style.highlight.section['font-family'] = this.sitesStyles.sites_style.bodyFont;
+      console.log(this.sitesStyles);
       // account questions info
       this.accountInfo$ = JSON.parse(data.user_accountinfo_settings_json);
       for (let i = 0; i <= this.accountInfo$.address; i++) {
@@ -221,7 +227,7 @@ export class SignUpFormsComponent implements AfterViewInit {
   }
  // NEW SITE ACCESS
  alreadyClient(): void {
-  console.log('asdasdasdasdasdas');
+  
   // close user info if user already exist
   this.isNewUser = true;
    // log in the user
@@ -344,6 +350,9 @@ export class SignUpFormsComponent implements AfterViewInit {
     // ids pos 0 is fore row value, column value 1 and blick 2
     Ref.instance.blockPosition = blockData.block_number;
 
+    this.sitesStyles.rows_style.default.text.body['font-family'] = this.sitesStyles.sites_style.bodyFont;
+    this.sitesStyles.rows_style.default.buttons['font-family'] = this.sitesStyles.sites_style.bodyFont;
+    Ref.instance.siteStyle = this.sitesStyles.rows_style.default;
   }
 
 // ON FOCUS OUT EMAIL VALIDATION

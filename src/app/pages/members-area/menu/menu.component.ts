@@ -8,6 +8,7 @@ import {Router} from '@angular/router';
 })
 export class MenuComponent implements OnInit {
 @Output() activePage: EventEmitter<object[]> = new EventEmitter();
+@Input() siteStyles: any;
  @Input() menuData!: MenuData;
   pictureUrl: any;
   letter: any;

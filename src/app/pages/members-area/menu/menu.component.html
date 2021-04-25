@@ -3,7 +3,7 @@
 <div  fxLayout="row">
 <div fxFlex="100">
   <mat-toolbar class="menu">
-    <mat-toolbar-row fxLayout="row">
+    <mat-toolbar-row fxLayout="row"  [style]="siteStyles?.rows_style?.default?.text?.body">
         <div fxFlex="35">
             <span>{{menuData?.business}}</span>
         </div>
@@ -14,6 +14,7 @@
             <div fxLayout="row" style="float: right;">               
                 <div fxFlex="100" fxFlexAlign="center">
                     <button mat-icon-button 
+                     [style]="siteStyles?.rows_style?.default?.buttons"
                         class="menu-button"
                         [matMenuTriggerFor]="menu" 
                         aria-label="Example icon-button with a menu">
@@ -25,15 +26,15 @@
                         <mat-icon class="icon" fxHide fxShow.gt-sm>keyboard_arrow_down</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item>
+                        <button  [style]="siteStyles?.rows_style?.default?.text?.body" mat-menu-item>
                             <mat-icon>dialpad</mat-icon>
                         <span>Redial</span>
                         </button>
-                        <button mat-menu-item disabled>
+                        <button  [style]="siteStyles?.rows_style?.default?.text?.body" mat-menu-item disabled>
                          <mat-icon>voicemail</mat-icon>
                         <span>Check voice mail</span>
                         </button>
-                        <button mat-menu-item (click)="logOut()">
+                        <button  [style]="siteStyles?.rows_style?.default?.text?.body" mat-menu-item (click)="logOut()">
                             <mat-icon>notifications_off</mat-icon>
                         <span>Log out</span>
                         </button>
@@ -46,7 +47,9 @@
 
        <mat-toolbar-row>         
        <div class="menu-button"  *ngFor="let menu of menuData?.pages; let i = index"   >
-        <button                      
+        <!-- -->
+        <button 
+        [style]="siteStyles?.rows_style?.default?.buttons"                     
         mat-raised-button             
         [color]="menu.active ? 'primary' : 'default'"
         (click)="setActivePage(menu?.page_number)"

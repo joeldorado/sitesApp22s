@@ -18,6 +18,7 @@ export class MembersAreaComponent implements OnInit {
   blocks$!: any;
   currentStructure!: any;
   loadingPage = false;
+  siteStyles: any;
   constructor(
         private isAuth: IsAuthService,
         private router: Router,
@@ -87,7 +88,7 @@ export class MembersAreaComponent implements OnInit {
     this.ma.getMenuPages().subscribe(data => {
 
       if (data.error) { alert(data.error); this.redirect(); return; }
-
+      this.siteStyles = JSON.parse(data.style);
       this.menuData$ = data;
 
       pageName = this.tcs.transform(pageName);

@@ -1,14 +1,17 @@
 <div class='template'> 
-    <div class="drop-row"  *ngFor="let r of pageStructure?.row_order let RI = index">
-<div   fxLayout="row">      
+    <div    
+    *ngFor="let r of pageStructure?.row_order let RI = index" >
+<div   class="row" fxLayout="row" [style]="siteStyles?.rows_style[pageStructure?.rows[r]?.style]?.section" >      
     <!-- column -->
 <div     
-class="column-body"             
+class="column-body"   
+[style]="siteStyles?.rows_style[pageStructure?.rows[r]?.style]?.section"          
 *ngFor="let c of pageStructure?.rows[r]?.column_order let CI = index" >                           
-    <!-- Blok-->                
+    <!-- Blok    -->                
     <div class="block-item">
     <!-- Blok ngFor-->
         <div class="block"  
+        [style]="siteStyles?.rows_style[pageStructure?.rows[r]?.style]?.section"
                 *ngFor="let b of pageStructure?.rows[r]?.columnBlockOrder[c]; let BI = index">
                     <div #blockComponent   
                         id="{{r}}{{c}}{{b}}"

@@ -1,8 +1,8 @@
-<div fxLayout="row" fxLayoutAlign="center" class="template">
+<div fxLayout="row" fxLayoutAlign="center" class="template" >
     <div fxFlex="70" fxLayout="column" fxLayoutAlign="start">
     <!-- content-->
         <!-- info -->
-        <div class="box">
+        <div class="box" [style]="sitesStyles?.rows_style['highlight']?.section">
             <div  fxLayout="row"  *ngFor="let block of blocks$ let i = index">                                    
                     <div fxFlex="100">                   
                         <!-- body content -->                                
@@ -14,26 +14,26 @@
         </div>
         <!-- end info-->
         <!-- email content -->    
-     <div class="row box" *ngIf="isAuthenticated && freeSub">
+     <div class="row box" *ngIf="isAuthenticated && freeSub" [style]="sitesStyles?.rows_style['highlight']?.section">
      <div fxLAyout="row">
-        <div fxFlex="100">
+        <div fxFlex="100" [style]="bodyFont">
             <p>Plase click on continue in order to get the free Subscrition. </p>
         </div>
         </div>
      <div fxFlex="100">
      
-         <button  (click)="logedInFreeSub()" fxFlex="100" mat-raised-button> Continue</button> 
+         <button [style]="sitesStyles?.rows_style?.default?.buttons" (click)="logedInFreeSub()" fxFlex="100" mat-raised-button> Continue</button> 
      </div>
      </div>
-      <div style="position: relative;" *ngIf="emailSignup && !isAuthenticated">
-         <h3 >Email 
+      <div style="position: relative;" *ngIf="emailSignup && !isAuthenticated" [style]="sitesStyles?.rows_style?.default?.text?.body">
+         <h3>Email 
          
          </h3>
 
 
 
 
-        <div class="row box">
+        <div class="row box" [style]="sitesStyles?.rows_style['highlight']?.section" >
                 <div fxFlex="100">                    
                 <mat-progress-bar mode="query" *ngIf="progress"></mat-progress-bar>
                     <div fxLayout="row" *ngIf="account?.account === 'exist'">
@@ -48,15 +48,15 @@
                     <div *ngIf="LogInerror !== ''" style=" color: red; margin-bottom: 15px;">
                     {{LogInerror}}
                     </div>       
-                    <mat-form-field appearance="legacy" class = "full-input">
+                    <mat-form-field [style]="bodyFont"  appearance="legacy" class = "full-input">
                     <mat-label>Enter your email address <b>{{validatonEmailLbl}}</b></mat-label>
-                    <input type="email"  formControlName="email"  (focusout)="onFocusOutEvent($event)"  matInput placeholder="email@example.com">   
+                    <input type="email" [style]="bodyFont" formControlName="email"  (focusout)="onFocusOutEvent($event)"  matInput placeholder="email@example.com">   
                         <mat-error *ngIf="emailForm.controls.email.hasError('required')">
                           Email is required.
                         </mat-error>                  
                     </mat-form-field>  
       
-                    <mat-form-field *ngIf="account?.account === 'exist' || account?.account === 'dosent'" 
+                    <mat-form-field [style]="bodyFont"  *ngIf="account?.account === 'exist' || account?.account === 'dosent'" 
                     appearance="legacy" class = "full-input">
                     <mat-label>Enter Password</mat-label>
                     <input  matInput type="password" formControlName="password" >    
@@ -65,7 +65,7 @@
                         </mat-error>                     
                     </mat-form-field>   
 
-                    <mat-form-field *ngIf="account?.account === 'dosent'" appearance="legacy" class = "full-input">
+                    <mat-form-field [style]="bodyFont"  *ngIf="account?.account === 'dosent'" appearance="legacy" class = "full-input">
                     <mat-label>Confirm Password</mat-label>
                     <input  matInput type="password" formControlName="confirmPassword">      
                         <mat-error *ngIf="emailForm.controls.confirmPassword.hasError('required')">
@@ -73,14 +73,14 @@
                         </mat-error>
                                                          
                     </mat-form-field> 
-                    <div fxLayout="row" *ngIf="account?.account === 'exist'">
+                    <div fxLayout="row" [style]="bodyFont"  *ngIf="account?.account === 'exist'">
                         <div fxFlex="100">
                            <button mat-raised-button> forgot password?</button>                    
                         </div>        
                     </div>
                 <!-- [(ngModel)]="emailTerms"-->
                     <section> 
-                        <mat-checkbox formControlName="agree"  >I accept Terms of Service and Privacy Policy</mat-checkbox>     
+                        <mat-checkbox formControlName="agree" [style]="bodyFont"  >I accept Terms of Service and Privacy Policy</mat-checkbox>     
                         <mat-error *ngIf="emailTerms">
                           Terms of Service... is required.
                         </mat-error>           
@@ -90,7 +90,7 @@
                     
                             <div fxFlex="50">
                             <!--  (click)="paymentProcess(2)" -->
-                                <button [disabled]="!emailForm.valid" type="submit" fxFlex="100" mat-raised-button> Continue</button>                                               
+                                <button [style]="sitesStyles?.rows_style?.default?.buttons" [disabled]="!emailForm.valid" type="submit" fxFlex="100" mat-raised-button> Continue</button>                                               
                             </div>
                     </div> 
                      
@@ -101,30 +101,30 @@
             </div>
         <!-- end email content  [innerHtml]="iframee" -->
        <div  #autoresponder ></div>
-        <!--  -->   
-        <div style="position: relative;"  payment coupone *ngIf="paymentOpt && this.siteOptions$.signup_type !== 'free'">
-            <app-payment-options (processPay)="submitedPayOptions($event)"></app-payment-options>
+        <!-- -->   
+        <div style="position: relative;"  payment coupone *ngIf="paymentOpt && this.siteOptions$.signup_type !== 'free'" >
+            <app-payment-options [siteStyle]="sitesStyles" (processPay)="submitedPayOptions($event)"></app-payment-options>
         </div>
         <!-- end payment coupone -->
 
 
-        <!--  process payment   -->   
-        <div style="position: relative;" *ngIf="processpymt && this.siteOptions$.signup_type !== 'free'"  >
+        <!--  process payment     -->   
+        <div style="position: relative;" *ngIf="processpymt && this.siteOptions$.signup_type !== 'free'">
         <h3 >Process Payment </h3>  
-        <div class="row box">
+        <div class="row box" [style]="sitesStyles?.rows_style['highlight']?.section">
             <div fxFlex="100">     
                 <!-- stripe - paypal -->
-                <button class="back-button"  mat-button (click)="paymentProcess(2)">
+                <button [style]="sitesStyles?.rows_style?.default?.buttons" class="back-button"  mat-button (click)="paymentProcess(2)">
                 <mat-icon>arrow_back</mat-icon> Plan Options</button> 
                 <mat-accordion>
                     <mat-expansion-panel hideToggle>
                     <mat-expansion-panel-header>
-                    <mat-panel-title>
+                    <mat-panel-title [style]="bodyFont">
                     Pay with card
                     </mat-panel-title>                 
                     </mat-expansion-panel-header>
                                            
-                        <app-stripe-card (nexStep)="paymentProcess($event)" [paymentData] ="selectedPaymentOpt"> </app-stripe-card>
+                        <app-stripe-card [fontBody]="sitesStyles?.rows_style?.default?.buttons" (nexStep)="paymentProcess($event)" [paymentData] ="selectedPaymentOpt"> </app-stripe-card>
                     
 
                     </mat-expansion-panel>
@@ -132,7 +132,7 @@
                     <mat-expansion-panel (opened)="panelOpenState = true"
                                     (closed)="panelOpenState = false">
                     <mat-expansion-panel-header>
-                    <mat-panel-title>
+                    <mat-panel-title [style]="bodyFont">
                     Pay with Paypal
                     </mat-panel-title>
                     <mat-panel-description>                    
@@ -151,14 +151,14 @@
         <div style="position: relative;" *ngIf="accountInfo && !isNewUser">
         <mat-progress-bar mode="query" *ngIf="progress"></mat-progress-bar>
         <h3 >Account Information </h3> 
-        <div class="row box" >
+        <div class="row box" [style]="sitesStyles?.rows_style['highlight']?.section">
             <div fxFlex="100">                   
-            <form [formGroup]="userInfoForm" (ngSubmit)="onSubmitUserInfo()">  
+            <form [formGroup]="userInfoForm" (ngSubmit)="onSubmitUserInfo()" >  
                 <!-- account info contnet -->
                     <!-- name -->
-                    <div fxLayout="row" fxLayoutGap="10px">
+                    <div fxLayout="row" fxLayoutGap="10px"  >
                     <div fxFlex="50">
-                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
                     <mat-label>First Name</mat-label>               
                     <input matInput placeholder="" formControlName="firstName">  
                         <mat-error *ngIf="userInfoForm.controls.firstName.hasError('required')">
@@ -167,7 +167,7 @@
                     </mat-form-field>
                     </div>
                     <div fxFlex="50">
-                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
                     <mat-label>Last Name</mat-label>
                     <input matInput placeholder="" formControlName="lastName">  
                          <mat-error *ngIf="userInfoForm.controls.lastName.hasError('required')">
@@ -178,9 +178,9 @@
                     </div>
                     <!-- end name-->
                     <!-- phone -->
-                    <div fxLayout="row" fxLayoutGap="10px">
+                    <div fxLayout="row" fxLayoutGap="10px" >
                     <div fxFlex="50">
-                    <mat-form-field appearance="legacy" fxFlex="100" *ngIf="accountInfo$?.phone">
+                    <mat-form-field [style]="bodyFont"  appearance="legacy" fxFlex="100" *ngIf="accountInfo$?.phone">
                     <mat-label>Phone</mat-label>
                     <input matInput placeholder="" formControlName="phone"> 
                         <mat-error *ngIf="userInfoForm.controls.phone.hasError('required')">
@@ -189,7 +189,7 @@
                     </mat-form-field>
                     </div>
                     <div fxFlex="50">   
-                        <mat-form-field appearance="legacy" fxFlex="100" *ngIf="accountInfo$?.dob">
+                        <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100" *ngIf="accountInfo$?.dob">
                             <mat-label>Date of Birth </mat-label>
                             <input matInput placeholder="" formControlName="birthday">
                                 <mat-error *ngIf="userInfoForm.controls.birthday.hasError('required')">
@@ -204,7 +204,7 @@
                     <div fxFlex="50">
                     
                     <div fxLayout="row" *ngFor="let a of addresses; let i = index"> 
-                        <mat-form-field appearance="legacy"                     
+                        <mat-form-field [style]="bodyFont" appearance="legacy"                     
                         fxFlex="100">
                         <mat-label>{{a.lbl}}</mat-label>
                         <input matInput placeholder="" formControlName="{{a.formControl}}">                     
@@ -212,7 +212,7 @@
                     </div>                    
                     </div>
                     <div fxFlex="50">
-                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
                     <mat-label>Suite / Apt Number</mat-label>
                     <input matInput placeholder="" formControlName="suiteAptNumber">
                                 <mat-error *ngIf="userInfoForm.controls.suiteAptNumber.hasError('required')">
@@ -225,7 +225,7 @@
                     <!-- City -->
                     <div fxLayout="row" fxLayoutGap="10px">
                     <div fxFlex="50">
-                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
                     <mat-label>City / Provence</mat-label>
                     <input matInput placeholder="" formControlName="city">
                             <mat-error *ngIf="userInfoForm.controls.city.hasError('required')">
@@ -240,7 +240,7 @@
                     <!-- country -->
                     <div fxLayout="row" fxLayoutGap="10px">
                     <div fxFlex="50">
-                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
                     <mat-label>Conuntry</mat-label>
                     <input matInput placeholder="" formControlName="conuntry">
                             <mat-error *ngIf="userInfoForm.controls.conuntry.hasError('required')">
@@ -249,7 +249,7 @@
                     </mat-form-field>
                     </div>
                     <div fxFlex="50">
-                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
                     <mat-label>Zip / Postal Code</mat-label>
                     <input matInput placeholder="" formControlName="zip">
                             <mat-error *ngIf="userInfoForm.controls.zip.hasError('required')">
@@ -262,7 +262,7 @@
                     <!-- question -->
                     <div fxLayout="row" fxLayoutGap="10px" *ngFor="let info of accountInfo$?.custom_questions; let i = index">
                     <div fxFlex="100">
-                    <mat-form-field appearance="legacy" fxFlex="100">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
                     <mat-label>{{info.question}}</mat-label>
                     <input matInput placeholder="">                     
                     </mat-form-field>
@@ -272,7 +272,7 @@
 
                     <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
                         <div fxFlex="50">
-                            <button fxFlex="100"   mat-raised-button > Complete</button>                                               
+                            <button fxFlex="100" [style]="sitesStyles?.rows_style?.default?.buttons"  mat-raised-button > Complete</button>                                               
                         </div>
                     </div>    
                     </form>

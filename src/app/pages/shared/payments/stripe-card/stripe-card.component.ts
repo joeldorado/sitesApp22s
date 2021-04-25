@@ -15,6 +15,7 @@ export class StripeCardComponent implements AfterViewInit {
   @Input() paymentData: any;
   @Output() nexStep: EventEmitter<number> = new EventEmitter();
   @ViewChild('cardInfo') cardInfo!: ElementRef;
+  @Input() fontBody: any;
   cardError: any;
   card: any;
   stripe: any;

@@ -11,7 +11,7 @@ import {CountdownTimerComponent} from '../../shared/countdown-timer/countdown-ti
   styleUrls: ['./body.component.scss']
 })
 export class BodyComponent implements  OnChanges {
-
+@Input() siteStyles: any;
 @ViewChildren('blockComponent', { read: ViewContainerRef })
 blockComponent!: QueryList<ViewContainerRef>;
 blobkData!: any;
@@ -24,7 +24,8 @@ constructor(private resolver: ComponentFactoryResolver) { }
 ngOnChanges(changes: { [property: string]: SimpleChange }): void {
     const blocksCh: SimpleChange = changes.blocks;
     if (blocksCh !== undefined && blocksCh.firstChange) { return; }
-
+    console.log(this.siteStyles);
+    console.log(this.pageStructure);
     this.blockComponent.forEach((blockComp, index) => {
       if (blockComp.length > 0) {
         blockComp.detach();
@@ -36,7 +37,7 @@ ngOnChanges(changes: { [property: string]: SimpleChange }): void {
               b.column_number.toString() === ids[1] &&
               b.block_number.toString() === ids[2])[0];
 
-      this.drawComponent(index, blockData);
+      this.drawComponent(index, ids, blockData);
 
     });
   }
@@ -48,7 +49,7 @@ ngOnChanges(changes: { [property: string]: SimpleChange }): void {
    * @param blockData
    * @desc toma y crea el componente dependiendo su tipo
    */
-  drawComponent(selected, blockData): void {
+  drawComponent(selected, ids, blockData): void {
     const elem: ViewContainerRef[]  =  this.blockComponent.filter((element, index) => index === selected);
     const componentType = blockData.block_type;
     const value = JSON.parse(blockData.data_json);
@@ -69,7 +70,12 @@ ngOnChanges(changes: { [property: string]: SimpleChange }): void {
     const Factory = this.resolver.resolveComponentFactory(component);
     const Ref: ComponentRef<any>  = elem[0].createComponent(Factory);
     Ref.instance.value = value;
+    // pageStructure?.rows[ids]?.style
+    // this.pageStructure.rows[ids[0]].style
 
+    this.siteStyles.rows_style[this.pageStructure.rows[ids[0]].style].text.body['font-family'] = this.siteStyles.sites_style.bodyFont;
+    this.siteStyles.rows_style[this.pageStructure.rows[ids[0]].style].buttons['font-family'] = this.siteStyles.sites_style.bodyFont;
+    Ref.instance.siteStyle = this.siteStyles.rows_style.default;
   }
 
 

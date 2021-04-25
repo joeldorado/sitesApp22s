@@ -7,6 +7,7 @@ import {SignUpFormService} from '../../../services/sign-up-form.service';
   styleUrls: ['./payment-options.component.scss']
 })
 export class PaymentOptionsComponent implements OnChanges {
+  @Input() siteStyle: any;
   @Output()
   processPay: EventEmitter<any> = new EventEmitter();
   paymentsOpts$!: any[];
@@ -18,7 +19,7 @@ export class PaymentOptionsComponent implements OnChanges {
   coupone!: Coupones[];
   invalidCoupone = false;
   aplayed = false;
-
+  fontBody: any;
   constructor(
     private singupForm: SignUpFormService
   ) {
@@ -39,6 +40,9 @@ export class PaymentOptionsComponent implements OnChanges {
   }
 
   ngOnChanges(): any {
+    if (this.siteStyle){
+      this.fontBody = this.siteStyle.rows_style.default.text.body;
+    }
   }
 
   paymentProcess(Type: number): void {

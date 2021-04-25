@@ -1,14 +1,16 @@
  <h3 >Payment Option</h3> 
-        <div class="row box">
+        <div class="row box" [style]="siteStyle?.rows_style['highlight']?.section" >
             <div fxFlex="100"> 
 
-             <button class="back-button"  mat-button (click)="paymentProcess(1)">
+             <button 
+             [style]="siteStyle?.rows_style?.default?.buttons" 
+             class="back-button"  mat-button (click)="paymentProcess(1)">
              <mat-icon>arrow_back</mat-icon> Edit Email</button> 
-
-
                <div fxLAyout="row" fxLayoutGap="10px">
                <div fxFlex="90">
-                    <mat-form-field appearance="legacy" class = "full-input">
+                     <mat-form-field
+                        [style]="fontBody"
+                        appearance="legacy" class = "full-input">
                     <mat-label>Enter coupon 
                     <strong class='warning' *ngIf="invalidCoupone">Invalid coupon.</strong>
                     <strong class='success' *ngIf="aplayed">Coupon Aplayed.</strong>
@@ -19,7 +21,9 @@
                     
                </div>
                 <div fxFlex="10"  fxLayoutAlign="end">
-                <button mat-raised-button [disabled]="enterCoupone === ''"  (click)="applayCoupone()"> Apply </button> 
+                <button 
+                [style]="siteStyle?.rows_style?.default?.buttons" 
+                mat-raised-button [disabled]="enterCoupone === ''"  (click)="applayCoupone()"> Apply </button> 
                 </div>
                </div> 
             <mat-radio-group
@@ -27,7 +31,7 @@
             class="example-radio-group"
             [(ngModel)]="selectedPayment"
             >
-                <mat-radio-button class="example-radio-button" 
+                <mat-radio-button [style]="fontBody" class="example-radio-button" 
                 *ngFor="let payment of paymentsOpts$" [value]="payment?.option_number">
                     <label *ngIf="payment?.payment_type === 'onetime'">
                      $ {{payment?.initial_amount}} USD one time payment
@@ -47,7 +51,9 @@
 
                  <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
                     <div fxFlex="50">
-                         <button fxFlex="100" [disabled]="selectedPayment === ''" mat-raised-button (click)="paymentProcess(3)"> Continue</button>                                               
+                         <button fxFlex="100" 
+                         [style]="siteStyle?.rows_style?.default?.buttons"
+                         [disabled]="selectedPayment === ''" mat-raised-button (click)="paymentProcess(3)"> Continue</button>                                               
                     </div>
                 </div>                                          
             </div>                                

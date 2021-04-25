@@ -32,7 +32,7 @@
       box-sizing: border-box;
       flex-grow: 1;
       flex-basis: 0;
-      border: 3px solid #fff;
+      border: 3px solid transparent;
       transition-delay: all .8s;
     }
 
@@ -56,7 +56,7 @@
     align-items: center center;
     vertical-align: top;
     box-sizing: border-box;    
-    background: #fff;
+   // background: #fff;
   }
 
    .block-icon:hover .icon-template {
@@ -184,3 +184,41 @@ img.my-cropper-loading {
     .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
       transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
     }
+
+
+.container {
+  margin-top: 20px;
+  padding: 10px;
+
+}
+.column-body {
+ 
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  flex-grow: 1;
+  flex-basis: 0;
+  transition-delay: all .8s;
+
+  
+}
+.block{
+  width: 100%;      
+  margin-left: 10px;
+  margin-right: 10px;
+  display: inline-block;
+  align-items: center center;
+  vertical-align: top;
+  box-sizing: border-box;    
+  // background: #fff;
+}
+.row {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 20px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px 1px #ddd;
+}
