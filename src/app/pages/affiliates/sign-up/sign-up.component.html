@@ -1,0 +1,58 @@
+<div fxLayout="row" fxLayoutAlign="center" class="template" >
+<div fxFlex="100" fxLayout="column" fxLayoutAlign="start">
+    <!-- content-->
+        <!-- info -->
+        <div class="box" [style]="siteStyles?.rows_style['highlight']?.section">
+            <div  fxLayout="row"  *ngFor="let block of value?.row let i = index">                                    
+            <div fxFlex="100">                   
+                <!-- body content -->                                
+                <div #previewComponents 
+                    [ngStyle]= "{'display' : block.block_type === 'empty' ? 'block' : 'none'}"></div>                     
+                <!-- end body content -->
+            </div>             
+        </div>  
+    </div>
+   
+</div>
+</div>
+<!-- end info-->
+
+
+<div fxLayout="row" fxLayoutAlign="center" class="template" >
+<div fxFlex="100" fxLayout="column" fxLayoutAlign="start">
+    <!-- content-->
+        <!-- info -->
+        <div class="box" [style]="siteStyles?.rows_style['highlight']?.section">
+            <div  fxLayout="row" >                                    
+            <div fxFlex="100">   
+            <p [style]="bodyFont">
+            We process our commissions (up to 50%) using PayPal. Please create a PayPal account and 
+            add the corresponding message below.
+            </p>                
+                <!-- body content -->    
+                <mat-form-field [style]="bodyFont"  appearance="legacy" class = "full-input">
+                <mat-label>Enter your PaypPal email address </mat-label>
+                <input type="email" [style]="bodyFont" [value]="email"  (focusout)="onFocusOutEvent($event)"  matInput placeholder="email@example.com">                                  
+                </mat-form-field>                              
+                <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
+                    <div fxFlex="50">                    
+                        <button [style]="siteStyles?.rows_style?.default?.buttons"  type="submit" fxFlex="100" mat-raised-button> Register</button>                                               
+                    </div>
+                </div>                
+                <!-- end body content -->
+            </div>             
+        </div>  
+    </div>
+   
+</div>
+</div>
+
+
+  <div  fxLayout="row" fxLayoutAlign="center center">
+    <div fxFlex="40"></div>
+    <div fxFlex='30' style="text-align: center;">
+        <small><a href="#" class='link'>Privacy Policy</a> <mat-icon class='gray-icon'>edit</mat-icon></small> 
+        <small> <a href="#" class='link'>Terms & Conditions</a> <mat-icon class='gray-icon'>edit</mat-icon></small>
+    </div>
+    <div fxFlex="35"></div>
+  </div>    
