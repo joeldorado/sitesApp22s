@@ -10,7 +10,7 @@
   <mat-toolbar class="menu">
     <mat-toolbar-row fxLayout="row">
         <div fxFlex="35">
-            <span>{{signUpData?.businessName}}</span>
+            <span>nvjvhj</span>
         </div>
         <div fxFlex="35" fxFlexAlign='center center'>
          <span> {{title}} </span>
@@ -34,7 +34,7 @@
                             </div>                        
                         <mat-icon class="icon" fxHide fxShow.gt-sm>keyboard_arrow_down</mat-icon>
                     </button>
-                          <mat-menu #menu="matMenu">
+                    <mat-menu #menu="matMenu">
                         <button [routerLink]="'dashboard'" mat-menu-item>
                             <mat-icon>link</mat-icon>
                         <span>Dashboard</span>
@@ -61,27 +61,6 @@
             </div>
         </div>
     </mat-toolbar-row>
-
-
-
-  <mat-toolbar-row fxLayout="row" *ngIf="title === 'Affiliate Program'">
-        <div fxFlex="70">
-            <button mat-button (click)="menuRouting('resources')" style="color: orange;"> Resources</button>
-            <button mat-button (click)="menuRouting('links')"> Affiliate Links</button>
-            <button mat-button (click)="menuRouting('sales')"> Sales</button>
-        </div>        
-        <div fxFlex="30" fxFlexAlign='end center' >
-            <div fxLayout="row" style="float: right;">               
-                <div fxFlex="100" fxFlexAlign="center">                
-                    <small>PayPal Email: {{affiliateData?.paypal_email}}  </small>                   
-                </div>
-            </div>
-        </div>
-    </mat-toolbar-row>
-
-
-
-
   </mat-toolbar>
 </div>
 </div>

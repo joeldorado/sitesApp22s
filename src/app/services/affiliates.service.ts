@@ -26,7 +26,7 @@ export class AffiliatesService {
     //  Authorization: this.appConfigService.getAppEnv().authorization,
       'Content-Type': 'application/json'
     });
-    if (this.path === 'signupform') {
+    if (this.path === 'affiliates') {
         this.path = '';
     }
 
@@ -42,9 +42,33 @@ export class AffiliatesService {
   }
 
   public accountExistVal(email: string): Observable<any> {
-    return this.httpClient.get(`${this.apiHost}api/site-account-validation`, {
+    return this.httpClient.get(`${this.apiHost}api/site-affiliate-account-validation?token=${this.tkn.get()}&path=${this.path}`, {
       params: new HttpParams().set('email', email)
     });
 
+  }
+
+  public affiliateAccess(): Observable<any> {
+    return this.httpClient.get(`${this.apiHost}api/site-access-validation?token=${this.tkn.get()}`, {
+      params: new HttpParams().set('path', this.path)
+    });
+  }
+
+  public registerAffiliate(mail: string): Observable<any> {
+    return this.httpClient.post(`${this.apiHost}api/site-add-aff-access?token=${this.tkn.get()}`, {
+      path: this.path,
+      email: mail
+    });
+  }
+
+  public getMemberData(): Observable<any> {
+    return this.httpClient.get(`${this.apiHost}api/site-affiliate-member-data?token=${this.tkn.get()}`, {
+      params: new HttpParams().set('path', this.path)
+    });
+  }
+  public getAffLinksData(): Observable<any>  {
+    return this.httpClient.get(`${this.apiHost}api/site-affiliate-links-data?token=${this.tkn.get()}`, {
+      params: new HttpParams().set('path', this.path)
+    });
   }
 }

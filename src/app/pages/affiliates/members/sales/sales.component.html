@@ -3,11 +3,10 @@
     <!-- content-->
         <!-- info -->
         <div class="box" [style]="siteStyles?.rows_style['highlight']?.section">
-            <div  fxLayout="row"  *ngFor="let block of resources let i = index">                                    
+            <div  fxLayout="row" >                                    
             <div fxFlex="100">                   
                 <!-- body content -->                                
-                <div #previewComponents 
-                    [ngStyle]= "{'display' : block.block_type === 'empty' ? 'block' : 'none'}"></div>                     
+                <h1> Your sales will show up here!</h1>                
                 <!-- end body content -->
             </div>             
         </div>  
@@ -16,6 +15,3 @@
 </div>
 </div>
 <!-- end info-->
-
-
-   

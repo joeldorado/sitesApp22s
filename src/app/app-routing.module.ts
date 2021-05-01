@@ -12,9 +12,31 @@ const Routes: Routes = [
     loadChildren: () => import('./pages/affiliates/affiliates.module').then(m => m.AffiliatesModule),
     pathMatch: 'full'
   },
+  {
+    path: 'affiliates/links',
+    loadChildren: () => import('./pages/affiliates/affiliates.module').then(m => m.AffiliatesModule),
+    pathMatch: 'full'
+  }, {
+    path: 'affiliates/resources',
+    loadChildren: () => import('./pages/affiliates/affiliates.module').then(m => m.AffiliatesModule),
+    pathMatch: 'full'
+  }, {
+    path: 'affiliates/sales',
+    loadChildren: () => import('./pages/affiliates/affiliates.module').then(m => m.AffiliatesModule),
+    pathMatch: 'full'
+  },
    {
     path: '404',
     loadChildren: () => import('./pages/page-404/page-404.module').then(m => m.Page404Module),
+    pathMatch: 'full'
+  }, {
+    path: 'billing',
+    loadChildren: () => import('./pages/billing/billing.module').then(m => m.BillingModule),
+    pathMatch: 'full'
+  },
+  {
+    path: 'account',
+    loadChildren: () => import('./pages/account/account.module').then(m => m.AccountModule),
     pathMatch: 'full'
   },
   {

@@ -79,7 +79,7 @@ export class MembersAreaComponent implements OnInit {
     let pageName = 'Home';
     const paths = location.pathname.split('members')[1];
 
-    if (paths !== '' && paths !== 'home') {
+    if (paths !== undefined && paths !== 'home') {
 
         pageName = paths.replace('/', '');
     }

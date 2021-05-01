@@ -1,0 +1,50 @@
+<div 
+
+    *ngFor="let site of linksData"
+    fxLayout="row" 
+    fxLayoutAlign="center" 
+    class="template" >
+ <div fxFlex="100" fxLayout="column" fxLayoutAlign="start">
+   <div fxLayout="row"  fxLayoutGap="10px" class="box" [style]="siteStyles?.rows_style['highlight']?.section">           
+        <div fxFlex="35">
+            <img [src]="site?.block?.image_url" fxFlex="100"/>
+        </div>
+        <div fxFlex="65">
+          <div fxLayout="row" >
+            <div fxFlex="30">
+              <h3 [style] ="siteStyles?.rows_style?.default?.text?.header">{{site?.block?.title}}</h3> 
+              <br> <br>
+                <p style="text-align: justify; padding: 10px;" [style] ="siteStyles?.rows_style?.default?.text?.body">
+                    {{site?.block?.description}}
+                </p>
+             
+             
+            </div>
+            <div fxFlex="70" style="text-align: right;">
+                {{site?.affiliate_commission_percent}} % Commission                          
+            </div>
+          </div>
+        
+     
+   <div fxLayout="row" style="margin-top: 14%;">
+            <div fxFlex="30">
+               {{site?.link}} 
+            </div>
+            <div fxFlex="70" style="text-align: right;">
+                 <button mat-raised-button> Copy Link </button> 
+            </div>
+        </div>
+        </div>
+      </div>
+    
+</div>
+
+</div>
+    
+   
+
+
+
+          
+
+           

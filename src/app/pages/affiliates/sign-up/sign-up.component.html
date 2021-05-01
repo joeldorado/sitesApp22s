@@ -28,17 +28,29 @@
             <p [style]="bodyFont">
             We process our commissions (up to 50%) using PayPal. Please create a PayPal account and 
             add the corresponding message below.
+            <strong *ngIf="messageAccountExit !== ''" class="error"><br>{{messageAccountExit}}</strong>
             </p>                
-                <!-- body content -->    
-                <mat-form-field [style]="bodyFont"  appearance="legacy" class = "full-input">
-                <mat-label>Enter your PaypPal email address </mat-label>
-                <input type="email" [style]="bodyFont" [value]="email"  (focusout)="onFocusOutEvent($event)"  matInput placeholder="email@example.com">                                  
-                </mat-form-field>                              
-                <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
-                    <div fxFlex="50">                    
-                        <button [style]="siteStyles?.rows_style?.default?.buttons"  type="submit" fxFlex="100" mat-raised-button> Register</button>                                               
-                    </div>
-                </div>                
+                <!-- body content -->   
+                <div *ngIf="logedIn">
+                    <mat-form-field [style]="bodyFont"  appearance="legacy" class = "full-input">
+                    <mat-label>Enter your PaypPal email address </mat-label>
+                    <input type="email" [style]="bodyFont" [(ngModel)]="email"  (focusout)="onFocusOutEvent($event)"  matInput placeholder="email@example.com">                                  
+                    </mat-form-field>                              
+                    <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
+                        <div fxFlex="50">                    
+                            <button 
+                            (click)="register()"
+                            [style]="siteStyles?.rows_style?.default?.buttons"  
+                            [disabled]="!errors" 
+                            type="submit" 
+                            fxFlex="100" 
+                            mat-raised-button> Register</button>                                               
+                        </div>
+                    </div>   
+                </div>
+                <div *ngIf="!logedIn">
+                    <p>Plase log in in order to register!!!</p>
+                </div>
                 <!-- end body content -->
             </div>             
         </div>  
@@ -48,11 +60,12 @@
 </div>
 
 
-  <div  fxLayout="row" fxLayoutAlign="center center">
+  <div  fxLayout="row" fxLayoutAlign="center center" >
     <div fxFlex="40"></div>
     <div fxFlex='30' style="text-align: center;">
         <small><a href="#" class='link'>Privacy Policy</a> <mat-icon class='gray-icon'>edit</mat-icon></small> 
         <small> <a href="#" class='link'>Terms & Conditions</a> <mat-icon class='gray-icon'>edit</mat-icon></small>
     </div>
     <div fxFlex="35"></div>
-  </div>    
+  </div>   
+   

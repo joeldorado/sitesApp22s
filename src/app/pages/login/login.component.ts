@@ -26,7 +26,6 @@ export class LoginComponent implements OnInit {
               private isAuth: IsAuthService,
               public dialogRef: MatDialogRef<LoginComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
-
     this.logIn = fb.group({
       email: new FormControl(''),
       password: new FormControl(''),
@@ -70,6 +69,9 @@ export class LoginComponent implements OnInit {
       this.redirecTo = 'members';
     } else if (this.siteName === 'Dashboard') {
       this.redirecTo = 'dashboard';
+    } else if (this.path[1] === 'affiliates') {
+      location.reload();
+      return;
     }
     this.dialogRef.close();
     this.router.navigateByUrl(this.redirecTo);

@@ -8,12 +8,11 @@ import {AffiliatesService} from '../../../services/affiliates.service';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit, OnChanges {
-  @Input() signUpData: any;
+
   @Input() sitestyle: any;
   @Input() logedIn: any;
-  @Input() affiliateData: any;
-  @Input() title: any = 'Affiliate';
-  @Output() affiliateRouting: EventEmitter<string>  = new EventEmitter();
+  @Input() title: any = 'Billing';
+
   defaultSyle = 'default';
   pictureUrl: any;
   letter: any;
@@ -39,7 +38,7 @@ export class MenuComponent implements OnInit, OnChanges {
     openDialog(): void {
     const dialogRef = this.dialog.open(LoginComponent, {
       width: '30%',
-      data: {menuData: this.signUpData.businessName}
+      data: {menuData: 'Billing'}
     });
     dialogRef.afterClosed().subscribe(result => {
 
@@ -52,10 +51,6 @@ export class MenuComponent implements OnInit, OnChanges {
     localStorage.clear();
     //  this.route.navigate(['/login']);
     location.reload();
-  }
-
-  menuRouting(action: string): void {
-    this.affiliateRouting.emit(action);
   }
 
 }

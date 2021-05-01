@@ -16,8 +16,11 @@ import {AffiliatesService} from '../../../services/affiliates.service';
 export class SignUpComponent implements OnChanges {
 @Input() value: any;
 @Input() siteStyles: any;
+@Input() logedIn: any;
 bodyFont: any;
 email = '';
+messageAccountExit = '';
+errors: any = null;
 @ViewChildren('previewComponents', {read: ViewContainerRef}) previewComponents!: QueryList<ViewContainerRef>;
   constructor(
     private resolver: ComponentFactoryResolver,
@@ -83,9 +86,27 @@ email = '';
 
     this.affServ.accountExistVal(this.email).subscribe(data => {
       console.log(data);
+      if (data.account === 'exist') {
+        this.messageAccountExit = 'You already added this PayPal Account, Try with another account';
+        this.errors = null;
+      } else {
+        this.errors =  true;
+      }
     });
 
 
+  }
+  register(): void {
+    if (this.email === '') {  this.messageAccountExit = 'Email is required';  this.errors = null; }
+    console.log(this.email);
+    this.affServ.registerAffiliate(this.email).subscribe(data => {
+      console.log(data);
+      if (data.access) {
+        location.reload();
+        return;
+      }
+      this.messageAccountExit = 'something went wrong please contact support';
+    });
   }
 
 }
