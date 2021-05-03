@@ -2,8 +2,141 @@
     <app-menu  
     [title] ="menuTitle"
     [logedIn]="isAuthenticated" 
-    [sitestyle]="sitesStyles$"   
+    [sitestyle]="siteStyles"   
     ></app-menu>
  
+<div fxLayout="row">
+    <div fxFlex="100">
+        <div class="box" [style]="siteStyles?.rows_style['highlight']?.section">
+            <div  fxLayout="row" >                                    
+            <div fxFlex="100">                   
+                <!-- body content -->                                
+                <h1>Payment Methods </h1> 
+                <p>Last 4 Digits: {{billingData?.last_for}}  &nbsp;&nbsp;&nbsp;&nbsp; Expiration  Date: 05/21  Brand: {{billingData?.card_brand}}</p>                
+                <!-- end body content -->
+            </div>             
+        </div>  
+    </div>
+    <!-- ******************************* -->
+    <div class="box" [style]="siteStyles?.rows_style['highlight']?.section">
+            <div  fxLayout="row" >                                    
+            <div fxFlex="100">                   
+                <!-- body content -->                                
+                <h1>Subscriptions </h1> 
+
+             <table mat-table [dataSource]="subDataSource" class="mat-elevation-z8">
+
+                <!--- Note that these columns can be defined in any order.
+                        The actual rendered columns are set as a property on the row definition" -->
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef> Date </th>
+                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef> Amount </th>
+                    <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef> Type </th>
+                    <td mat-cell *matCellDef="let element"> {{element.type | titlecase}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="site">
+                    <th mat-header-cell *matHeaderCellDef> Site </th>
+                    <td mat-cell *matCellDef="let element"> {{element.site | titlecase}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            
+                <!-- end body content -->
+            </div>             
+        </div>  
+        <!-- ***************************  -->
+        <!-- ****************************** -->
+        
+        <!-- ******************************* -->
+    </div>
+
+
+
+
+
+    <!-- ******************************* -->
+    <div class="box" [style]="siteStyles?.rows_style['highlight']?.section">
+            <div  fxLayout="row" >                                    
+            <div fxFlex="100">                   
+                <!-- body content -->     
+                <div fxLayout="row">       
+                    <div fxFlex="50"> <h1>Transactions </h1> </div>                    
+                    <div fxFlex="50" style="text-align:right;">                     
+                    <mat-form-field appearance="fill">
+                    <mat-label>All sites</mat-label>
+                    <mat-select (selectionChange)="transSiteFilter()" [(ngModel)]="transSiteSecected">
+                    <mat-option *ngFor="let site of billingData?.sites" [value]="site.site_name">
+                    {{site.site_name}}
+                    </mat-option>
+                    </mat-select>
+                    </mat-form-field>              
+                    </div>                    
+                    
+                </div>
+
+             <table mat-table [dataSource]="tranDataSource" class="mat-elevation-z8">
+
+                <!--- Note that these columns can be defined in any order.
+                        The actual rendered columns are set as a property on the row definition" -->
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef> Date </th>
+                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef> Amount </th>
+                    <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef> Type </th>
+                    <td mat-cell *matCellDef="let element"> {{element.type | titlecase}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="site">
+                    <th mat-header-cell *matHeaderCellDef> Site </th>
+                    <td mat-cell *matCellDef="let element"> {{element.site}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            
+                <!-- end body content -->
+            </div>             
+        </div>  
+        <!-- ***************************  -->
+        <!-- ****************************** -->
+        
+        <!-- ******************************* -->
+    </div>
+
+
+
+
+    </div><!-- end fx flex-->    
+</div>
+
 
 </div>
