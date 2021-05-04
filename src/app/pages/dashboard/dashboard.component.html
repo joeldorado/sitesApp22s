@@ -1,6 +1,13 @@
 <div class="template" *ngIf="isLogedIn">
-<app-menu [businessName]="businessName"> </app-menu>
-<app-body [data]="data" [domain]="businessUrl"> </app-body>
+   <app-menu 
+    [businessName]="businessName"
+    [title] ="menuTitle"
+    [logedIn]="isLogedIn" 
+    ></app-menu>
+ <!-- [sitestyle]="siteStyles" -->  
+<app-body 
+[data]="data" [domain]="businessUrl"
+> </app-body>
 </div>
 
 <div *ngIf="!isLogedIn" fxLayout="row" fxLayoutAlign="center" class="loginbtn">

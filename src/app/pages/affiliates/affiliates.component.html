@@ -1,12 +1,13 @@
 <div class="template">
     <app-menu 
-    [affiliateData]="affiliateData"
+    [businessName]="signUpData$?.businessName"
     [title] ="menuTitle"
     [logedIn]="isAuthenticated" 
-    [sitestyle]="sitesStyles$" 
-    [signUpData]="signUpData$"
+    [affiliateData]="affiliateData"
+    [sitestyle]="sitesStyles$"  
     (affiliateRouting)="menuAffRouting($event)"
     ></app-menu>
+    
     <mat-progress-bar *ngIf="loadingBody" mode="indeterminate"></mat-progress-bar>
     <div #body> </div>
 </div>

@@ -11,6 +11,7 @@ import {DashboardService} from '../../services/dashboard.service';
 })
 export class DashboardComponent implements OnInit {
   businessName = '';
+  menuTitle: any = 'Dashboard';
   path = location.pathname.split('/');
   redirecTo = 'start';
   isLogedIn = false;

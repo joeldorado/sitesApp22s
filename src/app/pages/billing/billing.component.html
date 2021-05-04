@@ -1,10 +1,10 @@
 <div class="template">
-    <app-menu  
+   <app-menu 
+    [businessName]="businessName"
     [title] ="menuTitle"
     [logedIn]="isAuthenticated" 
-    [sitestyle]="siteStyles"   
+    [sitestyle]="siteStyles"  
     ></app-menu>
- 
 <div fxLayout="row">
     <div fxFlex="100">
         <div class="box" [style]="siteStyles?.rows_style['highlight']?.section">

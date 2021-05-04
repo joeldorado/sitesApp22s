@@ -8,11 +8,12 @@ import {AffiliatesService} from '../../../services/affiliates.service';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit, OnChanges {
-  @Input() signUpData: any;
+
   @Input() sitestyle: any;
   @Input() logedIn: any;
   @Input() affiliateData: any;
   @Input() title: any = 'Affiliate';
+  @Input() businessName: any;
   @Output() affiliateRouting: EventEmitter<string>  = new EventEmitter();
   defaultSyle = 'default';
   pictureUrl: any;
@@ -21,6 +22,7 @@ export class MenuComponent implements OnInit, OnChanges {
     public dialog: MatDialog,
     private affServ: AffiliatesService
     ) {
+
     this.letter = localStorage.getItem('__site_name_');
     if (this.letter === 'null') {
       this.letter = localStorage.getItem('__site_email_');
@@ -39,7 +41,7 @@ export class MenuComponent implements OnInit, OnChanges {
     openDialog(): void {
     const dialogRef = this.dialog.open(LoginComponent, {
       width: '30%',
-      data: {menuData: this.signUpData.businessName}
+      data: {menuData: this.businessName}
     });
     dialogRef.afterClosed().subscribe(result => {
 

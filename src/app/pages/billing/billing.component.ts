@@ -31,6 +31,7 @@ export class BillingComponent implements OnInit {
   siteStyles: any;
   billingData!: any;
   transSiteSecected: any;
+  businessName: any;
   constructor(
     private isAuth: IsAuthService,
     private router: Router,
@@ -57,7 +58,7 @@ export class BillingComponent implements OnInit {
       this.billingData = data;
       this.siteStyles = data.style;
       console.log(this.siteStyles);
-      this.menuTitle = data.business_name;
+      this.businessName = data.business_name;
       // set data source for table subscriptions
       data.subscriptions.forEach(element => {
           const r = {
