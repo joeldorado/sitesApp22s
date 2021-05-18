@@ -10,6 +10,8 @@ import {MembersComponent} from './members/members.component';
 import {LinksComponent} from './members/links/links.component';
 import {SalesComponent} from './members/sales/sales.component';
 import { Location } from '@angular/common';
+import {MatDialog} from '@angular/material/dialog';
+import {LoginComponent} from '../login/login.component';
 @Component({
   selector: 'app-affiliates',
   templateUrl: './affiliates.component.html',
@@ -25,6 +27,7 @@ export class AffiliatesComponent implements OnInit {
   affiliateData: any;
   current = 'resources';
   loadingBody = false;
+  rowBodyMargin: any = {};
   constructor(
     private resolver: ComponentFactoryResolver,
     private isAuth: IsAuthService,
@@ -32,21 +35,30 @@ export class AffiliatesComponent implements OnInit {
     private token: TokenService,
     private auth: AuthService,
     private affServ: AffiliatesService,
-    private loc: Location
+    private loc: Location,
+    public dialog: MatDialog
   ) {
         this.isAuth.authStatus.subscribe((value) => {
           this.isAuthenticated = value;
-          if (value) {
-            // seria que el papa valide de nuevo y lo rediriga en teoria esta funcion no deveria entrar
-            // ya que el papa siempre deve de validar y redirigir
-            this.router.navigateByUrl('/affiliates');
-            return;
+          if (!value) {
+          this.openDialog();
+          return;
           }
+          this.loadPage();
         });
 
-        this.loadPage();
 
    }
+
+
+   openDialog(): void {
+    this.dialog.open(LoginComponent, {
+      width: '30%',
+      data: {menuData: {site: 'Affiliates'}}
+    });
+  }
+
+
    public menuAffRouting(action: string): void {
      if (this.current ===  action) { return; }
      this.current = action;
@@ -59,6 +71,11 @@ export class AffiliatesComponent implements OnInit {
       console.log(data);
       this.signUpData$ = data;
       this.sitesStyles$ = JSON.parse(data.style);
+
+      document.body.style.backgroundColor = this.sitesStyles$.sites_style.bodyBackground;
+      if (!this.sitesStyles$.sites_style.padding) {
+        this.rowBodyMargin = {margin: '0px !important', border: 'none !important', 'border-radius': '0px !important'};
+      }
       this.loadBody();
     });
    }
@@ -97,6 +114,7 @@ export class AffiliatesComponent implements OnInit {
       Ref.instance.value =  this.signUpData$;
       Ref.instance.siteStyles = this.sitesStyles$;
       Ref.instance.logedIn = this.isAuthenticated;
+      Ref.instance.rowPadding = this.rowBodyMargin;
       if (this.menuTitle === 'Affiliate Program' && this.current === 'resources') {
         Ref.instance.affiliateData.subscribe(affiliate => {
           this.affiliateData = affiliate;

@@ -19,6 +19,7 @@ export class MembersAreaComponent implements OnInit {
   currentStructure!: any;
   loadingPage = false;
   siteStyles: any;
+  rowBodyMargin: any = {};
   constructor(
         private isAuth: IsAuthService,
         private router: Router,
@@ -90,7 +91,10 @@ export class MembersAreaComponent implements OnInit {
       if (data.error) { alert(data.error); this.redirect(); return; }
       this.siteStyles = JSON.parse(data.style);
       this.menuData$ = data;
-
+      document.body.style.backgroundColor = this.siteStyles.sites_style.bodyBackground;
+      if (!this.siteStyles.sites_style.padding) {
+        this.rowBodyMargin = {margin: '0px !important', border: 'none !important', 'border-radius': '0px !important'};
+      }
       pageName = this.tcs.transform(pageName);
 
       const page = this.menuData$.pages.filter(p => p.page_tittle === pageName);

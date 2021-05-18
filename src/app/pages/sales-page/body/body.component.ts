@@ -15,6 +15,7 @@ export class BodyComponent implements OnChanges{
   @Input() structure: any;
   @Input() blocks: any;
   @Input() siteStyle: any;
+  @Input() rowPadding: any;
   @ViewChildren('blockComponent', { read: ViewContainerRef })
   blockComponent!: QueryList<ViewContainerRef>;
 
@@ -33,6 +34,9 @@ export class BodyComponent implements OnChanges{
      }, 1000);
   }
 
+ rowStyle(rowBody, padding): any {
+  return Object.assign(rowBody, padding);
+ }
 
  getComponentData(): void {
 

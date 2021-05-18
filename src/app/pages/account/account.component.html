@@ -1,1 +1,202 @@
-<p>account works!</p>
+<div class="template">
+   <app-menu 
+    [businessName]="businessName"
+    [title] ="menuTitle"
+    [logedIn]="isAuthenticated" 
+    [sitestyle]="sitesStyles"  
+    ></app-menu>
+
+
+
+<div class="template" *ngIf="isAuthenticated">
+        <!-- account info -->        
+        <mat-progress-bar mode="query" *ngIf="progress"></mat-progress-bar>
+        <div class="row box" [style]="rowStyle(sitesStyles?.rows_style[sectionSelected]?.section,rowBodyMargin)">
+            <div fxFlex="100">                   
+            <form [formGroup]="userInfoForm" (ngSubmit)="onSubmitUserInfo()" >  
+                <!-- account info contnet -->
+                    <!-- name -->
+                    <div fxLayout="row" fxLayoutGap="10px"  >
+                    <div fxFlex="50">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
+                    <mat-label>First Name</mat-label>               
+                    <input matInput placeholder="" formControlName="firstName">  
+                        <mat-error *ngIf="userInfoForm.controls.firstName.hasError('required')">
+                             First Name is required.
+                        </mat-error>                                                       
+                    </mat-form-field>
+                    </div>
+                    <div fxFlex="50">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
+                    <mat-label>Last Name</mat-label>
+                    <input matInput placeholder="" formControlName="lastName">  
+                         <mat-error *ngIf="userInfoForm.controls.lastName.hasError('required')">
+                             Last Name is required.
+                        </mat-error>                       
+                    </mat-form-field>
+                    </div>
+                    </div>
+                    <!-- end name-->
+
+                        <!-- email -->
+                    <div fxLayout="row" fxLayoutGap="10px"  >
+                    <div fxFlex="50">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
+                    <mat-label>Email</mat-label>               
+                    <input matInput placeholder="" formControlName="email">  
+                        <mat-error *ngIf="userInfoForm.controls.email.hasError('required')">
+                            Email is required.
+                        </mat-error>                                                       
+                    </mat-form-field>
+                    </div>
+                    <div fxFlex="50">                    
+                                <mat-accordion class="example-headers-align" multi>
+                                <mat-expansion-panel>
+                                    <mat-expansion-panel-header [style]="sitesStyles?.rows_style?.default?.buttons">
+                                    <mat-panel-title style="margin-left: 45%;" [style]="sitesStyles?.rows_style?.default?.buttons">       
+                                    Update Password
+                                    </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <mat-form-field class='updPassMarg'>
+                                    <mat-label>Password</mat-label>
+                                    <input matInput type="password" formControlName="password">
+                                    </mat-form-field>
+
+                                    <mat-form-field class='updPassMarg'>
+                                    <mat-label>Confirm Password</mat-label>
+                                    <input matInput type="password" formControlName="confirmPass">
+                                    </mat-form-field>                                
+
+                                    <a mat-raised-button (click)="updatePassword()">Update Password</a>
+                                    
+                                    <span *ngIf="emptyPass !== ''" class="error"> {{emptyPass}}</span>
+                                    <span *ngIf="success !== ''" class="success"> {{success}}</span>
+                                    
+                                </mat-expansion-panel>
+                                    </mat-accordion>
+                    </div>
+                    </div>
+                    <!-- end email-->
+                    <!-- phone -->
+                    <div fxLayout="row" fxLayoutGap="10px" >
+                    <div fxFlex="50">
+                    <mat-form-field [style]="bodyFont"  appearance="legacy" fxFlex="100" *ngIf="accountInfo$?.phone">
+                    <mat-label>Phone</mat-label>
+                    <input matInput placeholder="" formControlName="phone"> 
+                        <mat-error *ngIf="userInfoForm.controls.phone.hasError('required')">
+                             Phone is required.
+                        </mat-error>                      
+                    </mat-form-field>
+                    </div>
+                    <div fxFlex="50">   
+                        <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100" *ngIf="accountInfo$?.dob">
+                            <mat-label>Date of Birth </mat-label>
+                            <input matInput placeholder="" formControlName="birthday">
+                                <mat-error *ngIf="userInfoForm.controls.birthday.hasError('required')">
+                                    Date of Birth is required.
+                                </mat-error>                      
+                        </mat-form-field>
+                    </div>
+                    </div>
+                    <!-- end phone-->
+                    <!-- address -->
+                    <div fxLayout="row" fxLayoutGap="10px">
+                    <div fxFlex="50">
+                    
+                    <div fxLayout="row" *ngFor="let a of addresses; let i = index"> 
+                        <mat-form-field [style]="bodyFont" appearance="legacy"                     
+                        fxFlex="100">
+                        <mat-label>{{a.lbl}}</mat-label>
+                        <input matInput placeholder="" formControlName="{{a.formControl}}">                     
+                        </mat-form-field>
+                    </div>                    
+                    </div>
+                    <div fxFlex="50">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
+                    <mat-label>Suite / Apt Number</mat-label>
+                    <input matInput placeholder="" formControlName="suite_aptnumber">
+                                <mat-error *ngIf="userInfoForm.controls.suite_aptnumber.hasError('required')">
+                                    Suite / Apt Number is required.
+                                </mat-error>                     
+                    </mat-form-field>               
+                    </div>
+                    </div>
+                    <!-- end address-->
+                    <!-- City -->
+                    <div fxLayout="row" fxLayoutGap="10px">
+                    <div fxFlex="50">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
+                    <mat-label>City / Provence</mat-label>
+                    <input matInput placeholder="" formControlName="city">
+                            <mat-error *ngIf="userInfoForm.controls.city.hasError('required')">
+                                    City / Provence is required.
+                            </mat-error>                     
+                    </mat-form-field>
+                    </div>
+                    <div fxFlex="50">               
+                    </div>
+                    </div>
+                    <!-- end city-->
+                    <!-- country -->
+                    <div fxLayout="row" fxLayoutGap="10px">
+                    <div fxFlex="50">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
+                    <mat-label>Conuntry</mat-label>
+                    <input matInput placeholder="" formControlName="conuntry">
+                            <mat-error *ngIf="userInfoForm.controls.conuntry.hasError('required')">
+                                    Conuntry is required.
+                            </mat-error>                     
+                    </mat-form-field>
+                    </div>
+                    <div fxFlex="50">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
+                    <mat-label>Zip / Postal Code</mat-label>
+                    <input matInput placeholder="" formControlName="zip">
+                            <mat-error *ngIf="userInfoForm.controls.zip.hasError('required')">
+                                    Zip / Postal Code is required.
+                            </mat-error>                       
+                    </mat-form-field>               
+                    </div>
+                    </div>
+                    <!-- end country-->
+                    <!-- question -->
+                    <div fxLayout="row" fxLayoutGap="10px" *ngFor="let info of accountInfo$?.custom_questions; let i = index">
+                    <div fxFlex="100">
+                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
+                    <mat-label>{{info.question}}</mat-label>
+                    <input matInput placeholder="">                     
+                    </mat-form-field>
+                    </div>                
+                    </div>
+                    <!-- end question [disabled]="!userInfoForm.valid"-->
+
+                    <div fxLayout="row" fxLayoutAlign="center center" class="btn-container">
+                        <div fxFlex="50">
+                            <button fxFlex="100" [style]="sitesStyles?.rows_style?.default?.buttons"  mat-raised-button > Update</button>                                               
+                        </div>
+                    </div>    
+                    </form>
+                <!-- end account info content -->
+        </div>
+        </div>
+
+     <!-- facebook -->
+            <div class="row box" [style]="rowStyle(sitesStyles?.rows_style[sectionSelected]?.section,rowBodyMargin)">
+            <div fxFlex="50">     
+                {{facebook?.name}} &nbsp;&nbsp;&nbsp;&nbsp;/ &nbsp;&nbsp;&nbsp;&nbsp;{{facebook?.email}} 
+            </div>
+            <div fxFlex="50">     
+                    <button fxFlex="70" [style]="sitesStyles?.rows_style?.default?.buttons"  mat-raised-button > Reconnect</button>   
+            </div>
+            </div>
+           
+
+           <div fxLayout="row">
+            <div fxFlex="100" style='text-align: center;'>
+                <a href="" class='link'> Provacy Policy</a> <a href="" class='link'> Terms & Conditions</a>
+            </div>
+           </div>
+
+           
+</div>
+</div>

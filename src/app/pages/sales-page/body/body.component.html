@@ -6,7 +6,7 @@
                 class="row"
                 fxLayout="row"  
                 *ngFor="let r of structure?.row_order let RI = index"
-                [style]="siteStyle?.rows_style[structure?.rows[r]?.style].section"
+                [style]="rowStyle(siteStyle?.rows_style[structure?.rows[r]?.style].section,rowPadding)"
                 >
                     <div fxFlex="100" >  
                     

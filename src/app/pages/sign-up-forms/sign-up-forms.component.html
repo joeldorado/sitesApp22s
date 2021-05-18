@@ -1,8 +1,8 @@
 <div fxLayout="row" fxLayoutAlign="center" class="template" >
-    <div fxFlex="70" fxLayout="column" fxLayoutAlign="start">
+    <div fxFlex="70" fxLayout="column" fxLayoutAlign="start" style="margin-bottom: 30px;">
     <!-- content-->
         <!-- info -->
-        <div class="box" [style]="sitesStyles?.rows_style['highlight']?.section">
+        <div class="box" [style]="rowStyle(sitesStyles?.rows_style[selectedStyleRow]?.section,rowBodyMargin)">
             <div  fxLayout="row"  *ngFor="let block of blocks$ let i = index">                                    
                     <div fxFlex="100">                   
                         <!-- body content -->                                
@@ -14,26 +14,22 @@
         </div>
         <!-- end info-->
         <!-- email content -->    
-     <div class="row box" *ngIf="isAuthenticated && freeSub" [style]="sitesStyles?.rows_style['highlight']?.section">
+     <div class="row box" *ngIf="isAuthenticated && freeSub" [style]="rowStyle(sitesStyles?.rows_style[selectedStyleRow]?.section,rowBodyMargin)">
      <div fxLAyout="row">
         <div fxFlex="100" [style]="bodyFont">
             <p>Plase click on continue in order to get the free Subscrition. </p>
         </div>
         </div>
-     <div fxFlex="100">
-     
+     <div fxFlex="100">     
          <button [style]="sitesStyles?.rows_style?.default?.buttons" (click)="logedInFreeSub()" fxFlex="100" mat-raised-button> Continue</button> 
      </div>
      </div>
+
       <div style="position: relative;" *ngIf="emailSignup && !isAuthenticated" [style]="sitesStyles?.rows_style?.default?.text?.body">
-         <h3>Email 
-         
-         </h3>
-
-
-
-
-        <div class="row box" [style]="sitesStyles?.rows_style['highlight']?.section" >
+      <h3
+      [ngStyle]="titlesMargin"
+      >Email</h3>
+        <div class="row box" [style]="rowStyle(sitesStyles?.rows_style[selectedStyleRow]?.section,rowBodyMargin)">
                 <div fxFlex="100">                    
                 <mat-progress-bar mode="query" *ngIf="progress"></mat-progress-bar>
                     <div fxLayout="row" *ngIf="account?.account === 'exist'">
@@ -99,25 +95,27 @@
                                            
             </div>
             </div>
-        <!-- end email content  [innerHtml]="iframee" -->
+        <!-- end email content  [innerHtml]="iframee" *ngIf="paymentOpt && this.siteOptions$.signup_type !== 'free'"-->
        <div  #autoresponder ></div>
         <!-- -->   
-        <div style="position: relative;"  payment coupone *ngIf="paymentOpt && this.siteOptions$.signup_type !== 'free'" >
-            <app-payment-options [siteStyle]="sitesStyles" (processPay)="submitedPayOptions($event)"></app-payment-options>
+        <div style="position: relative;"  payment coupone  >
+            <app-payment-options [titlesMargin]="titlesMargin" [siteStyle]="sitesStyles" (processPay)="submitedPayOptions($event)"></app-payment-options>
         </div>
         <!-- end payment coupone -->
 
 
-        <!--  process payment     -->   
-        <div style="position: relative;" *ngIf="processpymt && this.siteOptions$.signup_type !== 'free'">
-        <h3 >Process Payment </h3>  
-        <div class="row box" [style]="sitesStyles?.rows_style['highlight']?.section">
+        <!--  process payment    *ngIf="processpymt && this.siteOptions$.signup_type !== 'free'" -->   
+        <div style="position: relative;" >
+        <h3  [ngStyle]="titlesMargin" >Process Payment </h3>  
+        <div class="row box" [style]="rowStyle(sitesStyles?.rows_style[selectedStyleRow]?.section,rowBodyMargin)">
             <div fxFlex="100">     
                 <!-- stripe - paypal -->
-                <button [style]="sitesStyles?.rows_style?.default?.buttons" class="back-button"  mat-button (click)="paymentProcess(2)">
+                <button  [ngStyle]="titlesMargin"  [style]="sitesStyles?.rows_style?.default?.buttons" class="back-button"  mat-button (click)="paymentProcess(2)">
                 <mat-icon>arrow_back</mat-icon> Plan Options</button> 
-                <mat-accordion>
-                    <mat-expansion-panel hideToggle>
+
+
+                <mat-accordion >
+                    <mat-expansion-panel hideToggle style="margin-top:50px;">
                     <mat-expansion-panel-header>
                     <mat-panel-title [style]="bodyFont">
                     Pay with card
@@ -147,12 +145,14 @@
     </div>
         <!-- end payment coupone -->
 
-        <!-- account info -->
-        <div style="position: relative;" *ngIf="accountInfo && !isNewUser">
-        <mat-progress-bar mode="query" *ngIf="progress"></mat-progress-bar>
-        <h3 >Account Information </h3> 
-        <div class="row box" [style]="sitesStyles?.rows_style['highlight']?.section">
-            <div fxFlex="100">                   
+        <!-- account info  *ngIf="accountInfo && !isNewUser"-->
+        <div style="position: relative;" >
+      
+        <h3 [ngStyle]="titlesMargin">Account Information </h3> 
+
+        <div class="row box" [style]="rowStyle(sitesStyles?.rows_style[selectedStyleRow]?.section,rowBodyMargin)">
+            <div fxFlex="100">   
+              <mat-progress-bar mode="query" *ngIf="progress"></mat-progress-bar>                
             <form [formGroup]="userInfoForm" (ngSubmit)="onSubmitUserInfo()" >  
                 <!-- account info contnet -->
                     <!-- name -->
@@ -214,8 +214,8 @@
                     <div fxFlex="50">
                     <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
                     <mat-label>Suite / Apt Number</mat-label>
-                    <input matInput placeholder="" formControlName="suiteAptNumber">
-                                <mat-error *ngIf="userInfoForm.controls.suiteAptNumber.hasError('required')">
+                    <input matInput placeholder="" formControlName="suite_aptnumber">
+                                <mat-error *ngIf="userInfoForm.controls.suite_aptnumber.hasError('required')">
                                     Suite / Apt Number is required.
                                 </mat-error>                     
                     </mat-form-field>               

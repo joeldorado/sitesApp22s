@@ -9,5 +9,6 @@
     ></app-menu>
     
     <mat-progress-bar *ngIf="loadingBody" mode="indeterminate"></mat-progress-bar>
-    <div #body> </div>
+    <div *ngIf="isAuthenticated" #body> </div>
+    <div *ngIf="!isAuthenticated" [style.background-image]="'url(/assets/img/login.jpeg)'" class="bk"></div>
 </div>

@@ -9,12 +9,17 @@ import { faLess } from '@fortawesome/free-brands-svg-icons';
 export class BodyComponent implements OnChanges {
 @Input() data: any;
 @Input() domain: any;
+@Input() siteStyle: any;
+@Input() rowPadding: any;
 sitesOrder: any;
 userType = '';
+sectionSelected = 'highlight';
 // subscribedSites = [];
 // otherSites = [];
   constructor() { }
-
+  rowStyle(rowBody, padding): any {
+    return Object.assign(rowBody, padding);
+   }
   ngOnChanges(): void {
     console.log(this.data);
     if (this.data === undefined ) {return; }

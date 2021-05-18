@@ -6,7 +6,8 @@
     ></app-menu>
    <mat-progress-bar *ngIf="loadingPage" mode="indeterminate"></mat-progress-bar>
    <!-- <div fxLayout="row" *ngFor="let pages of menuData$?.pages">  </div>-->
-    <app-body    
+    <app-body   
+    [rowPadding]="rowBodyMargin" 
     [siteStyles]="siteStyles"     
         [blocks]="blocks$" 
         [pageStructure]="currentStructure">

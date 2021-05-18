@@ -1,17 +1,17 @@
 <div class='template'> 
     <div    
     *ngFor="let r of pageStructure?.row_order let RI = index" >
-<div   class="row" fxLayout="row" [style]="siteStyles?.rows_style[pageStructure?.rows[r]?.style]?.section" >      
+<div   class="row" fxLayout="row" [style]="rowStyle(siteStyles?.rows_style[pageStructure?.rows[r]?.style]?.section,rowPadding)" >      
     <!-- column -->
 <div     
 class="column-body"   
-[style]="siteStyles?.rows_style[pageStructure?.rows[r]?.style]?.section"          
+      
 *ngFor="let c of pageStructure?.rows[r]?.column_order let CI = index" >                           
     <!-- Blok    -->                
     <div class="block-item">
     <!-- Blok ngFor-->
         <div class="block"  
-        [style]="siteStyles?.rows_style[pageStructure?.rows[r]?.style]?.section"
+              
                 *ngFor="let b of pageStructure?.rows[r]?.columnBlockOrder[c]; let BI = index">
                     <div #blockComponent   
                         id="{{r}}{{c}}{{b}}"

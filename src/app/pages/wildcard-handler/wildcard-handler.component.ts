@@ -20,9 +20,7 @@ export class WildcardHandlerComponent implements OnInit {
   constructor(
     private router: Router
   ) {
-    console.log('.....wildkard');
-    // validar que el site exista y que el busines tambien
-    // sales page
+
     const indexStart = this.path.indexOf('start');
     const indexMembersArea = this.path.indexOf('members');
     const indexDashboard = this.path.indexOf('dashboard');
@@ -30,22 +28,17 @@ export class WildcardHandlerComponent implements OnInit {
     const indexSignUpForm = this.path.indexOf('signupform');
 
     if (indexStart !== -1 && this.path[indexStart] === 'start') {
-      console.log('....start area');
       this.salespage = true;
       this.loading = true;
     } else if ((indexMembersArea !== -1 && this.path[indexMembersArea] === 'members') ||
     (this.path[indexSignUpForm] !== 'signupform') && this.path.length === 2) {
-      console.log('....members areassssss');
       this.membersarea = true;
       this.loading = true;
     } else if (indexDashboard !== -1 && this.path[indexDashboard] === 'dashboard') {
-      console.log('....dashboard area');
       this.dashboard = true;
     } else if (indexlLogin !== -1 && this.path[indexlLogin] === 'login') {
-      console.log('....login area');
       this.login = true;
     } else if (indexSignUpForm !== -1 && this.path[indexSignUpForm] === 'signupform') {
-      console.log('....signupform area');
       this.signUpForm = true;
       this.loading = true;
     }

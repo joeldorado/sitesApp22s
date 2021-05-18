@@ -1,12 +1,14 @@
- <h3 >Payment Option</h3> 
-        <div class="row box" [style]="siteStyle?.rows_style['highlight']?.section" >
+ <h3 [ngStyle]="titlesMargin" >Payment Option</h3> 
+        <div class="row box" [style]="rowStyle(siteStyle?.rows_style[selectedStyleRow]?.section,rowBodyMargin)">
             <div fxFlex="100"> 
 
              <button 
+             [ngStyle]="titlesMargin"
              [style]="siteStyle?.rows_style?.default?.buttons" 
              class="back-button"  mat-button (click)="paymentProcess(1)">
              <mat-icon>arrow_back</mat-icon> Edit Email</button> 
-               <div fxLAyout="row" fxLayoutGap="10px">
+
+               <div fxLAyout="row" fxLayoutGap="10px" style="margin-top: 50px;">
                <div fxFlex="90">
                      <mat-form-field
                         [style]="fontBody"

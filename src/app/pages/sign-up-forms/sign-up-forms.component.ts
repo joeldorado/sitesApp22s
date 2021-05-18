@@ -67,6 +67,9 @@ export class SignUpFormsComponent implements AfterViewInit {
   panelOpenState = false;
   sitesStyles: any;
   bodyFont: any;
+  rowBodyMargin: any = {};
+  titlesMargin: any = {};
+  selectedStyleRow = 'highlight';
   constructor(
     private supForm: SignUpFormService,
     private resolver: ComponentFactoryResolver,
@@ -94,6 +97,11 @@ export class SignUpFormsComponent implements AfterViewInit {
       if (data.error) { console.error(data); alert(data.error); }
 
       this.sitesStyles = JSON.parse(data.style);
+      document.body.style.backgroundColor = this.sitesStyles.sites_style.bodyBackground;
+      if (!this.sitesStyles.sites_style.padding) {
+        this.titlesMargin = {'margin-top': '20px;' };
+        this.rowBodyMargin = {margin: '0px !important', border: 'none !important', 'border-radius': '0px !important'};
+      }
       this.bodyFont = { 'font-family': this.sitesStyles.sites_style.bodyFont};
       this.sitesStyles.rows_style.highlight.section['font-family'] = this.sitesStyles.sites_style.bodyFont;
       console.log(this.sitesStyles);
@@ -140,7 +148,10 @@ export class SignUpFormsComponent implements AfterViewInit {
    <button (click)="getTokenAccess()" mat-raised-button>get token</button>
          <button (click)="getSubscription()" mat-raised-button>get subscription</button>
    */
-
+  rowStyle(rowBody, padding): any {
+    if (rowBody === null) { return; }
+    return Object.assign(rowBody, padding);
+   }
    ngAfterViewInit(): void {
     // const currentStep = localStorage.getItem('currentStep');
     // if (currentStep) {
@@ -447,6 +458,7 @@ export class SignUpFormsComponent implements AfterViewInit {
       conuntry: new FormControl('', [Validators.required]),
       city: new FormControl('', [Validators.required]),
       zip: new FormControl('', [Validators.required]),
+      suite_aptnumber: new FormControl('')
     });
   }
 }

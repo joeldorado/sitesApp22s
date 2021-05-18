@@ -1,18 +1,24 @@
-<div class="template" *ngIf="isLogedIn">
+<div class="template" >
    <app-menu 
     [businessName]="businessName"
     [title] ="menuTitle"
     [logedIn]="isLogedIn" 
     ></app-menu>
  <!-- [sitestyle]="siteStyles" -->  
-<app-body 
-[data]="data" [domain]="businessUrl"
-> </app-body>
+ <div class="template">
+    <app-body 
+    *ngIf="isLogedIn"
+    [data]="data" [domain]="businessUrl"
+    [siteStyle]="siteStyles"
+    [rowPadding]= "rowBodyMargin"
+    > </app-body>
 </div>
-
+</div>
+<!-- 
 <div *ngIf="!isLogedIn" fxLayout="row" fxLayoutAlign="center" class="loginbtn">
     <div fxFlex="50" fxLayout="column" fxLayoutAlign="center">
         <button mat-raised-button (click)="openDialog()"> <mat-icon>login</mat-icon> Click here to login </button>
     </div>
 </div>
 <div *ngIf="!isLogedIn" [style.background-image]="'url(/assets/img/login.jpeg)'" class="bk"></div>
+add-->

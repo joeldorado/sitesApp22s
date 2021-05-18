@@ -12,6 +12,7 @@ import {CountdownTimerComponent} from '../../shared/countdown-timer/countdown-ti
 })
 export class BodyComponent implements  OnChanges {
 @Input() siteStyles: any;
+@Input() rowPadding: any;
 @ViewChildren('blockComponent', { read: ViewContainerRef })
 blockComponent!: QueryList<ViewContainerRef>;
 blobkData!: any;
@@ -20,6 +21,10 @@ blobkData!: any;
 
 constructor(private resolver: ComponentFactoryResolver) { }
 
+rowStyle(rowBody, padding): any {
+  console.log(padding);
+  return Object.assign(rowBody, padding);
+ }
 
 ngOnChanges(changes: { [property: string]: SimpleChange }): void {
     const blocksCh: SimpleChange = changes.blocks;

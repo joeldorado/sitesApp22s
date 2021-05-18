@@ -12,6 +12,7 @@ menuData$: any;
 structure$: any;
 blocks$: any;
 logedIn = false;
+rowBodyMargin: any = {};
 path = location.pathname.split('/');
 siteStyles: any;
  constructor(
@@ -19,7 +20,6 @@ siteStyles: any;
   private router: Router,
   private isAuth: IsAuthService,
  ) {
-
   // console.log(
   //   JSON.stringify({
   //         sites_style: {headerFont: 'Open Sans', bodyFont: 'Zen Dots', padding: 1, bodyBackground: '#000'},
@@ -61,6 +61,11 @@ siteStyles: any;
     this.structure$ = JSON.parse(data.structure.structure_json);
    // console.log(data.style);
     this.siteStyles = JSON.parse(data.style);
+    console.log(this.siteStyles);
+    document.body.style.backgroundColor = this.siteStyles.sites_style.bodyBackground;
+    if (!this.siteStyles.sites_style.padding) {
+      this.rowBodyMargin = {margin: '0px !important', border: 'none !important', 'border-radius': '0px !important'};
+    }
     this.blocks$ = data.body;
     this.menuData$ = {
       business : data.business_name,

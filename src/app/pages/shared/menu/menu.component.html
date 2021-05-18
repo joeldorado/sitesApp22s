@@ -2,11 +2,7 @@
   <div fxFlex="100" >
 <div  fxLayout="row">
 <div fxFlex="100">
-<div fxLayout="row">
-    <div fxFlex="100">
-        <strong style="color:#eee;">Enrollment -> <label style="color: orange;">Affiliate Program</label></strong>
-    </div>
-</div>
+
   <mat-toolbar class="menu">
     <mat-toolbar-row fxLayout="row">
         <div fxFlex="35">
@@ -26,7 +22,7 @@
                   <button mat-icon-button 
                    *ngIf="logedIn"
                         class="menu-button"
-                        [matMenuTriggerFor]="menu" 
+                        [matMenuTriggerFor]="topMenu" 
                         aria-label="Example icon-button with a menu">                           
                             <img *ngIf="pictureUrl !== null" class="avatar" [src]="pictureUrl">                            
                             <div class ="dot" *ngIf="pictureUrl === null">
@@ -34,7 +30,7 @@
                             </div>                        
                         <mat-icon class="icon" fxHide fxShow.gt-sm>keyboard_arrow_down</mat-icon>
                     </button>
-                          <mat-menu #menu="matMenu">
+                    <mat-menu #topMenu="matMenu">
                         <button [routerLink]="'../dashboard'" mat-menu-item>
                             <mat-icon>link</mat-icon>
                         <span>Dashboard</span>

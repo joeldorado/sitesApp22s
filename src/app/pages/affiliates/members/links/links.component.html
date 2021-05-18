@@ -1,11 +1,15 @@
-<div 
 
+<div  class="template">
+
+<div 
     *ngFor="let site of linksData"
     fxLayout="row" 
     fxLayoutAlign="center" 
-    class="template" >
+    class="row box"
+    [style]="rowStyle(siteStyles?.rows_style[currentSection]?.section,rowPadding)"
+     >
  <div fxFlex="100" fxLayout="column" fxLayoutAlign="start">
-   <div fxLayout="row"  fxLayoutGap="10px" class="box" [style]="siteStyles?.rows_style['highlight']?.section">           
+   <div fxLayout="row"  fxLayoutGap="10px" >           
         <div fxFlex="35">
             <img [src]="site?.block?.image_url" fxFlex="100"/>
         </div>
@@ -41,7 +45,7 @@
 
 </div>
     
-   
+   </div>
 
 
 

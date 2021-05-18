@@ -8,6 +8,8 @@ import {SignUpFormService} from '../../../services/sign-up-form.service';
 })
 export class PaymentOptionsComponent implements OnChanges {
   @Input() siteStyle: any;
+  @Input() rowBodyMargin: any;
+  @Input() titlesMargin: any;
   @Output()
   processPay: EventEmitter<any> = new EventEmitter();
   paymentsOpts$!: any[];
@@ -20,6 +22,7 @@ export class PaymentOptionsComponent implements OnChanges {
   invalidCoupone = false;
   aplayed = false;
   fontBody: any;
+  selectedStyleRow = 'highlight';
   constructor(
     private singupForm: SignUpFormService
   ) {
@@ -32,7 +35,10 @@ export class PaymentOptionsComponent implements OnChanges {
       });
 
   }
-
+  rowStyle(rowBody, padding): any {
+    if (rowBody === null) { return; }
+    return Object.assign(rowBody, padding);
+   }
   resetPaymentOpts(): void {
     if (this.enterCoupone === '') {
       this.paymentsOpts$ = JSON.parse(this.copyPaymentsOpts);

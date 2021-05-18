@@ -31,7 +31,11 @@ export class LoginComponent implements OnInit {
       password: new FormControl(''),
     });
 
-    this.siteName = this.data.menuData.site;
+    if (this.data.menuData === null ) {
+      this.siteName = '22 Social Login';
+    } else {
+      this.siteName = this.data.menuData.site;
+    }
 
    }
    onNoClick(): void {
@@ -69,7 +73,9 @@ export class LoginComponent implements OnInit {
       this.redirecTo = 'members';
     } else if (this.siteName === 'Dashboard') {
       this.redirecTo = 'dashboard';
-    } else if (this.path[1] === 'affiliates') {
+    } else if (this.path[1] === 'affiliates'
+      || this.path[1] === 'account'
+      || this.path[1] === 'billing') {
       location.reload();
       return;
     }

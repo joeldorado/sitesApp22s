@@ -5,9 +5,11 @@
     [logedIn]="isAuthenticated" 
     [sitestyle]="siteStyles"  
     ></app-menu>
+<div class="template" *ngIf="isAuthenticated">
 <div fxLayout="row">
     <div fxFlex="100">
-        <div class="box" [style]="siteStyles?.rows_style['highlight']?.section">
+        <div class="box"         
+            [style]="rowStyle(siteStyles?.rows_style[sectionSelected]?.section,rowBodyMargin)">
             <div  fxLayout="row" >                                    
             <div fxFlex="100">                   
                 <!-- body content -->                                
@@ -18,7 +20,7 @@
         </div>  
     </div>
     <!-- ******************************* -->
-    <div class="box" [style]="siteStyles?.rows_style['highlight']?.section">
+    <div class="box" [style]="rowStyle(siteStyles?.rows_style[sectionSelected]?.section,rowBodyMargin)">
             <div  fxLayout="row" >                                    
             <div fxFlex="100">                   
                 <!-- body content -->                                
@@ -71,7 +73,7 @@
 
 
     <!-- ******************************* -->
-    <div class="box" [style]="siteStyles?.rows_style['highlight']?.section">
+    <div class="box" [style]="rowStyle(siteStyles?.rows_style[sectionSelected]?.section,rowBodyMargin)">
             <div  fxLayout="row" >                                    
             <div fxFlex="100">                   
                 <!-- body content -->     
@@ -138,5 +140,5 @@
     </div><!-- end fx flex-->    
 </div>
 
-
+</div>
 </div>

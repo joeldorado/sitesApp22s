@@ -17,7 +17,8 @@ export class DashboardComponent implements OnInit {
   isLogedIn = false;
   data: any;
   businessUrl = '';
-
+  siteStyles: any;
+  rowBodyMargin: any = {};
   constructor(
     private isAuth: IsAuthService,
     private router: Router,
@@ -51,6 +52,11 @@ export class DashboardComponent implements OnInit {
   loadData(): void {
     this.dsh.get_dashboard().subscribe(data => {
       this.businessName = data.business.business_name;
+      this.siteStyles = JSON.parse(data.business.style_json);
+      document.body.style.backgroundColor = this.siteStyles.sites_style.bodyBackground;
+      if (!this.siteStyles.sites_style.padding) {
+        this.rowBodyMargin = {margin: '0px !important', border: 'none !important', 'border-radius': '0px !important'};
+      }
       this.data = data;
       if (data.business.business_domain !== '') {
         this.businessUrl = data.business.business_domain;

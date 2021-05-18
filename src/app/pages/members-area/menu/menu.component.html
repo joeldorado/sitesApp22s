@@ -26,13 +26,21 @@
                         <mat-icon class="icon" fxHide fxShow.gt-sm>keyboard_arrow_down</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
-                        <button  [style]="siteStyles?.rows_style?.default?.text?.body" mat-menu-item>
-                            <mat-icon>dialpad</mat-icon>
-                        <span>Redial</span>
+                        <button [routerLink]="'../dashboard'" mat-menu-item>
+                            <mat-icon>link</mat-icon>
+                        <span>Dashboard</span>
                         </button>
-                        <button  [style]="siteStyles?.rows_style?.default?.text?.body" mat-menu-item disabled>
-                         <mat-icon>voicemail</mat-icon>
-                        <span>Check voice mail</span>
+                        <button [routerLink]="'../affiliates'" mat-menu-item >
+                         <mat-icon>link</mat-icon>
+                        <span>Affiliate</span>
+                        </button>
+                        <button [routerLink]="'../account'" mat-menu-item >
+                         <mat-icon>link</mat-icon>
+                        <span>Account</span>
+                        </button>
+                        <button [routerLink]="'../billing'" mat-menu-item >
+                         <mat-icon>link</mat-icon>
+                        <span>Billing</span>
                         </button>
                         <button  [style]="siteStyles?.rows_style?.default?.text?.body" mat-menu-item (click)="logOut()">
                             <mat-icon>notifications_off</mat-icon>
