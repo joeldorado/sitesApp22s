@@ -33,7 +33,7 @@ export class PaypalComponent implements OnInit {
     this.paypalService.initiate(
       'subscription',
       this.paypalData.paymentOptions.paypal.public.clientId,
-      this.paypalData.paymentOptions.paypal.currency,
+      this.paypalData.paymentOptions.currency,
       ).subscribe(
       () => paypal.Buttons({
         style: {
@@ -88,8 +88,9 @@ export class PaypalComponent implements OnInit {
     }
     // ============END Get Subcription Details Method========================
   singlePayment(): void {
-    this.paypalService.initiate('', this.paypalData.paymentOptions.paypal.public.clientId,
-      this.paypalData.paymentOptions.paypal.currency).subscribe(
+    const pv = JSON.parse(this.paypalData.paymentOptions.paypal.public_values);
+    this.paypalService.initiate('', pv.clientId,
+      this.paypalData.paymentOptions.currency).subscribe(
       () => paypal.Buttons({
         createOrder: (data, actions) => {
           return actions.order.create({
@@ -100,7 +101,7 @@ export class PaypalComponent implements OnInit {
             purchase_units: [{
               description: this.paypalData.payment_type,
               amount: {
-                currency_code: this.paypalData.paymentOptions.paypal.currency,
+                currency_code: this.paypalData.paymentOptions.currency,
                 value: this.paypalData.initial_amount
               }
             }

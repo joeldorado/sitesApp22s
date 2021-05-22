@@ -38,11 +38,11 @@ export class StripeService {
     {
       path: this.path,
       amount: data.initial_amount,
-      currency: data.paymentOptions.stripe.currency,
+      currency: data.paymentOptions.currency,
       stripeClienId: data.stripeClienId,
       stripeToken: data.stripeToken,
       paymentType: data.payment_type,
-      processor_settings_id: data.paymentOptions.stripe.processor_settings_id,
+      processor_settings_id: data.paymentOptions.stripe.id,
       email: data.email});
 
   }
@@ -56,9 +56,9 @@ export class StripeService {
       stripeClienId: data.stripeClienId,
       stripeToken: data.stripeToken,
       paymentType: data.payment_type,
-      processor_settings_id: data.paymentOptions.stripe.processor_settings_id,
+      processor_settings_id: data.paymentOptions.stripe.id,
       email: data.email,
-      currency: data.paymentOptions.stripe.currency,
+      currency: data.paymentOptions.currency,
       amount: data.recurring_amount,
       initialAmount: data.initial_amount,
       recurring_cycle: data.recurring_cycle
@@ -75,9 +75,9 @@ export class StripeService {
       stripeToken: data.stripeToken,
       paymentType: data.payment_type,
       number_of_payments: data.number_of_payments,
-      processor_settings_id: data.paymentOptions.stripe.processor_settings_id,
+      processor_settings_id: data.paymentOptions.stripe.id,
       email: data.email,
-      currency: data.paymentOptions.stripe.currency,
+      currency: data.paymentOptions.currency,
       amount: data.recurring_amount,
       initialAmount: data.initial_amount,
       recurring_cycle: data.recurring_cycle

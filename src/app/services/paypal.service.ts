@@ -75,7 +75,7 @@ export class PaypalService {
       plan: data.paypal_plan_id,
       initial_amount: data.initial_amount,
       payment_type: data.payment_type,
-      processor_settings_id: data.paymentOptions.paypal.processor_settings_id
+      processor_settings_id: data.paymentOptions.paypal.id
     });
   }
 
@@ -113,7 +113,7 @@ export class PaypalService {
     // subData.billing_info.last_payment
     return this.httpClient.post(`${this.apiHost}api/site-paypal-save-subscrion?token=${this.tkn.get()}`,
     {path: this.path,
-      processor_settings_id: paypalData.paymentOptions.paypal.processor_settings_id,
+      processor_settings_id: paypalData.paymentOptions.paypal.id,
       sub_id: subData.id,
       payment_type: paypalData.payment_type,
       status: subData.status,

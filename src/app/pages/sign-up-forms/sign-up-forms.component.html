@@ -95,17 +95,17 @@
                                            
             </div>
             </div>
-        <!-- end email content  [innerHtml]="iframee" *ngIf="paymentOpt && this.siteOptions$.signup_type !== 'free'"-->
+        <!-- end email content  [innerHtml]="iframee" -->
        <div  #autoresponder ></div>
         <!-- -->   
-        <div style="position: relative;"  payment coupone  >
+        <div style="position: relative;"  payment coupone  *ngIf="paymentOpt && this.siteOptions$.signup_type !== 'free'">
             <app-payment-options [titlesMargin]="titlesMargin" [siteStyle]="sitesStyles" (processPay)="submitedPayOptions($event)"></app-payment-options>
         </div>
         <!-- end payment coupone -->
 
 
-        <!--  process payment    *ngIf="processpymt && this.siteOptions$.signup_type !== 'free'" -->   
-        <div style="position: relative;" >
+        <!--  process payment     -->   
+        <div style="position: relative;" *ngIf="processpymt && this.siteOptions$.signup_type !== 'free'">
         <h3  [ngStyle]="titlesMargin" >Process Payment </h3>  
         <div class="row box" [style]="rowStyle(sitesStyles?.rows_style[selectedStyleRow]?.section,rowBodyMargin)">
             <div fxFlex="100">     
@@ -122,7 +122,10 @@
                     </mat-panel-title>                 
                     </mat-expansion-panel-header>
                                            
-                        <app-stripe-card [fontBody]="sitesStyles?.rows_style?.default?.buttons" (nexStep)="paymentProcess($event)" [paymentData] ="selectedPaymentOpt"> </app-stripe-card>
+                        <app-stripe-card 
+                        [fontBody]="sitesStyles?.rows_style?.default?.buttons" 
+                        (nexStep)="paymentProcess($event)" 
+                        [paymentData] ="selectedPaymentOpt"> </app-stripe-card>
                     
 
                     </mat-expansion-panel>
@@ -136,7 +139,9 @@
                     <mat-panel-description>                    
                     </mat-panel-description>
                     </mat-expansion-panel-header>                                          
-                            <app-paypal (nexStep)="paymentProcess($event)" [paypalData]="selectedPaymentOpt"></app-paypal>                     
+                            
+                        <app-paypal (nexStep)="paymentProcess($event)" [paypalData]="selectedPaymentOpt"></app-paypal>
+                                            
                     </mat-expansion-panel>
                 </mat-accordion>
                 <!-- END stripe - paypal -->                                                                                                                                 
@@ -145,8 +150,8 @@
     </div>
         <!-- end payment coupone -->
 
-        <!-- account info  *ngIf="accountInfo && !isNewUser"-->
-        <div style="position: relative;" >
+        <!-- account info  -->
+        <div style="position: relative;" *ngIf="accountInfo && !isNewUser">
       
         <h3 [ngStyle]="titlesMargin">Account Information </h3> 
 

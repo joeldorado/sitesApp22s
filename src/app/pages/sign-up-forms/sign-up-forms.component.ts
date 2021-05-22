@@ -120,6 +120,7 @@ export class SignUpFormsComponent implements AfterViewInit {
       }
       // crm options
       this.paymentOptions$ = data.integrationsOptions.paymentOptions;
+      this.paymentOptions$.currency = data.integrationsOptions.business.currency;
       this.integrationOptions$ = data.integrationsOptions;
       // payment options
       setTimeout(() => {
@@ -309,20 +310,21 @@ export class SignUpFormsComponent implements AfterViewInit {
   sendEmail(data: any): void {
     // remove later
 
-    if (this.integrationOptions$.siteIntegration.crm.type !== this.integrationOptions$.businessIntegration.type) { console.log('error the type direfetn'); return; }
+    if (this.integrationOptions$.site.crm.type !== this.integrationOptions$.business.type)
+    { console.log('error the type direfetn'); return; }
 
     // seth the form user info values in order to update the custome values and name
 
-    this.userInfoForm.addControl('awtoken', new FormControl (this.integrationOptions$.businessIntegration.public_values.token));
-    this.userInfoForm.addControl('bs', new FormControl (this.integrationOptions$.businessIntegration.bs));
-    this.userInfoForm.addControl('list', new FormControl (this.integrationOptions$.siteIntegration.crm.values.listid));
+    this.userInfoForm.addControl('awtoken', new FormControl (this.integrationOptions$.business.public_values.token));
+    this.userInfoForm.addControl('bs', new FormControl (this.integrationOptions$.business.bs));
+    this.userInfoForm.addControl('list', new FormControl (this.integrationOptions$.site.crm.values.listid));
     this.userInfoForm.addControl('email', new FormControl (data.email));
-    this.userInfoForm.addControl('refrshawtoken', new FormControl(this.integrationOptions$.businessIntegration.public_values.refreshToken));
+    this.userInfoForm.addControl('refrshawtoken', new FormControl(this.integrationOptions$.business.public_values.refreshToken));
 
     // autoresponder
     const Factory = this.resolver.resolveComponentFactory(AweberComponent);
     const Ref: ComponentRef<any>  = this.autoresponder.createComponent(Factory);
-    Ref.instance.value = {email: data.email, list: this.integrationOptions$.siteIntegration.crm.values.listid};
+    Ref.instance.value = {email: data.email, list: this.integrationOptions$.site.crm.values.listid};
 
   }
 
@@ -401,6 +403,7 @@ export class SignUpFormsComponent implements AfterViewInit {
 
   this.selectedPaymentOpt = data.selected;
   this.selectedPaymentOpt.email = this.currentEmail;
+
   this.selectedPaymentOpt.paymentOptions = this.paymentOptions$; // .public.publishable_key;
   // this.selectedPaymentOpt.currency = this.paymentOptions$.currency;
   this.paymentProcess(data.type);

@@ -40,8 +40,9 @@ export class StripeCardComponent implements AfterViewInit {
         this.stripeClientData = data;
       }
     });
-
-    this.stripe = Stripe(this.paymentData.paymentOptions.stripe.public.publishable_key);
+    console.log(this.paymentData.paymentOptions.stripe.public_values);
+    const pv = JSON.parse(this.paymentData.paymentOptions.stripe.public_values);
+    this.stripe = Stripe(pv.publishable_key);
     this.elements = this.stripe.elements();
     console.log('payment data');
     console.log(this.paymentData);
