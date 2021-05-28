@@ -104,7 +104,6 @@ export class SignUpFormsComponent implements AfterViewInit {
       }
       this.bodyFont = { 'font-family': this.sitesStyles.sites_style.bodyFont};
       this.sitesStyles.rows_style.highlight.section['font-family'] = this.sitesStyles.sites_style.bodyFont;
-      console.log(this.sitesStyles);
       // account questions info
       this.accountInfo$ = JSON.parse(data.user_accountinfo_settings_json);
       for (let i = 0; i <= this.accountInfo$.address; i++) {
@@ -311,7 +310,7 @@ export class SignUpFormsComponent implements AfterViewInit {
     // remove later
 
     if (this.integrationOptions$.site.crm.type !== this.integrationOptions$.business.type)
-    { console.log('error the type direfetn'); return; }
+    { console.log('error type is direfetn'); return; }
 
     // seth the form user info values in order to update the custome values and name
 
