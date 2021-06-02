@@ -70,6 +70,7 @@ export class SignUpFormsComponent implements AfterViewInit {
   rowBodyMargin: any = {};
   titlesMargin: any = {};
   selectedStyleRow = 'highlight';
+  contactId = '';
   constructor(
     private supForm: SignUpFormService,
     private resolver: ComponentFactoryResolver,
@@ -225,7 +226,10 @@ export class SignUpFormsComponent implements AfterViewInit {
       // then give site access
       this.supForm.newSiteAccess({payment: {type: this.siteOptions$.signup_type, processor: this.processor}}).subscribe(siteAcc => {
 
+
       this.sendEmail({email: siteAcc.access.email});
+
+
       let redirecTo = this.path + '/members';
       if (this.path === 'signupform') {
         redirecTo = 'members';
@@ -306,28 +310,43 @@ export class SignUpFormsComponent implements AfterViewInit {
 
 
   }
-  // EMAIL IFRAME SENDER
-  sendEmail(data: any): void {
-    // remove later
 
+  // crm integration subscribers email sender
+  sendEmail(data: any): void {
+    
     if (this.integrationOptions$.site.crm.type !== this.integrationOptions$.business.type)
     { console.log('error the type direfetn'); return; }
+ 
+    this.userInfoForm.addControl('crmType', new FormControl (this.integrationOptions$.site.crm.type));
+    if (this.integrationOptions$.site.crm.type === 'aweber') {
+      this.aweber(data.email);
+    } else if (this.integrationOptions$.site.crm.type === 'activecampaign') {
+      this.sendActivecampaign(data.email);
+    }
+    
 
-    // seth the form user info values in order to update the custome values and name
+  }
+
+ sendActivecampaign(email: string) {
+    this.supForm.activeCampaing(email, this.integrationOptions$.site.crm.values.listid).subscribe(resp => {
+
+      console.log(resp);
+    });
+  }
+
+  aweber(email: string) {
 
     this.userInfoForm.addControl('awtoken', new FormControl (this.integrationOptions$.business.public_values.token));
     this.userInfoForm.addControl('bs', new FormControl (this.integrationOptions$.business.bs));
     this.userInfoForm.addControl('list', new FormControl (this.integrationOptions$.site.crm.values.listid));
-    this.userInfoForm.addControl('email', new FormControl (data.email));
+    this.userInfoForm.addControl('email', new FormControl (email));
     this.userInfoForm.addControl('refrshawtoken', new FormControl(this.integrationOptions$.business.public_values.refreshToken));
 
     // autoresponder
     const Factory = this.resolver.resolveComponentFactory(AweberComponent);
     const Ref: ComponentRef<any>  = this.autoresponder.createComponent(Factory);
-    Ref.instance.value = {email: data.email, list: this.integrationOptions$.site.crm.values.listid};
-
+    Ref.instance.value = {email: email, list: this.integrationOptions$.site.crm.values.listid};
   }
-
 
   /**
    *

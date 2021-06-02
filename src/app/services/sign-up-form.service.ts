@@ -87,6 +87,12 @@ export class SignUpFormService {
     data);
 
   }
+
+  public activeCampaing(mail: string, listId: any): Observable<any> {
+    return this.httpClient.post(`${this.apiHost}api/site-activecampaing?token=${this.tkn.get()}`,
+    {email: mail, listid: listId });
+  }
+
   public sendEmail(data: any): Observable<any>  {
 
     return this.httpClient.post(`https://www.aweber.com/scripts/addlead.pl?email=doradoaguilusjoel@gmail.com
