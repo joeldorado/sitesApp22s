@@ -105,7 +105,6 @@ export class SignUpFormsComponent implements AfterViewInit {
       }
       this.bodyFont = { 'font-family': this.sitesStyles.sites_style.bodyFont};
       this.sitesStyles.rows_style.highlight.section['font-family'] = this.sitesStyles.sites_style.bodyFont;
-      console.log(this.sitesStyles);
       // account questions info
       this.accountInfo$ = JSON.parse(data.user_accountinfo_settings_json);
       for (let i = 0; i <= this.accountInfo$.address; i++) {
@@ -315,6 +314,7 @@ export class SignUpFormsComponent implements AfterViewInit {
   sendEmail(data: any): void {
     
     if (this.integrationOptions$.site.crm.type !== this.integrationOptions$.business.type)
+<<<<<<< HEAD
     { console.log('error the type direfetn'); return; }
  
     this.userInfoForm.addControl('crmType', new FormControl (this.integrationOptions$.site.crm.type));
@@ -324,6 +324,9 @@ export class SignUpFormsComponent implements AfterViewInit {
       this.sendActivecampaign(data.email);
     }
     
+=======
+    { console.log('error type is direfetn'); return; }
+>>>>>>> 73374cfa0261e8e9f2840dc85745c567a35bbb58
 
   }
 

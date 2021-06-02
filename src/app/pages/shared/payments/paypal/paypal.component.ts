@@ -27,12 +27,18 @@ export class PaypalComponent implements OnInit {
     }
   }
 
-
+  customSubscription(): void {
+    this.paypalService.processSubscription('I-21T82U9CDAMN', {paymentOptions: {paypal: { id: 2 },
+    }, payment_type: 'recurrent'}).subscribe(resp => {
+      console.log(resp);
+  });
+  }
 
   subscription(): void {
+    const pv = JSON.parse(this.paypalData.paymentOptions.paypal.public_values);
     this.paypalService.initiate(
       'subscription',
-      this.paypalData.paymentOptions.paypal.public.clientId,
+      pv.clientId,
       this.paypalData.paymentOptions.currency,
       ).subscribe(
       () => paypal.Buttons({
@@ -43,7 +49,6 @@ export class PaypalComponent implements OnInit {
           label: 'subscribe'
       },
       createSubscription: (data, actions) => {
-          console.log(data);
           return actions.subscription.create({
             /* Creates the subscription */
             plan_id: this.paypalData.paypal_plan_id // 'P-9W639366X5045830MMB3FTEQ'// 'P-9W639366X5045830MMB3FTEQ'
@@ -51,19 +56,32 @@ export class PaypalComponent implements OnInit {
       },
       onApprove: (data, actions) => {
         console.log(this.paypalData);
-        this.paypalService.getPaypalAccessToken(
-          this.paypalData.paymentOptions.paypal.paypalAccessToken).subscribe(tokenAccess => {
 
-          this.paypalService.getSubscription(tokenAccess.access_token, data.subscriptionID).subscribe(subData => {
+        this.paypalService.processSubscription(data.subscriptionID, this.paypalData).subscribe(resp => {
+            console.log(resp);
+            if (resp.error) { alert(resp.error); return; }
+            this.nexStep.emit(4);
+         });
+        // this.paypalService.getPaypalAccessToken(
+        //  this.paypalData.paymentOptions.paypal.paypalAccessToken).subscribe(tokenAccess => {
+       //   console.log('token: ', tokenAccess );
+       //   console.log(this.paypalData);
+       //   return ;
 
-            this.paypalService.saveSubscrition(subData, this.paypalData).subscribe(saveSub => {
-              console.log('saved subscrition paypal');
-              console.log(saveSub);
-              if (saveSub.error) { alert(saveSub.error); return; }
-              this.nexStep.emit(4);
-            });
-          });
-        });
+          // this.paypalService.getSubscription(tokenAccess.access_token, data.subscriptionID).subscribe(subData => {
+          //   this.paypalService.saveSubscrition(subData, this.paypalData).subscribe(saveSub => {
+          //     console.log('saved subscrition paypal');
+          //     console.log(saveSub);
+          //     if (saveSub.error) { alert(saveSub.error); return; }
+          //     this.nexStep.emit(4);
+          //   });
+          // });
+
+
+        //});
+      },
+      onError:  (err) => {
+       console.log(err);
       }
       }).render(this.paypalElement.nativeElement)
     );
@@ -71,22 +89,6 @@ export class PaypalComponent implements OnInit {
 
   }
 
-    // ============Start Get Subcription Details Method============================
-    getSubcriptionDetails(basicAuth, subcriptionId): void {
-      const xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange =  (data) => {
-        console.log('get subscruioton------>>>>>>');
-        console.log(data);
-        // i f (this.readyState === 4 && this.status === 200) {
-        //  console.log(JSON.parse(this.responseText));
-        //  alert(JSON.stringify(this.responseText));
-       // }
-      };
-      xhttp.open('GET', 'https://api.sandbox.paypal.com/v1/billing/subscriptions/' + subcriptionId, true);
-      xhttp.setRequestHeader('Authorization', basicAuth);
-      xhttp.send();
-    }
-    // ============END Get Subcription Details Method========================
   singlePayment(): void {
     const pv = JSON.parse(this.paypalData.paymentOptions.paypal.public_values);
     this.paypalService.initiate('', pv.clientId,

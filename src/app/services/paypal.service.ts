@@ -86,44 +86,22 @@ export class PaypalService {
 
   }
 
-  public getSubscription(token: any, subID: any): Observable<any> {
-    this.headers = new HttpHeaders({'Content-Type': 'application/json', Authorization: `Bearer ${token}`});
-// A21AALlUHImo6gnhAH-xTpn04XHibu0XPfsNJhFxGvZ1UiZwHfITairCJT1evhLBwk18KdFDfHfzay-rFPKOIy1KpxLfi_5mQ
-    return this.httpClient.get(`https://api-m.sandbox.paypal.com/v1/billing/subscriptions/${subID}`, { headers: this.headers});
-
-  }
-
-  saveSubscrition(subData, paypalData): Observable<any> {
-
-    let sendCurrency!: string;
-    let sendAmount!: string;
-    let sendEnrrollDate!: string;
-
-    if (subData.billing_info.last_payment) {
-      sendAmount =  subData.billing_info.last_payment.amount.value;
-      sendCurrency = subData.billing_info.last_payment.amount.currency_code;
-      sendEnrrollDate = subData.billing_info.last_payment.time;
-    } else {
-        sendAmount =  subData.billing_info.outstanding_balance.value;
-        sendCurrency = subData.billing_info.outstanding_balance.currency_code;
-        sendEnrrollDate = subData.create_time;
-    }
-
-    // outstanding_balance
-    // subData.billing_info.last_payment
-    return this.httpClient.post(`${this.apiHost}api/site-paypal-save-subscrion?token=${this.tkn.get()}`,
-    {path: this.path,
+  public processSubscription(subId: any, paypalData: any): Observable<any> {
+    return this.httpClient.post(`${this.apiHost}api/site-paypal-process-subscrion?token=${this.tkn.get()}`,
+    { path: this.path,
       processor_settings_id: paypalData.paymentOptions.paypal.id,
-      sub_id: subData.id,
-      payment_type: paypalData.payment_type,
-      status: subData.status,
-      currency: sendCurrency, // subData.billing_info.last_payment.amount.currency_code,
-      amount: sendAmount, // subData.billing_info.last_payment.amount.value,
-      next_charge: subData.billing_info.next_billing_time, // .toISOString().replace('.000Z', '').replace('.000T', ''),
-      enrollment_date: sendEnrrollDate
-      // subData.billing_info.last_payment.time // ).toISOString().replace('.000Z', '').replace('.000T', '')
+      sub_id: subId,
+      payment_type: paypalData.payment_type
       });
   }
+  // public getSubscription(token: any, subID: any): Observable<any> {
+  //  this.headers = new HttpHeaders({'Content-Type': 'application/json', Authorization: `Bearer ${token}`});
+    // A21AALlUHImo6gnhAH-xTpn04XHibu0XPfsNJhFxGvZ1UiZwHfITairCJT1evhLBwk18KdFDfHfzay-rFPKOIy1KpxLfi_5mQ
+  //  return this.httpClient.get(`https://api-m.sandbox.paypal.com/v1/billing/subscriptions/${subID}`, { headers: this.headers});
+
+  // }
+
+  // saveSubscrition(subData, paypalData): Observable<any> {}
 
 
   encodeBase(data): any {
