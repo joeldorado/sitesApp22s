@@ -265,13 +265,13 @@
                     </div>
                     <!-- end country-->
                     <!-- question -->
-                    <div fxLayout="row" fxLayoutGap="10px" *ngFor="let info of accountInfo$?.custom_questions; let i = index">
-                    <div fxFlex="100">
-                    <mat-form-field [style]="bodyFont" appearance="legacy" fxFlex="100">
-                    <mat-label>{{info.question}}</mat-label>
-                    <input matInput placeholder="">                     
-                    </mat-form-field>
-                    </div>                
+                    <div fxLayout="row" fxLayoutGap="10px" *ngFor="let q of questions; let i = index">
+                
+                        <mat-form-field [style]="bodyFont" appearance="legacy"  fxFlex="100">
+                        <mat-label>{{q.lbl}} </mat-label>
+                        <input matInput placeholder="" formControlName="{{q.formControl}}">                     
+                        </mat-form-field>
+                          
                     </div>
                     <!-- end question [disabled]="!userInfoForm.valid"-->
 

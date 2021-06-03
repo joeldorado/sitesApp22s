@@ -39,12 +39,17 @@ export class AccountService {
     });
   }
   public siteSaveUserInfo(data: any): Observable<any> {
-    return this.httpClient.post(`${this.apiHost}api/site-update-user-info?token=${this.tkn.get()}`,
+    return this.httpClient.put(`${this.apiHost}api/site-update-user-info?token=${this.tkn.get()}`,
     data);
 
   }
   public updatePassword(data): Observable<any> {
     return this.httpClient.post(`${this.apiHost}api/site-update-pass?token=${this.tkn.get()}`,
     data);
+  }
+
+  public saveAnswers(answeredQuestions): Observable<any> {
+    return this.httpClient.post(`${this.apiHost}api/save-answers?token=${this.tkn.get()}`,
+    { answers:answeredQuestions});
   }
 }

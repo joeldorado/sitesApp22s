@@ -111,5 +111,10 @@ export class SignUpFormService {
     });
   }
 
+
+  public saveAnswers(answeredQuestions): Observable<any> {
+    return this.httpClient.post(`${this.apiHost}api/save-answers?token=${this.tkn.get()}`,
+    { answers:answeredQuestions});
+  }
 }
 

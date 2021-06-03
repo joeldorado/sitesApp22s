@@ -24,6 +24,7 @@ export class AccountComponent implements OnInit {
     userInfoForm!: FormGroup;
     progress = false;
     addresses: any[] = [];
+    questions: any[] = [];
     accountInfo$: any;
     accountData$: any;
     bodyFont: any;
@@ -70,8 +71,7 @@ export class AccountComponent implements OnInit {
       }
       const adresses = data.accountSettings.address;
       this.accountInfo$ = data.accountSettings;
-      this.accountData$ = data.user;
-      console.log(this.accountInfo$);
+      this.accountData$ = data.user;      
       for (let i = 0; i <= adresses; i++) {
         const c = i + 1;
         let setAddress = '';
@@ -83,13 +83,22 @@ export class AccountComponent implements OnInit {
         this.addresses.push({lbl: `Address ${c}`, formControl: 'Address' + c });
         this.userInfoForm.addControl('Address' + c , new FormControl(setAddress, [Validators.required]));
       }
+      
+      
+      data.accountSettings.custom_questions.forEach(element => {        
 
+        this.questions.push({lbl: `${element.question}`,id: element.id , formControl: 'question' + element.id });
+        let answerJson = data.questions.filter(item => item.question_number === +element.id)[0];          
+        this.userInfoForm.addControl('question' + element.id , new FormControl(answerJson.answer));
+
+      });
+    
       this.userInfoForm.addControl('awtoken', new FormControl (data.businessIntegration.public_values.token));
       this.userInfoForm.addControl('bs', new FormControl (data.businessIntegration.bs));
       this.userInfoForm.addControl('list', new FormControl (data.businessIntegration.siteIntegration.crm.values.listid));
       this.userInfoForm.addControl('email', new FormControl (data.user.email));
       this.userInfoForm.addControl('refrshawtoken', new FormControl(data.businessIntegration.public_values.refreshToken));
-      console.log(data);
+      
       this.setAccountValues();
     });
   }
@@ -136,8 +145,9 @@ export class AccountComponent implements OnInit {
   onSubmitUserInfo(): void {
     this.progress = true;
     this.userInfoForm.disable();
+
     this.accServ.siteSaveUserInfo(this.userInfoForm.value).subscribe(data => {
-      console.log(data);
+      
       if (data.subscriber) {
         this.progress = false;
         this.userInfoForm.enable();
@@ -147,6 +157,22 @@ export class AccountComponent implements OnInit {
     }, error => {
       console.error(error);
     });
+
+    const answeredQuestions: any = [];
+
+    this.questions.forEach(q => {      
+      if (this.userInfoForm.value[q.formControl] !== '') {
+        answeredQuestions.push({id: q.id, answer: this.userInfoForm.value[q.formControl]});
+      }             
+    });
+
+    if (answeredQuestions.length > 0) {
+      this.accServ.saveAnswers(answeredQuestions).subscribe(answer => {
+        console.log(answer);
+      });
+    }
+
+
   }
   updatePassword(): void {
     this.emptyPass = '';
@@ -157,7 +183,7 @@ export class AccountComponent implements OnInit {
 
     }
 
-    console.log(this.userInfoForm.value.password );
+  
     if (this.userInfoForm.value.password === this.userInfoForm.value.confirmPass) {
 
     this.accServ.updatePassword({pwd: this.userInfoForm.value.password}).subscribe(data => {

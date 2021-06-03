@@ -51,25 +51,11 @@ export class MembersAreaComponent implements OnInit {
           this.redirect();
           return;
        }
-       this.loadMembersArea();
-        // if (data.length === 0 || data[0].status !== 'active' || data.error !== undefined) {
-        //    // alert(`You'r not a member.`);
-        //    let redirecTo = this.path[1] + '/start';
-        //    if (this.path[1] === 'members') { redirecTo = 'start'; }
-        //    this.router.navigate([redirecTo]);
-        //    return;
-
-        // }
-        // else if () {
-        //  msg = data.error;
-        //  alert(msg);
-        //  return;
-       // }
-       // else if () {
-         // alert(`Cant access this site, redirecting to your current access Sites.`);
-        //  this.router.navigate(['/dashboard']);
-        //  return;
-       // }
+       // setTimeout(() => {} ,1000);
+        this.loadMembersArea();
+       
+      
+   
       });
 
     });
@@ -79,11 +65,10 @@ export class MembersAreaComponent implements OnInit {
 
     let pageName = 'Home';
     const paths = location.pathname.split('members')[1];
-
-    if (paths !== undefined && paths !== 'home') {
-
-        pageName = paths.replace('/', '');
-    }
+ 
+    // if (paths !== undefined) {     
+    //     pageName =  paths.replace('/', '');
+    // }
 
     // gets pages fore the menu
     this.ma.getMenuPages().subscribe(data => {
@@ -95,8 +80,10 @@ export class MembersAreaComponent implements OnInit {
       if (!this.siteStyles.sites_style.padding) {
         this.rowBodyMargin = {margin: '0px !important', border: 'none !important', 'border-radius': '0px !important'};
       }
+      console.log(pageName);
       pageName = this.tcs.transform(pageName);
-
+      console.log(this.menuData$.pages);
+      console.log(pageName);
       const page = this.menuData$.pages.filter(p => p.page_tittle === pageName);
 
       let pageNumber = 0;
@@ -107,7 +94,7 @@ export class MembersAreaComponent implements OnInit {
 
       } else {
 
-        alert('404 Page not found, redirection to home page');
+        alert('404 Page not found, go to home page');
         return;
       }
 

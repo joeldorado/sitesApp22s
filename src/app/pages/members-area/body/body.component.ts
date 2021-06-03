@@ -21,16 +21,14 @@ blobkData!: any;
 
 constructor(private resolver: ComponentFactoryResolver) { }
 
-rowStyle(rowBody, padding): any {
-  console.log(padding);
+rowStyle(rowBody, padding): any {  
   return Object.assign(rowBody, padding);
  }
 
 ngOnChanges(changes: { [property: string]: SimpleChange }): void {
     const blocksCh: SimpleChange = changes.blocks;
     if (blocksCh !== undefined && blocksCh.firstChange) { return; }
-    console.log(this.siteStyles);
-    console.log(this.pageStructure);
+
     this.blockComponent.forEach((blockComp, index) => {
       if (blockComp.length > 0) {
         blockComp.detach();

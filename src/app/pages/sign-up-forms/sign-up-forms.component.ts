@@ -29,6 +29,7 @@ export class SignUpFormsComponent implements AfterViewInit {
 
   paypalData$!: any;
   addresses: any[] = [];
+  questions: any[] = [];
   blocks$!: any[];
   accountInfo$!: AccountInfo;
   account!: any;
@@ -49,7 +50,6 @@ export class SignUpFormsComponent implements AfterViewInit {
   viewPhone = true;
   emailForm!: FormGroup;
   userInfoForm!: FormGroup;
-  questions: string[] = ['What are you most struggling with?'];
   passMatch = false;
   processor = '';
   progress = false;
@@ -105,13 +105,24 @@ export class SignUpFormsComponent implements AfterViewInit {
       }
       this.bodyFont = { 'font-family': this.sitesStyles.sites_style.bodyFont};
       this.sitesStyles.rows_style.highlight.section['font-family'] = this.sitesStyles.sites_style.bodyFont;
-      // account questions info
+     
       this.accountInfo$ = JSON.parse(data.user_accountinfo_settings_json);
       for (let i = 0; i <= this.accountInfo$.address; i++) {
         const c = i + 1;
         this.addresses.push({lbl: `Address ${c}`, formControl: 'Address' + c });
         this.userInfoForm.addControl('Address' + c , new FormControl('', [Validators.required]));
       }
+
+      this.accountInfo$.custom_questions.forEach(element => {        
+
+        this.questions.push({lbl: `${element.question}`,id: element.id , formControl: 'question' + element.id });
+
+        this.userInfoForm.addControl('question' + element.id , new FormControl(''));
+
+      });
+
+
+
       this.blocks$ = data.blocks;
       this.siteOptions$ = data.siteOptions;
       if (this.siteOptions$.signup_type === 'free') {
@@ -133,31 +144,13 @@ export class SignUpFormsComponent implements AfterViewInit {
     this.startForms();
    } // end constructor
 
-  /* getTokenAccess(): void {
-    console.log(this.paymentOptions$.paypal.paypalAccessToken);
-    this.paypalS.getPaypalAccessToken(this.paymentOptions$.paypal.paypalAccessToken).subscribe(data => {
-      console.log(data);
-    });
-   }
 
-   getSubscription(): void {
-     this.paypalS.getSubscription('A21AALlUHImo6gnhAH-xTpn04XHibu0XPfsNJhFxGvZ1UiZwHfITairCJT1evhLBwk18KdFDfHfzay-rFPKOIy1KpxLfi_5mQ',
-     'I-6X6P051XGASE').subscribe(data => {
-       console.log(data);
-     });
-   }
-   <button (click)="getTokenAccess()" mat-raised-button>get token</button>
-         <button (click)="getSubscription()" mat-raised-button>get subscription</button>
-   */
   rowStyle(rowBody, padding): any {
     if (rowBody === null) { return; }
     return Object.assign(rowBody, padding);
    }
    ngAfterViewInit(): void {
-    // const currentStep = localStorage.getItem('currentStep');
-    // if (currentStep) {
-    //   this.paymentProcess(currentStep);
-    // }
+   
    }
  
   // HANLDE SITE ACCESS (check if the user already have acces to this site)
@@ -186,6 +179,20 @@ export class SignUpFormsComponent implements AfterViewInit {
   onSubmitUserInfo(): void {
     this.progress = true;
     this.userInfoForm.disable();
+    const answeredQuestions: any = [];
+
+    this.questions.forEach(q => {      
+      if (this.userInfoForm.value[q.formControl] !== '') {
+        answeredQuestions.push({id: q.id, answer: this.userInfoForm.value[q.formControl]});
+      }             
+    });
+
+    if (answeredQuestions.length > 0) {
+      this.supForm.saveAnswers(answeredQuestions).subscribe(answer => {
+        console.log(answer);
+      });
+    }
+  
     this.supForm.siteSaveUserInfo(this.userInfoForm.value).subscribe(data => {
       if (data.subscriber) {
         // pasar a una funcion para no repetir este codigo
@@ -194,6 +201,8 @@ export class SignUpFormsComponent implements AfterViewInit {
     }, error => {
       console.error(error);
     });
+
+    
   }
 
 
@@ -314,19 +323,15 @@ export class SignUpFormsComponent implements AfterViewInit {
   sendEmail(data: any): void {
     
     if (this.integrationOptions$.site.crm.type !== this.integrationOptions$.business.type)
-<<<<<<< HEAD
     { console.log('error the type direfetn'); return; }
  
-    this.userInfoForm.addControl('crmType', new FormControl (this.integrationOptions$.site.crm.type));
+    // this.userInfoForm.addControl('crmType', new FormControl (this.integrationOptions$.site.crm.type));
     if (this.integrationOptions$.site.crm.type === 'aweber') {
       this.aweber(data.email);
     } else if (this.integrationOptions$.site.crm.type === 'activecampaign') {
       this.sendActivecampaign(data.email);
     }
     
-=======
-    { console.log('error type is direfetn'); return; }
->>>>>>> 73374cfa0261e8e9f2840dc85745c567a35bbb58
 
   }
 
